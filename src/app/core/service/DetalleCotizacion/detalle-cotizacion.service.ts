@@ -9,7 +9,7 @@ import { CacheService } from '../cache.service';
   providedIn: 'root'
 })
 export class DetalleCotizacionService {
-  private apiUrl = `${environment.baseURL}/detalles-cotizacion`;
+  private apiUrl = `${environment.baseURL}/detail-quotation`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) { }
@@ -23,13 +23,13 @@ export class DetalleCotizacionService {
   }
 
   getByCotizacionId(cotizacionId: number): Observable<DetalleCotizacionResponse[]> {
-    return this.http.get<DetalleCotizacionResponse[]>(`${this.apiUrl}/cotizacion/${cotizacionId}`);
+    return this.http.get<DetalleCotizacionResponse[]>(`${this.apiUrl}/quotation/${cotizacionId}`);
   }
 
   createDetalleCotizacion(cotizacionId: number, detalleCotizacionRequest: DetalleCotizacionRequest): Observable<DetalleCotizacionResponse> {
-    return this.http.post<DetalleCotizacionResponse>(`${this.apiUrl}/cotizacion/${cotizacionId}`, detalleCotizacionRequest).pipe(
+    return this.http.post<DetalleCotizacionResponse>(`${this.apiUrl}/quotation/${cotizacionId}`, detalleCotizacionRequest).pipe(
       tap(() => {
-        this.cacheService.invalidatePattern(`/cotizaciones/${cotizacionId}/con-detalles`);
+        this.cacheService.invalidatePattern(`/quotation/${cotizacionId}/with-detail`);
       })
     );
   }
@@ -37,8 +37,8 @@ export class DetalleCotizacionService {
   updateDetalleCotizacion(id: number, patchPayload: DetalleCotizacionPatchRequest): Observable<DetalleCotizacionResponse> {
     return this.http.patch<DetalleCotizacionResponse>(`${this.apiUrl}/${id}`, patchPayload).pipe(
       tap((response) => {
-        if (response.cotizacion?.id) {
-          this.cacheService.invalidatePattern(`/cotizaciones/${response.cotizacion.id}/con-detalles`);
+        if (response.quotation?.id) {
+          this.cacheService.invalidatePattern(`/quotation/${response.quotation.id}/with-detail`);
         }
       })
     );
@@ -47,7 +47,7 @@ export class DetalleCotizacionService {
   deleteDetalleCotizacion(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       tap(() => {
-        this.cacheService.invalidatePattern(/\/cotizaciones\/\d+\/con-detalles/);
+        this.cacheService.invalidatePattern(/\/quotation\/\d+\/with-detail/);
       })
     );
   }

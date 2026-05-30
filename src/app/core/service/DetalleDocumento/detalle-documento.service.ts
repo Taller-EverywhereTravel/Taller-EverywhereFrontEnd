@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class DetalleDocumentoService {
 
-  private apiUrl = `${environment.baseURL}/detalle-documento`;
+  private apiUrl = `${environment.baseURL}/detail-document`;
 
   constructor(private http: HttpClient) { }
 
@@ -22,19 +22,19 @@ export class DetalleDocumentoService {
   }
 
   findByDocumento(documentoId: number): Observable<DetalleDocumentoResponse[]> {
-    return this.http.get<DetalleDocumentoResponse[]>(`${this.apiUrl}/documento/${documentoId}`);
+    return this.http.get<DetalleDocumentoResponse[]>(`${this.apiUrl}/document/${documentoId}`);
   }
 
   findByNumero(numero: string): Observable<DetalleDocumentoResponse[]> {
-    return this.http.get<DetalleDocumentoResponse[]>(`${this.apiUrl}/numero/${numero}`);
+    return this.http.get<DetalleDocumentoResponse[]>(`${this.apiUrl}/number/${numero}`);
   }
 
   findByPersonaNaturalId(personaNaturalId: number): Observable<DetalleDocumentoResponse[]> {
-    return this.http.get<DetalleDocumentoResponse[]>(`${this.apiUrl}/persona-natural/${personaNaturalId}`);
+    return this.http.get<DetalleDocumentoResponse[]>(`${this.apiUrl}/person-natural/${personaNaturalId}`);
   }
 
   findByPersonaId(personaId: number): Observable<DetalleDocumentoResponse[]> {
-    return this.http.get<DetalleDocumentoResponse[]>(`${this.apiUrl}/persona/${personaId}`);
+    return this.http.get<DetalleDocumentoResponse[]>(`${this.apiUrl}/person/${personaId}`);
   }
 
   saveDetalle(detalle: DetalleDocumentoRequest): Observable<DetalleDocumentoResponse> {
@@ -51,6 +51,6 @@ export class DetalleDocumentoService {
 
   buscarPorNumeroDocumento(numero: string): Observable<DetalleDocumentoConPersonasDto[]> {
     const params = new HttpParams().set('numero', numero);
-    return this.http.get<DetalleDocumentoConPersonasDto[]>(`${this.apiUrl}/buscar-por-numero`, { params });
+    return this.http.get<DetalleDocumentoConPersonasDto[]>(`${this.apiUrl}/search-by-number`, { params });
   }
 }

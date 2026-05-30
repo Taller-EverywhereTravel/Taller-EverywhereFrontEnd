@@ -10,7 +10,7 @@ import { CacheService } from '../cache.service';
 })
 export class LiquidacionService {
 
-  private apiUrl = `${environment.baseURL}/liquidaciones`;
+  private apiUrl = `${environment.baseURL}/liquidation`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) { }
@@ -36,11 +36,11 @@ export class LiquidacionService {
   }
 
   getLiquidacionConDetalles(id: number): Observable<LiquidacionConDetallesResponse> {
-    return this.http.get<LiquidacionConDetallesResponse>(`${this.apiUrl}/${id}/con-detalles`);
+    return this.http.get<LiquidacionConDetallesResponse>(`${this.apiUrl}/${id}/with-details`);
   }
 
   generarExcel(liquidacionId: number): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/${liquidacionId}/generar-excel`, {
+    return this.http.get(`${this.apiUrl}/${liquidacionId}/generate-excel`, {
       responseType: 'blob'
     });
   }
@@ -52,18 +52,18 @@ export class LiquidacionService {
   }
 
   createLiquidacionConCotizacion(cotizacionId: number, liquidacionRequest: LiquidacionRequest): Observable<LiquidacionResponse> {
-    return this.http.post<LiquidacionResponse>(`${this.apiUrl}/cotizacion/${cotizacionId}`, liquidacionRequest).pipe(
+    return this.http.post<LiquidacionResponse>(`${this.apiUrl}/quotation/${cotizacionId}`, liquidacionRequest).pipe(
       tap(() => this.cacheService.invalidateModule('liquidaciones'))
     );
   }
 
   // Métodos para gestión de carpetas
   getLiquidacionesByCarpeta(carpetaId: number): Observable<LiquidacionResponse[]> {
-    return this.http.get<LiquidacionResponse[]>(`${this.apiUrl}/carpeta/${carpetaId}`);
+    return this.http.get<LiquidacionResponse[]>(`${this.apiUrl}/folder/${carpetaId}`);
   }
 
   getLiquidacionesSinCarpeta(): Observable<LiquidacionResponse[]> {
-    return this.http.get<LiquidacionResponse[]>(`${this.apiUrl}/sin-carpeta`);
+    return this.http.get<LiquidacionResponse[]>(`${this.apiUrl}/without-folder`);
   }
 
   updateCarpeta(id: number, carpetaId: number | null): Observable<LiquidacionResponse> {
@@ -71,7 +71,7 @@ export class LiquidacionService {
     if (carpetaId !== null) {
       params = params.set('carpetaId', carpetaId.toString());
     }
-    return this.http.patch<LiquidacionResponse>(`${this.apiUrl}/${id}/carpeta`, null, { params }).pipe(
+    return this.http.patch<LiquidacionResponse>(`${this.apiUrl}/${id}/folder`, null, { params }).pipe(
       tap(() => this.cacheService.invalidateModule('liquidaciones'))
     );
   }

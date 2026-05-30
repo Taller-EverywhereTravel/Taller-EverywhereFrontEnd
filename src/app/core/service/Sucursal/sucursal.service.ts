@@ -9,7 +9,7 @@ import { BYPASS_CACHE } from '../../interceptos/cache.interceptor';
   providedIn: 'root'
 })
 export class SucursalService {
-  private apiUrl = `${environment.baseURL}/sucursales`;
+  private apiUrl = `${environment.baseURL}/branch`;
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +23,7 @@ export class SucursalService {
   }
 
   findByEstadoSucursal(estado: boolean): Observable<SucursalResponse[]> {
-    return this.http.get<SucursalResponse[]>(`${this.apiUrl}/estado/${estado}`);
+    return this.http.get<SucursalResponse[]>(`${this.apiUrl}/status/${estado}`);
   }
 
   saveSucursal(sucursal: SucursalRequest): Observable<SucursalResponse> {
@@ -36,7 +36,7 @@ export class SucursalService {
 
   cambiarEstadoSucursal(id: number, estado: boolean): Observable<SucursalResponse> {
     const params = new HttpParams().set('estado', estado.toString());
-    return this.http.patch<SucursalResponse>(`${this.apiUrl}/${id}/estado`, null, { params });
+    return this.http.patch<SucursalResponse>(`${this.apiUrl}/${id}/status`, null, { params });
   }
 
   deleteByIdSucursal(id: number): Observable<void> {

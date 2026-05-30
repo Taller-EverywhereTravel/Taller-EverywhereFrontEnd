@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class OperadorService {
 
-  private apiUrl = `${environment.baseURL}/operadores`;
+  private apiUrl = `${environment.baseURL}/operator`;
   constructor(private http: HttpClient) { }
 
   findAllOperador(): Observable<OperadorResponse[]> {

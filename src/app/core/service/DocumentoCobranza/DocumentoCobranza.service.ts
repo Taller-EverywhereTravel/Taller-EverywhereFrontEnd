@@ -10,7 +10,7 @@ import { BYPASS_CACHE } from '../../interceptos/cache.interceptor';
   providedIn: 'root'
 })
 export class DocumentoCobranzaService {
-  private apiUrl = `${environment.baseURL}/documentos-cobranza`;
+  private apiUrl = `${environment.baseURL}/document-collection`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) { }
@@ -45,11 +45,11 @@ export class DocumentoCobranzaService {
   }
 
   getDocumentoByNumero(numero: string): Observable<DocumentoCobranzaResponseDTO> {
-    return this.http.get<DocumentoCobranzaResponseDTO>(`${this.apiUrl}/numero/${numero}`);
+    return this.http.get<DocumentoCobranzaResponseDTO>(`${this.apiUrl}/number/${numero}`);
   }
 
   getDocumentoByCotizacion(cotizacionId: number): Observable<DocumentoCobranzaResponseDTO> {
-    return this.http.get<DocumentoCobranzaResponseDTO>(`${this.apiUrl}/cotizacion/${cotizacionId}`);
+    return this.http.get<DocumentoCobranzaResponseDTO>(`${this.apiUrl}/quotation/${cotizacionId}`);
   }
 
   updateDocumento(id: number, updateDTO: DocumentoCobranzaUpdateDTO): Observable<DocumentoCobranzaResponseDTO> {
@@ -63,11 +63,11 @@ export class DocumentoCobranzaService {
 
   // Métodos para gestión de carpetas
   getDocumentosByCarpeta(carpetaId: number): Observable<DocumentoCobranzaResponseDTO[]> {
-    return this.http.get<DocumentoCobranzaResponseDTO[]>(`${this.apiUrl}/carpeta/${carpetaId}`);
+    return this.http.get<DocumentoCobranzaResponseDTO[]>(`${this.apiUrl}/folder/${carpetaId}`);
   }
 
   getDocumentosSinCarpeta(): Observable<DocumentoCobranzaResponseDTO[]> {
-    return this.http.get<DocumentoCobranzaResponseDTO[]>(`${this.apiUrl}/sin-carpeta`);
+    return this.http.get<DocumentoCobranzaResponseDTO[]>(`${this.apiUrl}/without-folder`);
   }
 
   updateCarpeta(id: number, carpetaId: number | null): Observable<DocumentoCobranzaResponseDTO> {
@@ -75,7 +75,7 @@ export class DocumentoCobranzaService {
     if (carpetaId !== null) {
       params = params.set('carpetaId', carpetaId.toString());
     }
-    return this.http.patch<DocumentoCobranzaResponseDTO>(`${this.apiUrl}/${id}/carpeta`, null, { params }).pipe(
+    return this.http.patch<DocumentoCobranzaResponseDTO>(`${this.apiUrl}/${id}/folder`, null, { params }).pipe(
       tap(() => this.cacheService.invalidateModule('documentos-cobranza'))
     );
   }

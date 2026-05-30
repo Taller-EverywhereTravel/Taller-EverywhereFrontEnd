@@ -9,7 +9,7 @@ import { CacheService } from '../cache.service';
   providedIn: 'root'
 })
 export class ObservacionLiquidacionService {
-  private apiUrl = `${environment.baseURL}/observaciones-liquidacion`;
+  private apiUrl = `${environment.baseURL}/observation-liquidation`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) {}
@@ -25,10 +25,10 @@ export class ObservacionLiquidacionService {
   create(requestDTO: ObservacionLiquidacionRequest): Observable<ObservacionLiquidacionResponse> {
     return this.http.post<ObservacionLiquidacionResponse>(this.apiUrl, requestDTO).pipe(
       tap((response) => {
-        if (response.liquidacion?.id) {
-          this.cacheService.invalidatePattern(`/liquidaciones/${response.liquidacion.id}`);
+        if (response.liquidation?.id) {
+          this.cacheService.invalidatePattern(`/liquidation/${response.liquidation.id}`);
         } else if (requestDTO.liquidationId) {
-          this.cacheService.invalidatePattern(`/liquidaciones/${requestDTO.liquidationId}`);
+          this.cacheService.invalidatePattern(`/liquidation/${requestDTO.liquidationId}`);
         }
       })
     );
@@ -37,8 +37,8 @@ export class ObservacionLiquidacionService {
   update(id: number, requestDTO: ObservacionLiquidacionRequest): Observable<ObservacionLiquidacionResponse> {
     return this.http.put<ObservacionLiquidacionResponse>(`${this.apiUrl}/${id}`, requestDTO).pipe(
       tap((response) => {
-        if (response.liquidacion?.id) {
-          this.cacheService.invalidatePattern(`/liquidaciones/${response.liquidacion.id}`);
+        if (response.liquidation?.id) {
+          this.cacheService.invalidatePattern(`/liquidation/${response.liquidation.id}`);
         }
       })
     );
@@ -47,7 +47,7 @@ export class ObservacionLiquidacionService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       tap(() => {
-        this.cacheService.invalidatePattern(/\/liquidaciones\/\d+/);
+        this.cacheService.invalidatePattern(/\/liquidation\/\d+/);
       })
     );
   }

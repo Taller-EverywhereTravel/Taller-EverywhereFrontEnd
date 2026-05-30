@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class CarpetaService {
-  private apiUrl = `${environment.baseURL}/carpeta`;
+  private apiUrl = `${environment.baseURL}/folder`;
 
   constructor(private http: HttpClient) {
   }
@@ -38,38 +38,38 @@ export class CarpetaService {
   }
 
   findByNivelCarpeta(nivel: number): Observable<CarpetaResponse[]> {
-    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/nivel/${nivel}`);
+    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/level/${nivel}`);
   }
 
   findByNombreCarpeta(nombre: string): Observable<CarpetaResponse[]> {
-    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/buscar`);
+    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/search`);
   }
 
   finByMesCarpeta(mes: number): Observable<CarpetaResponse[]> {
-    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/fecha/${mes}`);
+    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/date/${mes}`);
   }
 
   finfByFechaCreacionBetweenCarpeta(fechaInicio: string, fechaFin: string): Observable<CarpetaResponse[]> {
     const params = new HttpParams()
       .set('fechaInicio', fechaInicio)
       .set('fechaFin', fechaFin);
-    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/fecha/between`, { params });
+    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/date/between`, { params });
   }
 
   findRecentCarpetas(): Observable<CarpetaResponse[]> {
-    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/recientes`);
+    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/recent`);
   }
 
   findRaicesCarpeta(): Observable<CarpetaResponse[]> {
-    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/raices`);
+    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/roots`);
   }
 
   findCaminoCarpeta(id: number): Observable<CarpetaResponse[]> {
-    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/${id}/camino`);
+    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/${id}/way`);
   }
 
   findHijosCarpeta(id: number): Observable<CarpetaResponse[]> {
-    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/hijos/${id}`);
+    return this.http.get<CarpetaResponse[]>(`${this.apiUrl}/children/${id}`);
   }
 
 }

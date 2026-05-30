@@ -10,7 +10,7 @@ import { BYPASS_CACHE } from '../../interceptos/cache.interceptor';
   providedIn: 'root'
 })
 export class CotizacionService {
-  private apiUrl = `${environment.baseURL}/cotizaciones`;
+  private apiUrl = `${environment.baseURL}/quotation`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) { }
@@ -22,7 +22,7 @@ export class CotizacionService {
   }
 
   createCotizacionWithPersona(personaId: number, cotizacionRequest: CotizacionRequest): Observable<CotizacionResponse> {
-    return this.http.post<CotizacionResponse>(`${this.apiUrl}/persona/${personaId}`, cotizacionRequest).pipe(
+    return this.http.post<CotizacionResponse>(`${this.apiUrl}/person/${personaId}`, cotizacionRequest).pipe(
       tap(() => this.cacheService.invalidateModule('cotizaciones'))
     );
   }
@@ -36,7 +36,7 @@ export class CotizacionService {
   }
 
   getCotizacionConDetalles(id: number): Observable<CotizacionConDetallesResponseDTO> {
-    return this.http.get<CotizacionConDetallesResponseDTO>(`${this.apiUrl}/${id}/con-detalles`);
+    return this.http.get<CotizacionConDetallesResponseDTO>(`${this.apiUrl}/${id}/with-detail`);
   }
 
   updateCotizacion(id: number, cotizacionPatchRequest: CotizacionPatchRequest): Observable<CotizacionResponse> {
@@ -66,11 +66,11 @@ export class CotizacionService {
       context: new HttpContext().set(BYPASS_CACHE, true)
     } : {};
 
-    return this.http.get<CotizacionResponse[]>(`${this.apiUrl}/sin-liquidacion`, options);
+    return this.http.get<CotizacionResponse[]>(`${this.apiUrl}/without-liquidation`, options);
   }
 
   generarDocx(cotizacionId: number): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/${cotizacionId}/generar-docx`, {
+    return this.http.get(`${this.apiUrl}/${cotizacionId}/generate-docx`, {
       responseType: 'blob'
     });
   }
@@ -93,11 +93,11 @@ export class CotizacionService {
 
   // Métodos para gestión de carpetas
   getCotizacionesByCarpeta(carpetaId: number): Observable<CotizacionResponse[]> {
-    return this.http.get<CotizacionResponse[]>(`${this.apiUrl}/carpeta/${carpetaId}`);
+    return this.http.get<CotizacionResponse[]>(`${this.apiUrl}/folder/${carpetaId}`);
   }
 
   getCotizacionesSinCarpeta(): Observable<CotizacionResponse[]> {
-    return this.http.get<CotizacionResponse[]>(`${this.apiUrl}/sin-carpeta`);
+    return this.http.get<CotizacionResponse[]>(`${this.apiUrl}/without-folder`);
   }
 
   updateCarpeta(id: number, carpetaId: number | null): Observable<CotizacionResponse> {
@@ -105,7 +105,7 @@ export class CotizacionService {
     if (carpetaId !== null) {
       params = params.set('carpetaId', carpetaId.toString());
     }
-    return this.http.patch<CotizacionResponse>(`${this.apiUrl}/${id}/carpeta`, null, { params }).pipe(
+    return this.http.patch<CotizacionResponse>(`${this.apiUrl}/${id}/folder`, null, { params }).pipe(
       tap(() => this.cacheService.invalidateModule('cotizaciones'))
     );
   }

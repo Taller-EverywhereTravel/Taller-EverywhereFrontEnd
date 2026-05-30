@@ -9,7 +9,7 @@ import { CacheService } from '../cache.service';
   providedIn: 'root'
 })
 export class DetalleLiquidacionService {
-  private apiUrl = `${environment.baseURL}/detalles-liquidacion`;
+  private apiUrl = `${environment.baseURL}/detail-liquidation`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) {}
@@ -23,7 +23,7 @@ export class DetalleLiquidacionService {
   }
 
   getDetallesByLiquidacionId(liquidacionId: number): Observable<DetalleLiquidacionSinLiquidacion[]> {
-    return this.http.get<DetalleLiquidacionSinLiquidacion[]>(`${this.apiUrl}/liquidacion/${liquidacionId}`);
+    return this.http.get<DetalleLiquidacionSinLiquidacion[]>(`${this.apiUrl}/liquidation/${liquidacionId}`);
   }
 
   createDetalleLiquidacion(liquidacionId: number, detalleLiquidacionRequest: DetalleLiquidacionRequest): Observable<DetalleLiquidacionResponse> {
@@ -33,7 +33,7 @@ export class DetalleLiquidacionService {
     };
     return this.http.post<DetalleLiquidacionResponse>(this.apiUrl, requestWithLiquidacionId).pipe(
       tap(() => {
-        this.cacheService.invalidatePattern(`/liquidaciones/${liquidacionId}/con-detalles`);
+        this.cacheService.invalidatePattern(`/liquidation/${liquidacionId}/with-detail`);
       })
     );
   }
@@ -41,8 +41,8 @@ export class DetalleLiquidacionService {
   updateDetalleLiquidacion(id: number, detalleLiquidacionRequest: DetalleLiquidacionRequest): Observable<DetalleLiquidacionResponse> {
     return this.http.patch<DetalleLiquidacionResponse>(`${this.apiUrl}/${id}`, detalleLiquidacionRequest).pipe(
       tap((response) => {
-        if (response.liquidacion?.id) {
-          this.cacheService.invalidatePattern(`/liquidaciones/${response.liquidacion.id}/con-detalles`);
+        if (response.liquidation?.id) {
+          this.cacheService.invalidatePattern(`/liquidation/${response.liquidation.id}/with-detail`);
         }
       })
     );
@@ -51,7 +51,7 @@ export class DetalleLiquidacionService {
   deleteDetalleLiquidacion(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       tap(() => {
-        this.cacheService.invalidatePattern(/\/liquidaciones\/\d+\/con-detalles/);
+        this.cacheService.invalidatePattern(/\/liquidation\/\d+\/with-detail/);
       })
     );
   }

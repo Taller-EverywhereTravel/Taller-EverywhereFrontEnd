@@ -17,7 +17,7 @@ export class PdfService {
       'Accept': 'application/pdf'
     });
 
-    return this.http.get(`${this.apiUrl}/documento-cobranza/${id}`, {
+    return this.http.get(`${this.apiUrl}/document-collection/${id}`, {
       headers,
       responseType: 'blob'
     });
@@ -68,7 +68,7 @@ export class PdfService {
       'Accept': 'application/pdf'
     });
 
-    return this.http.get(`${this.apiUrl}/recibo/${id}`, {
+    return this.http.get(`${this.apiUrl}/receipt/${id}`, {
       headers,
       responseType: 'blob'
     });

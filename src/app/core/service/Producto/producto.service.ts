@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class ProductoService {
-  private apiUrl = `${environment.baseURL}/producto`;
+  private apiUrl = `${environment.baseURL}/product`;
 
   constructor(private http: HttpClient) {
   }
@@ -34,6 +34,6 @@ export class ProductoService {
   }
 
   getByCodigoProducto(codigo: string): Observable<ProductoResponse> {
-    return this.http.get<ProductoResponse>(`${this.apiUrl}/codigo/${codigo}`);
+    return this.http.get<ProductoResponse>(`${this.apiUrl}/code/${codigo}`);
   }
 }

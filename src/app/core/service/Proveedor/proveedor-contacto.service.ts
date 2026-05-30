@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
     providedIn: 'root'
 })
 export class ProveedorContactoService {
-    private apiUrl = `${environment.baseURL}/proveedor-contacto`;
+    private apiUrl = `${environment.baseURL}/supplier-contact`;
 
     constructor(private http: HttpClient) { }
 
@@ -21,11 +21,11 @@ export class ProveedorContactoService {
     }
 
     getByProveedorId(proveedorId: number): Observable<ProveedorContactoResponse[]> {
-        return this.http.get<ProveedorContactoResponse[]>(`${this.apiUrl}/proveedor/${proveedorId}`);
+        return this.http.get<ProveedorContactoResponse[]>(`${this.apiUrl}/supplier/${proveedorId}`);
     }
 
     getByGrupoContactoId(grupoId: number): Observable<ProveedorContactoResponse[]> {
-        return this.http.get<ProveedorContactoResponse[]>(`${this.apiUrl}/grupo/${grupoId}`);
+        return this.http.get<ProveedorContactoResponse[]>(`${this.apiUrl}/group/${grupoId}`);
     }
 
     create(request: ProveedorContactoRequest): Observable<ProveedorContactoResponse> {

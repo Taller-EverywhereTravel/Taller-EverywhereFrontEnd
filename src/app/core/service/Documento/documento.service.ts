@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class DocumentoService {
 
-  private apiUrl = `${environment.baseURL}/documentos`;
+  private apiUrl = `${environment.baseURL}/document`;
   constructor(private http: HttpClient) { }
 
   getAllDocumentos(): Observable<DocumentoResponse[]> {

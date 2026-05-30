@@ -9,7 +9,7 @@ import { BYPASS_CACHE } from '../../interceptos/cache.interceptor';
   providedIn: 'root'
 })
 export class FormaPagoService {
-  private apiUrl = `${environment.baseURL}/formas-pago`;
+  private apiUrl = `${environment.baseURL}/method-payment`;
 
   constructor(private http: HttpClient) {
   }
@@ -24,12 +24,12 @@ export class FormaPagoService {
   }
 
   getByCodigoFormaPago(codigo: number): Observable<FormaPagoResponse> {
-    return this.http.get<FormaPagoResponse>(`${this.apiUrl}/codigo/${codigo}`);
+    return this.http.get<FormaPagoResponse>(`${this.apiUrl}/code/${codigo}`);
   }
 
   getByDescripcionFormaPago(descripcion: string): Observable<FormaPagoResponse[]> {
     const params = new HttpParams().set('descripcion', descripcion);
-    return this.http.get<FormaPagoResponse[]>(`${this.apiUrl}/descripcion`, {params});
+    return this.http.get<FormaPagoResponse[]>(`${this.apiUrl}/description`, {params});
   }
 
   saveFormaPago(formaPago: FormaPagoRequest): Observable<FormaPagoResponse> {

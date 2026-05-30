@@ -8,7 +8,7 @@ import { PersonaNaturalRequest, PersonaNaturalResponse } from '../../../shared/m
   providedIn: 'root'
 })
 export class PersonaNaturalService {
-  private baseURL = `${environment.baseURL}/personas-naturales`;
+  private baseURL = `${environment.baseURL}/person-natural`;
   private http = inject(HttpClient);
 
   constructor() { }
@@ -23,22 +23,22 @@ export class PersonaNaturalService {
 
   findByDocumento(documento: string): Observable<PersonaNaturalResponse[]> {
     const params = new HttpParams().set('documento', documento);
-    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/documento`, { params });
+    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/document`, { params });
   }
 
   findByNombres(nombres: string): Observable<PersonaNaturalResponse[]> {
     const params = new HttpParams().set('nombres', nombres);
-    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/nombres`, { params });
+    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/name`, { params });
   }
 
   findByApellidosPaternos(apellidos: string): Observable<PersonaNaturalResponse[]> {
     const params = new HttpParams().set('apellidos', apellidos);
-    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/apellidos-paterno`, { params });
+    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/surname-paternal`, { params });
   }
 
   findByApellidosMaternos(apellidos: string): Observable<PersonaNaturalResponse[]> {
     const params = new HttpParams().set('apellidos', apellidos);
-    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/apellidos-materno`, { params });
+    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/surname-maternal`, { params });
   }
 
   save(personaNaturalRequest: PersonaNaturalRequest): Observable<PersonaNaturalResponse> {
@@ -50,11 +50,11 @@ export class PersonaNaturalService {
   }
 
   asociarViajero(id: number, viajeroId: number): Observable<PersonaNaturalResponse> {
-    return this.http.patch<PersonaNaturalResponse>(`${this.baseURL}/${id}/asociar-viajero`, { viajeroId });
+    return this.http.patch<PersonaNaturalResponse>(`${this.baseURL}/${id}/associate-traveler`, { viajeroId });
   }
 
   desasociarViajero(id: number): Observable<PersonaNaturalResponse> {
-    return this.http.patch<PersonaNaturalResponse>(`${this.baseURL}/${id}/desasociar-viajero`, null);
+    return this.http.patch<PersonaNaturalResponse>(`${this.baseURL}/${id}/dissociate-traveler`, null);
   }
 
   deleteById(id: number): Observable<void> {

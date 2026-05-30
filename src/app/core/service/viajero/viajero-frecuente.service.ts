@@ -8,7 +8,7 @@ import { ViajeroFrecuenteRequest, ViajeroFrecuenteResponse } from '../../../shar
   providedIn: 'root'
 })
 export class ViajeroFrecuenteService {
-  private baseURL = `${environment.baseURL}/viajeros-frecuentes`;
+  private baseURL = `${environment.baseURL}/traveler-frequent`;
   private http = inject(HttpClient);
 
   constructor() { }
@@ -26,7 +26,7 @@ export class ViajeroFrecuenteService {
   }
 
   listarPorViajero(viajeroId: number): Observable<ViajeroFrecuenteResponse[]> {
-    return this.http.get<ViajeroFrecuenteResponse[]>(`${this.baseURL}/viajero/${viajeroId}`);
+    return this.http.get<ViajeroFrecuenteResponse[]>(`${this.baseURL}/traveler/${viajeroId}`);
   }
 
   actualizar(id: number, viajeroFrecuenteRequest: ViajeroFrecuenteRequest): Observable<ViajeroFrecuenteResponse> {

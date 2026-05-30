@@ -11,7 +11,7 @@ export class ViajeroService {
   exportViajeros(selectedItems: number[]) {
     throw new Error('Method not implemented.');
   }
-  private baseURL = `${environment.baseURL}/viajeros`;
+  private baseURL = `${environment.baseURL}/traveler`;
   private http = inject(HttpClient);
 
   constructor() { }
@@ -22,12 +22,12 @@ export class ViajeroService {
 
   findByNacionalidad(nacionalidad: string): Observable<ViajeroResponse[]> {
     const params = new HttpParams().set('nacionalidad', nacionalidad);
-    return this.http.get<ViajeroResponse[]>(`${this.baseURL}/nacionalidad`, { params });
+    return this.http.get<ViajeroResponse[]>(`${this.baseURL}/nationality`, { params });
   }
 
   findByResidencia(residencia: string): Observable<ViajeroResponse[]> {
     const params = new HttpParams().set('residencia', residencia);
-    return this.http.get<ViajeroResponse[]>(`${this.baseURL}/residencia`, { params });
+    return this.http.get<ViajeroResponse[]>(`${this.baseURL}/residence`, { params });
   }
 
   findById(id: number): Observable<ViajeroResponse> {
@@ -47,7 +47,7 @@ export class ViajeroService {
   }
 
   findAllWithPersonaNatural(): Observable<ViajeroResponse[]> {
-    return this.http.get<ViajeroResponse[]>(`${this.baseURL}/con-persona-natural`);
+    return this.http.get<ViajeroResponse[]>(`${this.baseURL}/with-natural-person`);
   }
 
  /*

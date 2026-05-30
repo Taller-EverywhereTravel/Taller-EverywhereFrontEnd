@@ -9,7 +9,7 @@ import { CacheService } from '../cache.service';
   providedIn: 'root'
 })
 export class PersonaService {
-  private baseURL = `${environment.baseURL}/personas`;
+  private baseURL = `${environment.baseURL}/person`;
   private http = inject(HttpClient);
   private cacheService = inject(CacheService);
 
@@ -25,12 +25,12 @@ export class PersonaService {
 
   findByEmail(email: string): Observable<PersonaResponse[]> {
     const params = new HttpParams().set('email', email);
-    return this.http.get<PersonaResponse[]>(`${this.baseURL}/email`, { params });
+    return this.http.get<PersonaResponse[]>(`${this.baseURL}/mail`, { params });
   }
 
   findByTelefono(telefono: string): Observable<PersonaResponse[]> {
     const params = new HttpParams().set('telefono', telefono);
-    return this.http.get<PersonaResponse[]>(`${this.baseURL}/telefono`, { params });
+    return this.http.get<PersonaResponse[]>(`${this.baseURL}/phone`, { params });
   }
 
   save(personaRequest: PersonaRequest): Observable<PersonaResponse> {
@@ -52,6 +52,6 @@ export class PersonaService {
   }
 
   findPersonaNaturalOrJuridicaById(id: number): Observable<personaDisplay> {
-    return this.http.get<personaDisplay>(`${this.baseURL}/${id}/NaturalOrJuridica`);
+    return this.http.get<personaDisplay>(`${this.baseURL}/${id}/NaturalOrJuridic`);
   }
 }

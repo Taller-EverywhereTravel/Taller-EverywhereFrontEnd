@@ -8,7 +8,7 @@ import { PagoPaxRequest, PagoPaxResponse } from '../../../shared/models/PagoPax/
   providedIn: 'root'
 })
 export class PagoPaxService {
-  private baseURL = `${environment.baseURL}/pagos-pax`;
+  private baseURL = `${environment.baseURL}/payment-pax`;
   private http = inject(HttpClient);
 
   constructor() { }
@@ -38,7 +38,7 @@ export class PagoPaxService {
    * Obtener todos los pagos pax de una liquidación
    */
   findByLiquidacionId(liquidacionId: number): Observable<PagoPaxResponse[]> {
-    return this.http.get<PagoPaxResponse[]>(`${this.baseURL}/liquidacion/${liquidacionId}`);
+    return this.http.get<PagoPaxResponse[]>(`${this.baseURL}/liquidation/${liquidacionId}`);
   }
 
   /**

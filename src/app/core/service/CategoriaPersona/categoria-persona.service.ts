@@ -9,7 +9,7 @@ import { PersonaNaturalResponse } from '../../../shared/models/Persona/personaNa
   providedIn: 'root'
 })
 export class CategoriaPersonaService {
-  private baseURL = `${environment.baseURL}/categorias-personas`;
+  private baseURL = `${environment.baseURL}/category-person`;
 
   constructor(private http: HttpClient) { }
 
@@ -19,7 +19,7 @@ export class CategoriaPersonaService {
 
   findByNombre(nombre: string): Observable<CategoriaPersonaResponse[]> {
     const params = new HttpParams().set('nombre', nombre);
-    return this.http.get<CategoriaPersonaResponse[]>(`${this.baseURL}/nombre`, { params });
+    return this.http.get<CategoriaPersonaResponse[]>(`${this.baseURL}/name`, { params });
   }
 
   findById(id: number): Observable<CategoriaPersonaResponse> {
@@ -39,18 +39,18 @@ export class CategoriaPersonaService {
   }
 
   asignarCategoria(personaNaturalId: number, categoriaId: number): Observable<PersonaNaturalResponse> {
-    return this.http.patch<PersonaNaturalResponse>(`${this.baseURL}/persona-natural/${personaNaturalId}/asignar`, { categoriaId });
+    return this.http.patch<PersonaNaturalResponse>(`${this.baseURL}/person-natural/${personaNaturalId}/assign`, { categoriaId });
   }
 
   desasignarCategoria(personaNaturalId: number): Observable<PersonaNaturalResponse> {
-    return this.http.patch<PersonaNaturalResponse>(`${this.baseURL}/persona-natural/${personaNaturalId}/desasignar`, null);
+    return this.http.patch<PersonaNaturalResponse>(`${this.baseURL}/person-natural/${personaNaturalId}/unassign`, null);
   }
 
   findPersonasPorCategoria(categoriaId: number): Observable<PersonaNaturalResponse[]> {
-    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/categoria/${categoriaId}`);
+    return this.http.get<PersonaNaturalResponse[]>(`${this.baseURL}/category/${categoriaId}`);
   }
 
   getCategoriaDePersona(personaNaturalId: number): Observable<CategoriaPersonaResponse> {
-    return this.http.get<CategoriaPersonaResponse>(`${this.baseURL}/persona-natural/${personaNaturalId}/categoria`);
+    return this.http.get<CategoriaPersonaResponse>(`${this.baseURL}/person-natural/${personaNaturalId}/category`);
   }
 }

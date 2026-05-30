@@ -13,7 +13,7 @@ import { CacheService } from '../cache.service';
   providedIn: 'root'
 })
 export class HistorialCotizacionService {
-  private apiUrl = `${environment.baseURL}/historial-cotizaciones`;
+  private apiUrl = `${environment.baseURL}/historial-quotation`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) {}
@@ -27,15 +27,15 @@ export class HistorialCotizacionService {
   }
 
   findByCotizacionId(cotizacionId: number): Observable<HistorialCotizacionSimple[]> {
-    return this.http.get<HistorialCotizacionSimple[]>(`${this.apiUrl}/cotizacion/${cotizacionId}`);
+    return this.http.get<HistorialCotizacionSimple[]>(`${this.apiUrl}/quotation/${cotizacionId}`);
   }
 
   create(request: HistorialCotizacionRequest): Observable<HistorialCotizacionResponse> {
     return this.http.post<HistorialCotizacionResponse>(this.apiUrl, request).pipe(
       tap((response) => {
-        const cotizacionId = response.cotizacionId ?? request.quotationId;
+        const cotizacionId = response.quotationId ?? request.quotationId;
         if (cotizacionId) {
-          this.cacheService.invalidatePattern(`/cotizaciones/${cotizacionId}`);
+          this.cacheService.invalidatePattern(`/quotation/${cotizacionId}`);
         }
       })
     );
@@ -44,8 +44,8 @@ export class HistorialCotizacionService {
   update(id: number, request: HistorialCotizacionRequest): Observable<HistorialCotizacionResponse> {
     return this.http.patch<HistorialCotizacionResponse>(`${this.apiUrl}/${id}`, request).pipe(
       tap((response) => {
-        if (response.cotizacionId) {
-          this.cacheService.invalidatePattern(`/cotizaciones/${response.cotizacionId}`);
+        if (response.quotationId) {
+          this.cacheService.invalidatePattern(`/quotation/${response.quotationId}`);
         }
       })
     );

@@ -13,7 +13,7 @@ import { CacheService } from '../cache.service';
   providedIn: 'root'
 })
 export class DetalleDocumentoCobranzaService {
-  private apiUrl = `${environment.baseURL}/detalle-documento-cobranza`;
+  private apiUrl = `${environment.baseURL}/detail-document-collection`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) { }
@@ -30,14 +30,14 @@ export class DetalleDocumentoCobranzaService {
 
   getDetallesByDocumentoCobranza(documentoId: number): Observable<DetalleDocumentoCobranzaResponseDTO[]> {
     const context = new HttpContext().set(BYPASS_CACHE, true);
-    return this.http.get<DetalleDocumentoCobranzaResponseDTO[]>(`${this.apiUrl}/documento-cobranza/${documentoId}`, { context });
+    return this.http.get<DetalleDocumentoCobranzaResponseDTO[]>(`${this.apiUrl}/document-collection/${documentoId}`, { context });
   }
 
   createDetalle(dto: DetalleDocumentoCobranzaRequestDTO): Observable<DetalleDocumentoCobranzaResponseDTO> {
     return this.http.post<DetalleDocumentoCobranzaResponseDTO>(this.apiUrl, dto).pipe(
       tap((response) => {
-        if (response.documentoCobranzaId) {
-          this.cacheService.invalidatePattern(`/documentos-cobranza/${response.documentoCobranzaId}`);
+        if (response.documentCollectionId) {
+          this.cacheService.invalidatePattern(`/document-collection/${response.documentCollectionId}`);
         }
       })
     );
@@ -46,8 +46,8 @@ export class DetalleDocumentoCobranzaService {
   updateDetalle(id: number, dto: DetalleDocumentoCobranzaRequestDTO): Observable<DetalleDocumentoCobranzaResponseDTO> {
     return this.http.patch<DetalleDocumentoCobranzaResponseDTO>(`${this.apiUrl}/${id}`, dto).pipe(
       tap((response) => {
-        if (response.documentoCobranzaId) {
-          this.cacheService.invalidatePattern(`/documentos-cobranza/${response.documentoCobranzaId}`);
+        if (response.documentCollectionId) {
+          this.cacheService.invalidatePattern(`/document-collection/${response.documentCollectionId}`);
         }
       })
     );

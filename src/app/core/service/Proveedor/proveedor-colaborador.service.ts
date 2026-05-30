@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
     providedIn: 'root'
 })
 export class ProveedorColaboradorService {
-    private apiUrl = `${environment.baseURL}/proveedor-colaborador`;
+    private apiUrl = `${environment.baseURL}/supplier-collection`;
 
     constructor(private http: HttpClient) { }
 
@@ -21,7 +21,7 @@ export class ProveedorColaboradorService {
     }
 
     getByProveedorId(proveedorId: number): Observable<ProveedorColaboradorResponse[]> {
-        return this.http.get<ProveedorColaboradorResponse[]>(`${this.apiUrl}/proveedor/${proveedorId}`);
+        return this.http.get<ProveedorColaboradorResponse[]>(`${this.apiUrl}/supplier/${proveedorId}`);
     }
 
     create(request: ProveedorColaboradorRequest): Observable<ProveedorColaboradorResponse> {

@@ -8,7 +8,7 @@ import { PersonaJuridicaRequest, PersonaJuridicaResponse } from '../../../shared
   providedIn: 'root'
 })
 export class PersonaJuridicaService {
-  private baseURL = `${environment.baseURL}/personas-juridicas`;
+  private baseURL = `${environment.baseURL}/person-juridic`;
   private http = inject(HttpClient);
 
   constructor() { }

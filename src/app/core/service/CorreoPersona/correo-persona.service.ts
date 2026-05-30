@@ -10,12 +10,12 @@ import { CorreoPersonaRequest, CorreoPersonaResponse } from '../../../shared/mod
 })
 export class CorreoPersonaService {
 
-  private baseURL = `${environment.baseURL}/correos-persona`;
+  private baseURL = `${environment.baseURL}/mail-person`;
 
   constructor(private http: HttpClient) { }
 
   findByPersonaId(personaId: number): Observable<CorreoPersonaResponse[]> {
-    return this.http.get<CorreoPersonaResponse[]>(`${this.baseURL}/personas/${personaId}`);
+    return this.http.get<CorreoPersonaResponse[]>(`${this.baseURL}/person/${personaId}`);
   }
 
   findById(correoId: number): Observable<CorreoPersonaResponse> {
@@ -23,11 +23,11 @@ export class CorreoPersonaService {
   }
 
   create(personaId: number, correoData: CorreoPersonaRequest): Observable<CorreoPersonaResponse> {
-    return this.http.post<CorreoPersonaResponse>(`${this.baseURL}/personas/${personaId}`, correoData);
+    return this.http.post<CorreoPersonaResponse>(`${this.baseURL}/person/${personaId}`, correoData);
   }
 
   update(personaId: number, correoId: number, correoData: CorreoPersonaRequest): Observable<CorreoPersonaResponse> {
-    return this.http.patch<CorreoPersonaResponse>(`${this.baseURL}/personas/${personaId}/correo/${correoId}`, correoData);
+    return this.http.patch<CorreoPersonaResponse>(`${this.baseURL}/person/${personaId}/mail/${correoId}`, correoData);
   }
 
   delete(correoId: number): Observable<void> {

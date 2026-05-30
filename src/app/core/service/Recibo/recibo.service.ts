@@ -10,7 +10,7 @@ import { BYPASS_CACHE } from '../../interceptos/cache.interceptor';
   providedIn: 'root'
 })
 export class ReciboService {
-  private apiUrl = `${environment.baseURL}/recibos`;
+  private apiUrl = `${environment.baseURL}/receipt`;
   private cacheService = inject(CacheService);
 
   constructor(private http: HttpClient) { }
@@ -55,11 +55,11 @@ export class ReciboService {
 
   // Métodos para gestión de carpetas
   getRecibosByCarpeta(carpetaId: number): Observable<ReciboResponseDTO[]> {
-    return this.http.get<ReciboResponseDTO[]>(`${this.apiUrl}/carpeta/${carpetaId}`);
+    return this.http.get<ReciboResponseDTO[]>(`${this.apiUrl}/folder/${carpetaId}`);
   }
 
   getRecibosSinCarpeta(): Observable<ReciboResponseDTO[]> {
-    return this.http.get<ReciboResponseDTO[]>(`${this.apiUrl}/sin-carpeta`);
+    return this.http.get<ReciboResponseDTO[]>(`${this.apiUrl}/without-folder`);
   }
 
   updateCarpeta(id: number, carpetaId: number | null): Observable<ReciboResponseDTO> {
@@ -67,7 +67,7 @@ export class ReciboService {
     if (carpetaId !== null) {
       params = params.set('carpetaId', carpetaId.toString());
     }
-    return this.http.patch<ReciboResponseDTO>(`${this.apiUrl}/${id}/carpeta`, null, { params }).pipe(
+    return this.http.patch<ReciboResponseDTO>(`${this.apiUrl}/${id}/folder`, null, { params }).pipe(
       tap(() => this.cacheService.invalidateModule('recibos'))
     );
   }

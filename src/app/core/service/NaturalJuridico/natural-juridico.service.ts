@@ -10,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class NaturalJuridicoService {
 
-  private baseURL = `${environment.baseURL}/natural-juridico`;
+  private baseURL = `${environment.baseURL}/natural-juridic`;
 
   constructor(private http: HttpClient) { }
 
@@ -23,11 +23,11 @@ export class NaturalJuridicoService {
   }
 
   findByPersonaNaturalId(personaNaturalId: number): Observable<NaturalJuridicaResponse[]> {
-    return this.http.get<NaturalJuridicaResponse[]>(`${this.baseURL}/persona-natural/${personaNaturalId}`);
+    return this.http.get<NaturalJuridicaResponse[]>(`${this.baseURL}/person-natural/${personaNaturalId}`);
   }
 
   findByPersonaJuridicaId(personaJuridicaId: number): Observable<NaturalJuridicaResponse[]> {
-    return this.http.get<NaturalJuridicaResponse[]>(`${this.baseURL}/persona-juridica/${personaJuridicaId}`);
+    return this.http.get<NaturalJuridicaResponse[]>(`${this.baseURL}/person-juridica/${personaJuridicaId}`);
   }
 
   create(request: NaturalJuridicaRequest): Observable<NaturalJuridicaResponse[]> {
@@ -39,11 +39,11 @@ export class NaturalJuridicoService {
   }
 
   deleteByPersonas(personaNaturalId: number, personaJuridicaId: number): Observable<void> {
-    const url = `${this.baseURL}/persona-natural/${personaNaturalId}/persona-juridica/${personaJuridicaId}`;
+    const url = `${this.baseURL}/person-natural/${personaNaturalId}/person-juridic/${personaJuridicaId}`;
     return this.http.delete<void>(url);
   }
 
   patchByPersonaNaturalId(personaNaturalId: number, patchData: NaturalJuridicoPatch): Observable<NaturalJuridicaResponse[]> {
-    return this.http.patch<NaturalJuridicaResponse[]>(`${this.baseURL}/persona-natural/${personaNaturalId}`, patchData);
+    return this.http.patch<NaturalJuridicaResponse[]>(`${this.baseURL}/person-natural/${personaNaturalId}`, patchData);
   }
 }

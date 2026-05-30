@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class EstadoCotizacionService {
-  private apiUrl = `${environment.baseURL}/estados-cotizacion`;
+  private apiUrl = `${environment.baseURL}/status-quotation`;
 
   constructor(private http: HttpClient) {
   }
