@@ -36,7 +36,7 @@
                             <i class="fas fa-chevron-right mx-2"></i>
                         </li>
                         <li class="text-white font-medium">
-                            Detalle del proveedor {{ proveedor?.nombre || '' }}
+                            Detalle del proveedor {{ proveedor?.name || '' }}
                         </li>
                     </ol>
                 </nav>
@@ -49,7 +49,7 @@
                                 <i class="fas fa-truck text-2xl"></i>
                             </div>
                             <div>
-                                <h1 class="text-4xl font-bold">{{ proveedor?.nombre || 'Proveedor' }}</h1>
+                                <h1 class="text-4xl font-bold">{{ proveedor?.name || 'Proveedor' }}</h1>
                                 <p class="text-xl opacity-90 mt-2">
                                     Información detallada del proveedor
                                 </p>
@@ -134,11 +134,11 @@
                             <div *ngIf="!editandoProveedor" class="space-y-3">
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Nombre:</span>
-                                    <span class="font-semibold">{{ proveedor?.nombre || 'No especificado' }}</span>
+                                    <span class="font-semibold">{{ proveedor?.name || 'No especificado' }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Nombre Jurídico:</span>
-                                    <span class="font-semibold">{{ proveedor?.nombreJuridico || 'No especificado'
+                                    <span class="font-semibold">{{ proveedor?.nameJuridic || 'No especificado'
                                         }}</span>
                                 </div>
                                 <div class="flex justify-between">
@@ -147,12 +147,12 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Fecha de Creación:</span>
-                                    <span class="font-semibold">{{ proveedor?.creado | date: 'dd/MM/yyyy HH:mm'
+                                    <span class="font-semibold">{{ proveedor?.created | date: 'dd/MM/yyyy HH:mm'
                                         }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Última Actualización:</span>
-                                    <span class="font-semibold">{{ proveedor?.actualizado | date: 'dd/MM/yyyy HH:mm'
+                                    <span class="font-semibold">{{ proveedor?.updated | date: 'dd/MM/yyyy HH:mm'
                                         }}</span>
                                 </div>
                             </div>
@@ -242,7 +242,7 @@
                                 </div>
 
                                 <div class="space-y-2">
-                                    <h4 class="font-bold text-gray-900 text-lg">{{ colaborador.nombre }}</h4>
+                                    <h4 class="font-bold text-gray-900 text-lg">{{ colaborador.name }}</h4>
                                     <div class="flex items-center gap-2 text-sm text-gray-600"
                                         *ngIf="colaborador.cargo">
                                         <i class="fas fa-briefcase text-gray-400"></i>
@@ -325,8 +325,8 @@
                                 </div>
 
                                 <div class="space-y-2">
-                                    <h4 class="font-bold text-gray-900 text-base" *ngIf="contacto.descripcion">{{
-                                        contacto.descripcion }}</h4>
+                                    <h4 class="font-bold text-gray-900 text-base" *ngIf="contacto.description">{{
+                                        contacto.description }}</h4>
                                     <div class="flex items-center gap-2 text-sm text-gray-600" *ngIf="contacto.email">
                                         <i class="fas fa-envelope text-gray-400"></i>
                                         <span class="break-all">{{ contacto.email }}</span>
@@ -406,8 +406,8 @@
                                 </div>
 
                                 <div class="space-y-2">
-                                    <h4 class="font-bold text-gray-900 text-lg">{{ grupo.nombre }}</h4>
-                                    <p class="text-sm text-gray-600" *ngIf="grupo.descripcion">{{ grupo.descripcion }}
+                                    <h4 class="font-bold text-gray-900 text-lg">{{ grupo.name }}</h4>
+                                    <p class="text-sm text-gray-600" *ngIf="grupo.description">{{ grupo.description }}
                                     </p>
                                 </div>
                             </div>
@@ -679,7 +679,7 @@
                     <select formControlName="grupoContactoId"
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-everywhere-primary focus:border-transparent bg-white">
                         <option [value]="null">Sin grupo</option>
-                        <option *ngFor="let grupo of gruposContacto" [value]="grupo.id">{{ grupo.nombre }}</option>
+                        <option *ngFor="let grupo of gruposContacto" [value]="grupo.id">{{ grupo.name }}</option>
                     </select>
                 </div>
 

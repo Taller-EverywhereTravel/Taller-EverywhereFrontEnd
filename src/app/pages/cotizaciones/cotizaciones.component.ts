@@ -1974,7 +1974,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       // Actualizar cada detalle con PATCH para cambiar solo el campo 'seleccionado'
       for (const seleccion of selecciones) {
         await this.detalleCotizacionService
-          .updateDetalleCotizacion(seleccion.detalleId, { seleccionado: seleccion.seleccionado })
+          .updateDetalleCotizacion(seleccion.detalleId, { selected: seleccion.seleccionado })
           .toPromise();
       }
 
@@ -2339,10 +2339,10 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
         // Incluir relaciones (ids) en el PATCH si están presentes o cambiaron
         const relationFields: (keyof CotizacionPatchRequest)[] = [
           'counterId',
-          'formaPagoId',
-          'estadoCotizacionId',
-          'sucursalId',
-          'carpetaId',
+          'methodPaymentId',
+          'statusQuotationId',
+          'branchId',
+          'folderId',
         ];
 
         relationFields.forEach((field) => {
@@ -2382,7 +2382,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
           nameQuotation: formValue.nombreCotizacion || '',
           numAdult: formValue.cantAdultos ?? 1,
           numChild: formValue.cantNinos ?? 0,
-          dateIssue: formValue.fechaVencimiento,
+          dateExpiration: formValue.fechaVencimiento,
           originDestination: formValue.origenDestino,
           dateDeparture: formValue.fechaSalida,
           dateReturn: formValue.fechaRegreso,
@@ -2393,7 +2393,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
           methodPaymentId: formValue.formaPagoId,
           statusQuotationId: formValue.estadoCotizacionId,
           branchId: formValue.sucursalId,
-          folder: formValue.carpetaId,
+          folderId: formValue.carpetaId,
         };
 
         let createResult: CotizacionResponse | undefined = undefined;
@@ -2448,13 +2448,13 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
     // Campos a comparar para el PATCH
     const fieldsToCheck: (keyof CotizacionRequest)[] = [
-      'nombreCotizacion',
-      'origenDestino',
-      'fechaSalida',
-      'fechaRegreso',
-      'moneda',
-      'observacion',
-      'fechaVencimiento',
+      'nameQuotation',
+      'originDestination',
+      'dateDeparture',
+      'dateReturn',
+      'currency',
+      'observation',
+      'dateExpiration',
     ];
 
     // Manejar cantAdultos y cantNinos juntos - si alguno cambia, incluir ambos
@@ -2560,7 +2560,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if (detalle.proveedor && detalle.proveedor.id === 0) {
       const nuevoProveedor = await this.proveedorService
         .createProveedor({
-          nombre: detalle.proveedor.name,
+          name: detalle.proveedor.name,
         })
         .toPromise();
       proveedorId = nuevoProveedor?.id;
@@ -2777,7 +2777,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if (!persona || !persona.id) return;
 
     // Si ya es un personaDisplay normalizado, usarlo tal cual
-    if ('tipo' in persona && 'nombre' in persona) {
+    if ('type' in persona && 'name' in persona) {
       this.personasCache[persona.id] = persona;
     } else if ('ruc' in persona) {
       // Persona jurídica
@@ -3070,7 +3070,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     }
 
     // Si es personaDisplay (nuevo modelo unificado)
-    if ('tipo' in persona && 'identificador' in persona) {
+    if ('type' in persona && 'identifier' in persona) {
       const tipo = persona.type.toUpperCase();
       return tipo === 'JURIDICA' ? 'Empresa' : 'Cliente';
     }
@@ -3089,14 +3089,14 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if (!persona) return '';
 
     // Si es personaDisplay (nuevo modelo unificado)
-    if ('tipo' in persona && 'identificador' in persona) {
+    if ('type' in persona && 'identifier' in persona) {
       return persona.identifier || '';
     }
 
     // Si es persona jurídica, devolver RUC
     if ('ruc' in persona && persona.ruc) return persona.ruc;
     // Si es persona natural, devolver documento
-    if ('documento' in persona && persona.document) return persona.document;
+    if ('document' in persona && persona.document) return persona.document;
 
     return '';
   }
@@ -3107,11 +3107,11 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if (!persona) return false;
 
     // Si es personaDisplay (nuevo modelo unificado)
-    if ('tipo' in persona && 'identificador' in persona) {
+    if ('type' in persona && 'identifier' in persona) {
       return !!persona.identifier;
     }
 
-    return !!('documento' in persona && persona.document) || !!('ruc' in persona && persona.ruc);
+    return !!('document' in persona && persona.document) || !!('ruc' in persona && persona.ruc);
   }
 
   getSelectedClienteName(): string {
@@ -3129,7 +3129,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
   ): string {
     if (!persona) return 'Cliente';
     // Si es personaDisplay (modelo unificado)
-    if ('tipo' in persona && 'nombre' in persona) {
+    if ('type' in persona && 'name' in persona) {
       const nombreLimpio = persona.name
         .replace(/null|undefined/gi, '')
         .replace(/\s+/g, ' ')
@@ -3141,9 +3141,9 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if ('nombres' in persona) {
       const pn = persona as any;
 
-      const nombres = pn.nombres || '';
-      const apellidoPaterno = pn.apellidosPaterno || pn.apellidoPaterno || '';
-      const apellidoMaterno = pn.apellidosMaterno || pn.apellidoMaterno || '';
+      const nombres = pn.name || '';
+      const apellidoPaterno = pn.surnamePaternal || pn.apellidoPaterno || '';
+      const apellidoMaterno = pn.surnameMaternal || pn.apellidoMaterno || '';
 
       // Construir nombre completo solo con valores que existan y no sean 'null' como string
       const partes = [nombres, apellidoPaterno, apellidoMaterno]
@@ -3174,7 +3174,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       return 'Cliente';
     }
     // Si es personaDisplay
-    if ('tipo' in persona && 'nombre' in persona) {
+    if ('type' in persona && 'name' in persona) {
       return persona.name.replace(/null|undefined/gi, '').replace(/\s+/g, ' ').trim();
     }
     // Compatibilidad con modelos antiguos (soporta apellidosPaterno/apellidosMaterno)

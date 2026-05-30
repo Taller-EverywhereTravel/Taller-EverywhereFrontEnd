@@ -298,7 +298,7 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
         const yaExisteDocumento = this.documentos.some(
           (documento) =>
             documento.quotationId === cotizacion.id ||
-            documento.codeQuotation === cotizacion.codigoCotizacion,
+            documento.codeQuotation === cotizacion.codeQuotation,
         );
         return !yaExisteDocumento;
       });

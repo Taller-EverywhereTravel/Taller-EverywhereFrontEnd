@@ -223,7 +223,7 @@
                       <!-- Documentos personales (DNI, Pasaporte, etc.) -->
                       <optgroup label="📄 Documentos Personales del Cliente">
                         <option *ngFor="let doc of documentosCliente" [value]="'doc_' + doc.id">
-                          {{ doc.documento.tipo }}: {{ doc.numero }}
+                          {{ doc.documento.type }}: {{ doc.numero }}
                         </option>
                       </optgroup>
                       <!-- Empresas asociadas (RUC) -->
@@ -324,7 +324,7 @@
                     <div class="w-6 h-6 bg-amber-100 rounded-md flex items-center justify-center">
                       <i class="fas fa-calendar-check text-amber-600 text-xs"></i>
                     </div>
-                    <span class="text-sm font-medium text-gray-900">{{ (recibo.fechaVencimiento | date:'dd/MM/yyyy') ||
+                    <span class="text-sm font-medium text-gray-900">{{ (recibo.dateExpiration | date:'dd/MM/yyyy') ||
                       'Sin fecha' }}</span>
                   </div>
                   <div *ngIf="modoEdicion" class="relative">
@@ -359,7 +359,7 @@
                     <i class="fas fa-sticky-note text-purple-600 text-xs"></i>
                   </div>
                   <span class="text-sm font-medium text-gray-900 break-words whitespace-pre-wrap overflow-hidden"
-                    style="word-break: break-word; overflow-wrap: break-word;">{{ recibo.observaciones || 'Sin
+                    style="word-break: break-word; overflow-wrap: break-word;">{{ recibo.observation || 'Sin
                     observaciones' }}</span>
                 </div>
                 <div *ngIf="modoEdicion" class="relative">
@@ -420,11 +420,11 @@
                     [style.grid-template-columns]="modoEdicion ? 'minmax(120px, 2fr) minmax(150px, 3fr) minmax(80px, 100px) minmax(100px, 120px) minmax(100px, 120px) 70px' : 'minmax(120px, 2fr) minmax(150px, 3fr) minmax(80px, 100px) minmax(100px, 120px) minmax(100px, 120px)'">
                     <!-- Producto -->
                     <div>
-                      <select *ngIf="modoEdicion" [ngModel]="detalle.productoId"
+                      <select *ngIf="modoEdicion" [ngModel]="detalle.productId"
                         (ngModelChange)="onDetalleOriginalChange(i, 'productoId', $event)"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
-                        <option *ngFor="let producto of productos" [value]="producto.id">{{ producto.tipo }}</option>
+                        <option *ngFor="let producto of productos" [value]="producto.id">{{ producto.type }}</option>
                       </select>
                       <div *ngIf="!modoEdicion" class="px-3 py-2 bg-white rounded-lg border border-gray-200/50">
                         <span class="text-xs font-medium text-gray-900 block truncate">{{
@@ -433,42 +433,42 @@
                     </div>
                     <!-- Descripción -->
                     <div>
-                      <textarea *ngIf="modoEdicion" [value]="detalle.descripcion"
-                        (input)="onDetalleOriginalChange(i, 'descripcion', $any($event.target).value)"
+                      <textarea *ngIf="modoEdicion" [value]="detalle.description"
+                        (input)="onDetalleOriginalChange(i, 'description', $any($event.target).value)"
                         placeholder="Descripción" rows="2"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm resize-y min-h-[60px] max-h-[200px]"></textarea>
                       <div *ngIf="!modoEdicion" class="px-3 py-2 bg-white rounded-lg border border-gray-200/50">
-                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.descripcion || 'Sin
+                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.description || 'Sin
                           descripción' }}</span>
                       </div>
                     </div>
                     <!-- Cantidad -->
                     <div>
-                      <input *ngIf="modoEdicion" type="number" [value]="detalle.cantidad"
-                        (input)="onDetalleOriginalChange(i, 'cantidad', $any($event.target).value)" min="1"
+                      <input *ngIf="modoEdicion" type="number" [value]="detalle.amount"
+                        (input)="onDetalleOriginalChange(i, 'amount', $any($event.target).value)" min="1"
                         placeholder="1"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
                       <div *ngIf="!modoEdicion"
                         class="px-3 py-2 bg-white rounded-lg border border-gray-200/50 text-center">
-                        <span class="text-xs font-medium text-gray-900">{{ detalle.cantidad }}</span>
+                        <span class="text-xs font-medium text-gray-900">{{ detalle.amount }}</span>
                       </div>
                     </div>
                     <!-- Precio -->
                     <div>
-                      <input *ngIf="modoEdicion" type="number" [value]="detalle.precio"
-                        (input)="onDetalleOriginalChange(i, 'precio', $any($event.target).value)" step="0.01" min="0"
+                      <input *ngIf="modoEdicion" type="number" [value]="detalle.price"
+                        (input)="onDetalleOriginalChange(i, 'price', $any($event.target).value)" step="0.01" min="0"
                         placeholder="0.00"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
                       <div *ngIf="!modoEdicion"
                         class="px-3 py-2 bg-white rounded-lg border border-gray-200/50 text-right">
-                        <span class="text-xs font-medium text-gray-900">{{ recibo.moneda || 'S/' }} {{ detalle.precio |
+                        <span class="text-xs font-medium text-gray-900">{{ recibo.currency || 'S/' }} {{ detalle.price |
                           number:'1.2-2' }}</span>
                       </div>
                     </div>
                     <!-- Total -->
                     <div class="px-3 py-2 bg-blue-50 rounded-lg border border-blue-200/50 text-right">
-                      <span class="text-xs font-bold text-blue-900">{{ recibo.moneda || 'S/' }} {{ ((detalle.cantidad
-                        || 0) * (detalle.precio || 0)) | number:'1.2-2' }}</span>
+                      <span class="text-xs font-bold text-blue-900">{{ recibo.currency || 'S/' }} {{ ((detalle.amount
+                        || 0) * (detalle.price || 0)) | number:'1.2-2' }}</span>
                     </div>
                     <!-- Acciones -->
                     <div *ngIf="modoEdicion" class="text-center">
@@ -488,38 +488,38 @@
                       style="grid-template-columns: minmax(120px, 2fr) minmax(150px, 3fr) minmax(80px, 100px) minmax(100px, 120px) minmax(100px, 120px) 70px;">
                       <!-- Producto -->
                       <div>
-                        <select [ngModel]="detalle.productoId"
+                        <select [ngModel]="detalle.productId"
                           (ngModelChange)="onDetalleFijoChange(i, 'productoId', $event)"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                           <option value="">Seleccionar</option>
-                          <option *ngFor="let producto of productos" [value]="producto.id">{{ producto.tipo }}</option>
+                          <option *ngFor="let producto of productos" [value]="producto.id">{{ producto.type }}</option>
                         </select>
                       </div>
                       <!-- Descripción -->
                       <div>
-                        <textarea [value]="detalle.descripcion"
+                        <textarea [value]="detalle.description"
                           (input)="onDetalleFijoChange(i, 'descripcion', $any($event.target).value)"
                           placeholder="Descripción" rows="2"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm resize-y min-h-[60px] max-h-[200px]"></textarea>
                       </div>
                       <!-- Cantidad -->
                       <div>
-                        <input type="number" [value]="detalle.cantidad"
+                        <input type="number" [value]="detalle.amount"
                           (input)="onDetalleFijoChange(i, 'cantidad', $any($event.target).value)" min="1"
                           placeholder="1"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
                       </div>
                       <!-- Precio -->
                       <div>
-                        <input type="number" [value]="detalle.precio"
+                        <input type="number" [value]="detalle.price"
                           (input)="onDetalleFijoChange(i, 'precio', $any($event.target).value)" step="0.01" min="0"
                           placeholder="0.00"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
                       </div>
                       <!-- Total -->
                       <div class="px-3 py-2 bg-green-50 rounded-lg border border-green-200/50 text-right">
-                        <span class="text-xs font-bold text-green-900">{{ recibo.moneda || 'S/' }} {{
-                          ((detalle.cantidad || 0) * (detalle.precio || 0)) | number:'1.2-2' }}</span>
+                        <span class="text-xs font-bold text-green-900">{{ recibo.currency || 'S/' }} {{
+                          ((detalle.amount || 0) * (detalle.price || 0)) | number:'1.2-2' }}</span>
                       </div>
                       <!-- Acciones -->
                       <div class="text-center">
@@ -542,7 +542,7 @@
                       <select formControlName="productoId"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
-                        <option *ngFor="let producto of productos" [value]="producto.id">{{ producto.tipo }}</option>
+                        <option *ngFor="let producto of productos" [value]="producto.id">{{ producto.type }}</option>
                       </select>
                     </div>
                     <!-- Descripción -->
@@ -562,7 +562,7 @@
                     </div>
                     <!-- Total Placeholder -->
                     <div class="px-3 py-2 bg-gray-100 rounded-lg border border-gray-200/50 text-right">
-                      <span class="text-xs font-medium text-gray-500">{{ recibo.moneda || 'S/' }} 0.00</span>
+                      <span class="text-xs font-medium text-gray-500">{{ recibo.currency || 'S/' }} 0.00</span>
                     </div>
                     <!-- Botón Agregar -->
                     <div class="text-center">
@@ -590,13 +590,13 @@
                   <div class="space-y-3">
                     <div class="flex justify-between items-center text-sm">
                       <span class="text-gray-600">Subtotal Detalles:</span>
-                      <span class="font-medium text-gray-900">{{ recibo.moneda || 'S/' }} {{ (calcularTotal()) |
+                      <span class="font-medium text-gray-900">{{ recibo.currency || 'S/' }} {{ (calcularTotal()) |
                         number:'1.2-2' }}</span>
                     </div>
                     <div class="border-t border-blue-300 pt-3 mt-3">
                       <div class="flex justify-between items-center">
                         <span class="text-base font-semibold text-gray-900">Total:</span>
-                        <span class="text-2xl font-bold text-everywhere-primary">{{ recibo.moneda || 'S/' }} {{
+                        <span class="text-2xl font-bold text-everywhere-primary">{{ recibo.currency || 'S/' }} {{
                           calcularTotal() | number:'1.2-2' }}</span>
                       </div>
                     </div>

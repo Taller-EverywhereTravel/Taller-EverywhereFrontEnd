@@ -356,10 +356,10 @@
                   Fecha de Emisión
                   <span class="text-red-500">*</span>
                 </label>
-                <input type="datetime-local" formControlName="fechaEmision"
+                <input type="datetime-local" formControlName="dateIssue"
                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  [class.border-red-300]="isFieldInvalid(cotizacionForm, 'fechaEmision')" />
-                <div *ngIf="isFieldInvalid(cotizacionForm, 'fechaEmision')"
+                  [class.border-red-300]="isFieldInvalid(cotizacionForm, 'dateIssue')" />
+                <div *ngIf="isFieldInvalid(cotizacionForm, 'dateIssue')"
                   class="mt-2 p-2 bg-red-50 border border-red-200 rounded-lg">
                   <p class="text-sm text-red-600 flex items-center">
                     <i class="fas fa-exclamation-circle mr-2"></i>
@@ -741,7 +741,7 @@
                       <option value="">Seleccionar</option>
                       <option *ngFor="let producto of productos" [value]="producto.id"
                         [selected]="producto.id === detalle.producto?.id">
-                        {{ producto.tipo }}
+                        {{ producto.type }}
                       </option>
                     </select>
                   </div>
@@ -815,7 +815,7 @@
                       [class.border-red-300]="isFieldInvalid(detalleForm, 'productoId')">
                       <option value="">Seleccionar</option>
                       <option *ngFor="let producto of productos" [value]="producto.id">
-                        {{ producto.tipo }}
+                        {{ producto.type }}
                       </option>
                     </select>
                   </div>
@@ -1034,7 +1034,7 @@
                               <option value="">Seleccionar</option>
                               <option *ngFor="let producto of productos" [value]="producto.id"
                                 [selected]="producto.id === detalle.producto?.id">
-                                {{ producto.tipo }}
+                                {{ producto.type }}
                               </option>
                             </select>
                           </div>
@@ -1111,7 +1111,7 @@
                               [class.border-red-300]="isFieldInvalid(detalleGrupoForm, 'productoId')">
                               <option value="">Seleccionar</option>
                               <option *ngFor="let producto of productos" [value]="producto.id">
-                                {{ producto.tipo }}
+                                {{ producto.type }}
                               </option>
                             </select>
                           </div>
@@ -1263,7 +1263,7 @@
             Visualizar Cotización
           </h2>
           <p class="text-white/90 mt-1" *ngIf="cotizacionCompleta">
-            {{ cotizacionCompleta.codigoCotizacion }} - {{ formatDate(cotizacionCompleta.fechaEmision) }}
+            {{ cotizacionCompleta.codeQuotation }} - {{ formatDate(cotizacionCompleta.dateIssue) }}
           </p>
         </div>
         <button (click)="cerrarModalVer()" class="p-2 hover:bg-white/20 rounded-lg transition-colors duration-200">
@@ -1293,7 +1293,7 @@
                 Código de Cotización
               </label>
               <div class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-900 font-medium">
-                {{ cotizacionCompleta.codigoCotizacion }}
+                {{ cotizacionCompleta.codeQuotation }}
               </div>
             </div>
 
@@ -1313,7 +1313,7 @@
                 Fecha de Emisión
               </label>
               <div class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-900">
-                {{ formatDateTime(cotizacionCompleta.fechaEmision) }}
+                {{ formatDateTime(cotizacionCompleta.dateIssue) }}
               </div>
             </div>
 
@@ -1404,7 +1404,7 @@
                 <div class="relative">
                   <div
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 pr-10 text-sm">
-                    {{ cotizacionCompleta.origenDestino || 'No especificado' }}
+                    {{ cotizacionCompleta.originDestination || 'No especificado' }}
                   </div>
                   <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                     <i class="fas fa-route text-gray-400 text-xs"></i>
@@ -1477,7 +1477,7 @@
                     Moneda
                   </label>
                   <div class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 text-sm">
-                    {{ cotizacionCompleta.moneda || 'USD' }}
+                    {{ cotizacionCompleta.currency || 'USD' }}
                   </div>
                 </div>
                 <div>
@@ -1529,7 +1529,7 @@
                 </div>
                 <!-- Producto -->
                 <div class="text-sm text-gray-900">
-                  {{ detalle.producto?.tipo || 'Sin producto' }}
+                  {{ detalle.producto?.type || 'Sin producto' }}
                 </div>
                 <!-- Cantidad -->
                 <div class="text-sm text-gray-900 text-center">
@@ -1635,7 +1635,7 @@
                     </div>
                     <!-- Producto -->
                     <div class="text-sm text-gray-900">
-                      {{ detalle.producto?.tipo || 'Sin producto' }}
+                      {{ detalle.producto?.type || 'Sin producto' }}
                     </div>
                     <!-- Cantidad -->
                     <div class="text-sm text-gray-900 text-center">
@@ -1701,7 +1701,7 @@
                 class="flex justify-between items-center py-3 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg px-4 border border-emerald-200">
                 <span class="font-semibold text-gray-900 text-lg">Cotización más económica:</span>
                 <span class="font-bold text-emerald-600 text-2xl">
-                  ${{ getTotalCotizacionCompleta() | number:'1.2-2' }} {{ cotizacionCompleta.moneda || 'USD' }}
+                  ${{ getTotalCotizacionCompleta() | number:'1.2-2' }} {{ cotizacionCompleta.currency || 'USD' }}
                 </span>
               </div>
             </div>

@@ -528,7 +528,7 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
             const relaciones = await this.naturalJuridicoService
               .findByPersonaNaturalId(personaNaturalId)
               .toPromise() || [];
-            this.personasJuridicas = relaciones.map(r => r.personaJuridica);
+            this.personasJuridicas = relaciones.map(r => r.personJuridic);
           } else {
             if (this.documento?.personJuridicId) {
               this.personasJuridicas = [{

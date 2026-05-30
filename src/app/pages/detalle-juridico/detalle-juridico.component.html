@@ -237,7 +237,7 @@
                   <div class="space-y-3">
                     <div class="flex justify-between">
                       <span class="text-gray-600">Dirección:</span>
-                      <span class="font-semibold">{{ personaJuridica?.persona?.direccion || 'N/A' }}</span>
+                      <span class="font-semibold">{{ personaJuridica?.persona?.address || 'N/A' }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="text-gray-600">Observaciones:</span>
@@ -283,7 +283,7 @@
                   <!-- Información de la empresa -->
                   <div class="space-y-2">
                     <h4 class="font-bold text-gray-900 text-lg line-clamp-2">
-                      {{ empresa.nombres }} {{ empresa.apellidosPaterno }} {{ empresa.apellidosMaterno }}
+                      {{ empresa.name }} {{ empresa.apellidosPaterno }} {{ empresa.apellidosMaterno }}
                     </h4>
 
                     <!-- Documento -->
@@ -293,9 +293,9 @@
                     </div>
 
                     <!-- Dirección -->
-                    <div *ngIf="empresa.persona.direccion" class="flex items-start gap-2 text-sm text-gray-600">
+                    <div *ngIf="empresa.persona.address" class="flex items-start gap-2 text-sm text-gray-600">
                       <i class="fas fa-map-marker-alt text-gray-400 mt-1"></i>
-                      <span class="line-clamp-2">{{ empresa.persona.direccion }}</span>
+                      <span class="line-clamp-2">{{ empresa.persona.address }}</span>
                     </div>
 
                     <!-- Sexo -->
@@ -403,11 +403,11 @@
                       <div class="flex items-center justify-between text-sm">
                         <span class="text-gray-600">Tipo:</span>
                         <span class="px-3 py-1 rounded-full font-medium"
-                          [class.bg-blue-100]="telefono.tipo === 'PRINCIPAL'"
-                          [class.text-blue-700]="telefono.tipo === 'PRINCIPAL'"
-                          [class.bg-purple-100]="telefono.tipo === 'SECUNDARIO'"
-                          [class.text-purple-700]="telefono.tipo === 'SECUNDARIO'">
-                          {{ getTipoTelefonoLabel(telefono.tipo) }}
+                          [class.bg-blue-100]="telefono.type === 'PRINCIPAL'"
+                          [class.text-blue-700]="telefono.type === 'PRINCIPAL'"
+                          [class.bg-purple-100]="telefono.type === 'SECUNDARIO'"
+                          [class.text-purple-700]="telefono.type === 'SECUNDARIO'">
+                          {{ getTipoTelefonoLabel(telefono.type) }}
                         </span>
                       </div>
 
@@ -485,11 +485,11 @@
                       <div class="flex items-center justify-between text-sm">
                         <span class="text-gray-600">Tipo:</span>
                         <span class="px-3 py-1 rounded-full font-medium"
-                          [class.bg-blue-100]="correo.tipo === 'PRINCIPAL'"
-                          [class.text-blue-700]="correo.tipo === 'PRINCIPAL'"
-                          [class.bg-purple-100]="correo.tipo === 'SECUNDARIO'"
-                          [class.text-purple-700]="correo.tipo === 'SECUNDARIO'">
-                          {{ getTipoCorreoLabel(correo.tipo) }}
+                          [class.bg-blue-100]="correo.type === 'PRINCIPAL'"
+                          [class.text-blue-700]="correo.type === 'PRINCIPAL'"
+                          [class.bg-purple-100]="correo.type === 'SECUNDARIO'"
+                          [class.text-purple-700]="correo.type === 'SECUNDARIO'">
+                          {{ getTipoCorreoLabel(correo.type) }}
                         </span>
                       </div>
 

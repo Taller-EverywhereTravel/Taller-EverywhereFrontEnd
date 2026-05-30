@@ -269,7 +269,7 @@
                           <i class="fas fa-box text-white text-sm"></i>
                         </div>
                         <div class="flex-1">
-                          <div class="text-sm font-medium text-orange-900">{{ liquidacion.producto?.tipo || 'Sin producto' }}</div>
+                          <div class="text-sm font-medium text-orange-900">{{ liquidacion.producto?.type || 'Sin producto' }}</div>
                           <div class="text-xs text-orange-600">Servicio contratado</div>
                         </div>
                       </div>
@@ -278,7 +278,7 @@
                           class="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
                           <option value="">Seleccionar producto</option>
                           <option *ngFor="let producto of productos" [value]="producto.id">
-                            {{ producto.tipo }}
+                            {{ producto.type }}
                           </option>
                         </select>
                       </div>
@@ -420,7 +420,7 @@
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="px-3 py-2 bg-gray-50 rounded-lg border border-gray-200/50">
                         <span class="text-xs font-medium text-gray-900 block break-words">{{
-                          getViajeroDisplayName(detalle.viajero?.id) }}</span>
+                          getViajeroDisplayName(detalle.traveler?.id) }}</span>
                       </div>
 
                       <!-- Dropdown de resultados (solo en modo edición) -->
@@ -429,10 +429,10 @@
                         <div *ngFor="let viajero of getViajerosFiltrados('detalle-original-' + i)"
                           (mousedown)="onViajeroSelect('detalle-original-' + i, viajero)"
                           class="px-3 py-2 hover:bg-purple-50 cursor-pointer text-sm border-b border-gray-100 last:border-b-0">
-                          <div class="font-medium text-gray-900">{{ viajero.personaNatural?.nombres || 'N/A' }} {{
-                            viajero.personaNatural?.apellidosPaterno || '' }}</div>
-                          <div *ngIf="viajero.personaNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
-                            viajero.personaNatural?.apellidosMaterno }}</div>
+                          <div class="font-medium text-gray-900">{{ viajero.personNatural?.name || 'N/A' }} {{
+                            viajero.personNatural?.apellidosPaterno || '' }}</div>
+                          <div *ngIf="viajero.personNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
+                            viajero.personNatural?.apellidosMaterno }}</div>
                         </div>
                         <div *ngIf="getViajerosFiltrados('detalle-original-' + i).length === 0"
                           class="px-3 py-2 text-sm text-gray-500 text-center">
@@ -449,7 +449,7 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
                         <option *ngFor="let producto of productos" [value]="producto.id">
-                          {{ producto.tipo }}
+                          {{ producto.type }}
                         </option>
                       </select>
 
@@ -679,10 +679,10 @@
                           <div *ngFor="let viajero of getViajerosFiltrados('detalle-fijo-' + i)"
                             (mousedown)="onViajeroSelect('detalle-fijo-' + i, viajero)"
                             class="px-3 py-2 hover:bg-purple-50 cursor-pointer text-sm border-b border-gray-100 last:border-b-0">
-                            <div class="font-medium text-gray-900">{{ viajero.personaNatural?.nombres || 'N/A' }} {{
-                              viajero.personaNatural?.apellidosPaterno || '' }}</div>
-                            <div *ngIf="viajero.personaNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
-                              viajero.personaNatural?.apellidosMaterno }}</div>
+                            <div class="font-medium text-gray-900">{{ viajero.personNatural?.name || 'N/A' }} {{
+                              viajero.personNatural?.apellidosPaterno || '' }}</div>
+                            <div *ngIf="viajero.personNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
+                              viajero.personNatural?.apellidosMaterno }}</div>
                           </div>
                           <div *ngIf="getViajerosFiltrados('detalle-fijo-' + i).length === 0"
                             class="px-3 py-2 text-sm text-gray-500 text-center">
@@ -698,7 +698,7 @@
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                           <option value="">Seleccionar</option>
                           <option *ngFor="let producto of productos" [value]="producto.id">
-                            {{ producto.tipo }}
+                            {{ producto.type }}
                           </option>
                         </select>
                       </div>
@@ -840,10 +840,10 @@
                         <div *ngFor="let viajero of getViajerosFiltrados('nuevo')"
                           (mousedown)="onViajeroSelect('nuevo', viajero)"
                           class="px-3 py-2 hover:bg-purple-50 cursor-pointer text-sm border-b border-gray-100 last:border-b-0">
-                          <div class="font-medium text-gray-900">{{ viajero.personaNatural?.nombres || 'N/A' }} {{
-                            viajero.personaNatural?.apellidosPaterno || '' }}</div>
-                          <div *ngIf="viajero.personaNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
-                            viajero.personaNatural?.apellidosMaterno }}</div>
+                          <div class="font-medium text-gray-900">{{ viajero.personNatural?.name || 'N/A' }} {{
+                            viajero.personNatural?.apellidosPaterno || '' }}</div>
+                          <div *ngIf="viajero.personNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
+                            viajero.personNatural?.apellidosMaterno }}</div>
                         </div>
                         <div *ngIf="getViajerosFiltrados('nuevo').length === 0"
                           class="px-3 py-2 text-sm text-gray-500 text-center">
@@ -858,7 +858,7 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
                         <option *ngFor="let producto of productos" [value]="producto.id">
-                          {{ producto.tipo }}
+                          {{ producto.type }}
                         </option>
                       </select>
                     </div>
@@ -1143,14 +1143,14 @@
                   <div class="flex-1">
                     <div class="flex items-center gap-3 mb-2">
                       <span
-                        [class]="pago.moneda === 'USD' ?
+                        [class]="pago.currency === 'USD' ?
                                    'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800' :
                                    'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800'">
                         <i class="fas fa-circle text-xs mr-1"></i>
-                        {{ pago.moneda }}
+                        {{ pago.currency }}
                       </span>
                       <span class="text-lg font-bold text-gray-900">
-                        {{ pago.moneda === 'USD' ? (pago.monto | currency:'USD':'symbol':'1.2-2') : ('S/ ' + (pago.monto
+                        {{ pago.currency === 'USD' ? (pago.monto | currency:'USD':'symbol':'1.2-2') : ('S/ ' + (pago.monto
                         |
                         number:'1.2-2')) }}
                       </span>

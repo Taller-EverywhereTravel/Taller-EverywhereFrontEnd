@@ -525,7 +525,7 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
             const relaciones = await this.naturalJuridicoService
               .findByPersonaNaturalId(personaNaturalId)
               .toPromise() || [];
-            this.personasJuridicas = relaciones.map(r => r.personaJuridica);
+            this.personasJuridicas = relaciones.map(r => r.personJuridic);
           } else {
             if (this.recibo?.personJuridicId) {
               this.personasJuridicas = [{

@@ -24,7 +24,7 @@ export interface CotizacionRequest {
   methodPaymentId?: number
   statusQuotationId?: number
   branchId?: number
-  folder?: number
+  folderId?: number
 }
 
 export type CotizacionPatchRequest = Partial<CotizacionRequest>

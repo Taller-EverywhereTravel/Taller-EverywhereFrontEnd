@@ -136,21 +136,21 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" *ngIf="liquidacionSeleccionada">
             <div class="bg-white rounded-lg p-4 shadow-sm">
               <div class="text-sm text-gray-500 mb-1">Número</div>
-              <div class="text-lg font-semibold text-gray-800">{{ liquidacionSeleccionada.numero || 'N/A' }}</div>
+              <div class="text-lg font-semibold text-gray-800">{{ liquidacionSeleccionada.number || 'N/A' }}</div>
             </div>
             <div class="bg-white rounded-lg p-4 shadow-sm">
               <div class="text-sm text-gray-500 mb-1">Fecha de Compra</div>
               <div class="text-lg font-semibold text-gray-800">
-                {{ liquidacionSeleccionada.fechaCompra ? (liquidacionSeleccionada.fechaCompra | date:'dd/MM/yyyy') : 'N/A' }}
+                {{ liquidacionSeleccionada.datePurchase ? (liquidacionSeleccionada.datePurchase | date:'dd/MM/yyyy') : 'N/A' }}
               </div>
             </div>
             <div class="bg-white rounded-lg p-4 shadow-sm">
               <div class="text-sm text-gray-500 mb-1">Destino</div>
-              <div class="text-lg font-semibold text-gray-800">{{ liquidacionSeleccionada.destino || 'N/A' }}</div>
+              <div class="text-lg font-semibold text-gray-800">{{ liquidacionSeleccionada.destiny || 'N/A' }}</div>
             </div>
             <div class="bg-white rounded-lg p-4 shadow-sm">
               <div class="text-sm text-gray-500 mb-1">Número de Pasajeros</div>
-              <div class="text-lg font-semibold text-gray-800">{{ liquidacionSeleccionada.numeroPasajeros || 'N/A' }}</div>
+              <div class="text-lg font-semibold text-gray-800">{{ liquidacionSeleccionada.numberPassenger || 'N/A' }}</div>
             </div>
           </div>
         </div>    <!-- Contenido del Modal - Tabla de Detalles -->
@@ -186,25 +186,25 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let detalle of liquidacionCompleta?.detalles; let i = index; trackBy: trackByDetalle"
+              <tr *ngFor="let detalle of liquidacionCompleta?.detail; let i = index; trackBy: trackByDetalle"
                   class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
 
                 <!-- Cliente (Viajero) -->
                 <td class="px-4 py-3 text-sm">
                   <div class="flex flex-col">
-                    <span class="font-medium text-gray-800">{{ detalle.viajero?.personaNatural?.nombres || 'N/A' }}</span>
-                    <span class="text-xs text-gray-500">{{ detalle.viajero?.personaNatural?.apellidosPaterno || '' }} {{ detalle.viajero?.personaNatural?.apellidosMaterno || '' }}</span>
+                    <span class="font-medium text-gray-800">{{ detalle.traveler?.personNatural?.name || 'N/A' }}</span>
+                    <span class="text-xs text-gray-500">{{ detalle.traveler?.personNatural?.surnamePaternal || '' }} {{ detalle.traveler?.personNatural?.surnameMaternal || '' }}</span>
                   </div>
                 </td>
 
                 <!-- Producto -->
                 <td class="px-4 py-3 text-sm">
-                  <span class="text-gray-800">{{ detalle.producto?.descripcion || 'N/A' }}</span>
+                  <span class="text-gray-800">{{ detalle.product?.description || 'N/A' }}</span>
                 </td>
 
                 <!-- Proveedor -->
                 <td class="px-4 py-3 text-sm">
-                  <span class="text-gray-800">{{ detalle.proveedor?.nombre || 'N/A' }}</span>
+                  <span class="text-gray-800">{{ detalle.supplier?.name || 'N/A' }}</span>
                 </td>
 
                 <!-- Nro de Ticket o File -->
@@ -214,32 +214,32 @@
 
                 <!-- Documento Cobro -->
                 <td class="px-4 py-3 text-sm">
-                  <span class="text-gray-800">{{ detalle.documentoCobro || 'N/A' }}</span>
+                  <span class="text-gray-800">{{ detalle.documentCollection || 'N/A' }}</span>
                 </td>
 
                 <!-- Operador -->
                 <td class="px-4 py-3 text-sm">
-                  <span class="text-gray-800">{{ detalle.operador?.nombre || 'N/A' }}</span>
+                  <span class="text-gray-800">{{ detalle.operator?.name || 'N/A' }}</span>
                 </td>
 
                 <!-- Costo de Ticket -->
                 <td class="px-4 py-3 text-sm text-right">
                   <span class="font-semibold text-gray-800">
-                    {{ detalle.costoTicket ? (detalle.costoTicket | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
+                    {{ detalle.costTicket ? (detalle.costTicket | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
                   </span>
                 </td>
 
                 <!-- Cargo por Servicio -->
                 <td class="px-4 py-3 text-sm text-right">
                   <span class="font-semibold text-gray-800">
-                    {{ detalle.cargoServicio ? (detalle.cargoServicio | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
+                    {{ detalle.chargeService ? (detalle.chargeService | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
                   </span>
                 </td>
 
                 <!-- Valor Venta -->
                 <td class="px-4 py-3 text-sm text-right">
                   <span class="font-semibold text-green-600">
-                    {{ detalle.valorVenta ? (detalle.valorVenta | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
+                    {{ detalle.valueSale ? (detalle.valueSale | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
                   </span>
                 </td>
 
@@ -250,48 +250,48 @@
 
                 <!-- Documento Fee -->
                 <td class="px-4 py-3 text-sm">
-                  <span class="text-gray-800">{{ detalle.documentoFee || 'N/A' }}</span>
+                  <span class="text-gray-800">{{ detalle.documentFee || 'N/A' }}</span>
                 </td>
 
                 <!-- Comision -->
                 <td class="px-4 py-3 text-sm">
-                  <span class="text-gray-800">{{ detalle.comision || 'N/A' }}</span>
+                  <span class="text-gray-800">{{ detalle.comission || 'N/A' }}</span>
                 </td>
 
                 <!-- Factura Compra -->
                 <td class="px-4 py-3 text-sm">
-                  <span class="text-gray-800">{{ detalle.facturaCompra || 'N/A' }}</span>
+                  <span class="text-gray-800">{{ detalle.invoicePurchase || 'N/A' }}</span>
                 </td>
 
                 <!-- Boleta Pasajero -->
                 <td class="px-4 py-3 text-sm">
-                  <span class="text-gray-800">{{ detalle.boletaPasajero || 'N/A' }}</span>
+                  <span class="text-gray-800">{{ detalle.ticketPassenger || 'N/A' }}</span>
                 </td>
 
                 <!-- Monto Descontado -->
                 <td class="px-4 py-3 text-sm text-right">
                   <span class="font-semibold text-red-600">
-                    {{ detalle.montoDescuento ? (detalle.montoDescuento | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
+                    {{ detalle.amountDiscount ? (detalle.amountDiscount | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
                   </span>
                 </td>
 
                 <!-- Pago Pax USD -->
                 <td class="px-4 py-3 text-sm text-right">
                   <span class="font-semibold text-blue-600">
-                    {{ detalle.pagoPaxUSD ? (detalle.pagoPaxUSD | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
+                    {{ detalle.paymentPaxUSD ? (detalle.paymentPaxUSD | currency:'USD':'symbol':'1.2-2') : 'N/A' }}
                   </span>
                 </td>
 
                 <!-- Pago Pax PEN -->
                 <td class="px-4 py-3 text-sm text-right">
                   <span class="font-semibold text-blue-600">
-                    {{ detalle.pagoPaxPEN ? (detalle.pagoPaxPEN | currency:'PEN':'symbol':'1.2-2') : 'N/A' }}
+                    {{ detalle.paymentPaxPEN ? (detalle.paymentPaxPEN | currency:'PEN':'symbol':'1.2-2') : 'N/A' }}
                   </span>
                 </td>
               </tr>
 
               <!-- Mensaje cuando no hay detalles -->
-              <tr *ngIf="liquidacionCompleta && (!liquidacionCompleta.detalles || liquidacionCompleta.detalles.length === 0)">
+              <tr *ngIf="liquidacionCompleta && (!liquidacionCompleta.detail || liquidacionCompleta.detail.length === 0)">
                 <td colspan="16" class="px-4 py-8 text-center text-gray-500">
                   <div class="flex flex-col items-center gap-2">
                     <i class="fas fa-inbox text-4xl text-gray-300"></i>
@@ -357,27 +357,27 @@
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-2">
-                <span class="font-semibold text-lg text-gray-900">{{ cotizacion.codigoCotizacion }}</span>
+                <span class="font-semibold text-lg text-gray-900">{{ cotizacion.codeQuotation }}</span>
                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  {{ cotizacion.estadoCotizacion?.descripcion || 'Sin estado' }}
+                  {{ cotizacion.statusQuotation?.description || 'Sin estado' }}
                 </span>
               </div>
-              <p class="text-gray-700 font-medium">{{ getPersonaDisplayName(cotizacion.personas?.id || 0) }}</p>
-              <p class="text-gray-600 text-sm">{{ cotizacion.origenDestino || 'Sin destino' }}</p>
+              <p class="text-gray-700 font-medium">{{ getPersonaDisplayName(cotizacion.person?.id || 0) }}</p>
+              <p class="text-gray-600 text-sm">{{ cotizacion.originDestination || 'Sin destino' }}</p>
               <div class="flex items-center gap-4 mt-2">
                 <span class="text-sm text-gray-500">
                   <i class="fas fa-calendar-alt mr-1"></i>
                   <span class="text-gray-500 text-xs">Salida:</span>
-                  {{ formatDate(cotizacion.fechaSalida) }}
+                  {{ formatDate(cotizacion.dateDeparture) }}
                 </span>
                 <span class="text-sm text-gray-500">
                   <i class="fas fa-calendar-alt mr-1"></i>
                   <span class="text-gray-500 text-xs">Regreso:</span>
-                  {{ formatDate(cotizacion.fechaRegreso) }}
+                  {{ formatDate(cotizacion.dateReturn) }}
                 </span>
                 <span class="text-sm text-gray-500">
                   <i class="fas fa-users mr-1"></i>
-                  {{ (cotizacion.cantAdultos || 0) + (cotizacion.cantNinos || 0) }} PAX
+                  {{ (cotizacion.numAdult || 0) + (cotizacion.numChild || 0) }} PAX
                 </span>
               </div>
             </div><!--

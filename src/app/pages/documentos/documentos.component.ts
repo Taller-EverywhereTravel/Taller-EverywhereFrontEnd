@@ -208,11 +208,11 @@ export class DocumentosComponent implements OnInit {
       next: (documentos) => {
         this.documentos = documentos.map(doc => ({
           id: doc.id,
-          tipo: doc.tipo,
-          descripcion: doc.descripcion || '',
-          estado: doc.estado,
-          creado: doc.creado,
-          actualizado: doc.actualizado || doc.creado
+          tipo: doc.type,
+          descripcion: doc.description || '',
+          estado: doc.status,
+          creado: doc.created,
+          actualizado: doc.updated || doc.created
         }));
         this.totalDocumentos = this.documentos.length;
         // Actualizar la configuración del DataTable con los nuevos datos

@@ -195,7 +195,7 @@
                   [class.border-red-500]="personaNaturalForm.get('documentoInicial.documentoId')?.invalid && personaNaturalForm.get('documentoInicial.documentoId')?.touched">
                   <option value="">Seleccione un tipo</option>
                   <option *ngFor="let tipo of tiposDocumento" [value]="tipo.id">
-                    {{ tipo.tipo }}
+                    {{ tipo.type }}
                   </option>
                 </select>
                 <div
@@ -240,7 +240,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                   Fecha de Emisión
                 </label>
-                <input type="date" formControlName="fechaEmision"
+                <input type="date" formControlName="dateIssue"
                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-everywhere-primary focus:border-transparent">
               </div>
 
@@ -343,7 +343,7 @@
                   <div class="space-y-3">
                     <div class="flex justify-between">
                       <span class="text-gray-600">Nombres:</span>
-                      <span class="font-semibold">{{ personaNatural?.nombres || 'No especificado' }}</span>
+                      <span class="font-semibold">{{ personaNatural?.name || 'No especificado' }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="text-gray-600">Apellido Paterno:</span>
@@ -361,7 +361,7 @@
                 </div> 
 
                 <!-- Información de Viajero -->
-                <div class="bg-blue-50 rounded-xl p-6" *ngIf="personaNatural?.viajero">
+                <div class="bg-blue-50 rounded-xl p-6" *ngIf="personaNatural?.traveler">
                   <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <i class="fas fa-passport text-blue-600"></i>
                     Información de Viajero
@@ -369,17 +369,17 @@
                   <div class="space-y-3">
                     <div class="flex justify-between">
                       <span class="text-gray-600">Fecha de Nacimiento:</span>
-                      <span class="font-semibold">{{ personaNatural?.viajero?.fechaNacimiento || 'No especificado'
+                      <span class="font-semibold">{{ personaNatural?.traveler?.fechaNacimiento || 'No especificado'
                         }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="text-gray-600">Nacionalidad:</span>
-                      <span class="font-semibold">{{ personaNatural?.viajero?.nacionalidad || 'No especificado'
+                      <span class="font-semibold">{{ personaNatural?.traveler?.nacionalidad || 'No especificado'
                         }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="text-gray-600">Residencia:</span>
-                      <span class="font-semibold">{{ personaNatural?.viajero?.residencia || 'No especificado' }}</span>
+                      <span class="font-semibold">{{ personaNatural?.traveler?.residencia || 'No especificado' }}</span>
                     </div>
                   </div>
                 </div>
@@ -393,7 +393,7 @@
                   <div class="space-y-3">
                     <div class="flex justify-between">
                       <span class="text-gray-600">Dirección:</span>
-                      <span class="font-semibold">{{ personaNatural?.persona?.direccion || 'No especificado' }}</span>
+                      <span class="font-semibold">{{ personaNatural?.persona?.address || 'No especificado' }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="text-gray-600">Observaciones:</span>
@@ -479,9 +479,9 @@
                       <span class="font-mono">{{ empresa.ruc }}</span>
                     </div>
 
-                    <div *ngIf="empresa.persona.direccion" class="flex items-start gap-2 text-sm text-gray-600">
+                    <div *ngIf="empresa.persona.address" class="flex items-start gap-2 text-sm text-gray-600">
                       <i class="fas fa-map-marker-alt text-gray-400 mt-1"></i>
-                      <span class="line-clamp-2">{{ empresa.persona.direccion }}</span>
+                      <span class="line-clamp-2">{{ empresa.persona.address }}</span>
                     </div>
 
                     <!-- Información adicional -->
@@ -577,11 +577,11 @@
                       <div class="flex items-center justify-between text-sm">
                         <span class="text-gray-600">Tipo:</span>
                         <span class="px-3 py-1 rounded-full font-medium"
-                          [class.bg-blue-100]="telefono.tipo === 'PRINCIPAL'"
-                          [class.text-blue-700]="telefono.tipo === 'PRINCIPAL'"
-                          [class.bg-purple-100]="telefono.tipo === 'SECUNDARIO'"
-                          [class.text-purple-700]="telefono.tipo === 'SECUNDARIO'">
-                          {{ getTipoTelefonoLabel(telefono.tipo) }}
+                          [class.bg-blue-100]="telefono.type === 'PRINCIPAL'"
+                          [class.text-blue-700]="telefono.type === 'PRINCIPAL'"
+                          [class.bg-purple-100]="telefono.type === 'SECUNDARIO'"
+                          [class.text-purple-700]="telefono.type === 'SECUNDARIO'">
+                          {{ getTipoTelefonoLabel(telefono.type) }}
                         </span>
                       </div>
 
@@ -659,11 +659,11 @@
                       <div class="flex items-center justify-between text-sm">
                         <span class="text-gray-600">Tipo:</span>
                         <span class="px-3 py-1 rounded-full font-medium"
-                          [class.bg-blue-100]="correo.tipo === 'PRINCIPAL'"
-                          [class.text-blue-700]="correo.tipo === 'PRINCIPAL'"
-                          [class.bg-purple-100]="correo.tipo === 'SECUNDARIO'"
-                          [class.text-purple-700]="correo.tipo === 'SECUNDARIO'">
-                          {{ getTipoCorreoLabel(correo.tipo) }}
+                          [class.bg-blue-100]="correo.type === 'PRINCIPAL'"
+                          [class.text-blue-700]="correo.type === 'PRINCIPAL'"
+                          [class.bg-purple-100]="correo.type === 'SECUNDARIO'"
+                          [class.text-purple-700]="correo.type === 'SECUNDARIO'">
+                          {{ getTipoCorreoLabel(correo.type) }}
                         </span>
                       </div>
 
@@ -757,9 +757,9 @@
                     </div>
 
                     <div class="pt-3 mt-3 border-t border-gray-100 space-y-1 text-xs text-gray-600">
-                      <div class="flex justify-between" *ngIf="documento.fechaEmision">
+                      <div class="flex justify-between" *ngIf="documento.dateIssue">
                         <span>Emisión:</span>
-                        <span class="font-medium">{{ documento.fechaEmision | date: 'dd/MM/yyyy' }}</span>
+                        <span class="font-medium">{{ documento.dateIssue | date: 'dd/MM/yyyy' }}</span>
                       </div>
                       <div class="flex justify-between" *ngIf="documento.fechaVencimiento">
                         <span>Vencimiento:</span>
@@ -792,7 +792,7 @@
             <div *ngIf="activeTab === 'viajeros'" class="space-y-6">
               <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-gray-900">Viajeros Frecuentes</h3>
-                <button (click)="abrirModalViajeroFrecuente()" *ngIf="personaNatural?.viajero"
+                <button (click)="abrirModalViajeroFrecuente()" *ngIf="personaNatural?.traveler"
                   class="bg-everywhere-primary text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-everywhere-primary/90 transition-colors">
                   <i class="fas fa-plus"></i>
                   Agregar Viajero Frecuente
@@ -846,7 +846,7 @@
               </div>
 
               <!-- Estado cuando no es viajero -->
-              <div *ngIf="!personaNatural?.viajero" class="text-center py-12 bg-gray-50 rounded-xl">
+              <div *ngIf="!personaNatural?.traveler" class="text-center py-12 bg-gray-50 rounded-xl">
                 <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
                   <i class="fas fa-plane text-gray-400 text-2xl"></i>
                 </div>
@@ -857,7 +857,7 @@
               </div>
 
               <!-- Estado vacío para viajeros -->
-              <div *ngIf="personaNatural?.viajero && viajerosFrecuentes.length === 0"
+              <div *ngIf="personaNatural?.traveler && viajerosFrecuentes.length === 0"
                 class="text-center py-12 bg-gray-50 rounded-xl">
                 <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
                   <i class="fas fa-plane text-gray-400 text-2xl"></i>
@@ -1274,9 +1274,9 @@
                       <p class="text-sm text-gray-600">RUC: {{ empresa.ruc }}</p>
                     </div>
                   </div>
-                  <div class="text-xs text-gray-500 mt-2" *ngIf="empresa.persona.direccion">
+                  <div class="text-xs text-gray-500 mt-2" *ngIf="empresa.persona.address">
                     <i class="fas fa-map-marker-alt mr-1"></i>
-                    {{ empresa.persona.direccion }}
+                    {{ empresa.persona.address }}
                   </div>
                 </div>
               </div>
@@ -1338,7 +1338,7 @@
             [class.border-red-500]="documentoForm.get('documentoId')?.invalid && documentoForm.get('documentoId')?.touched">
             <option [value]="null" disabled>Seleccione un tipo</option>
             <option *ngFor="let tipo of tiposDocumento" [value]="tipo.id">
-              {{ tipo.tipo }}
+              {{ tipo.type }}
             </option>
           </select>
         </div>

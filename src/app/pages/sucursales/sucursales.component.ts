@@ -252,15 +252,23 @@ export class SucursalesComponent implements OnInit {
   }
 
   private transformarDataParaTabla(): void {
-    this.sucursalesTabla = this.sucursales.map(sucursal => ({
-      ...sucursal,
-      estadoText: sucursal.status ? 'Activa' : 'Inactiva'
-    }));
-    this.tableConfig = {
-      ...this.tableConfig,
-      data: this.sucursalesTabla
-    };
-  }
+  this.sucursalesTabla = this.sucursales.map(sucursal => ({
+    id: sucursal.id,
+    descripcion: sucursal.description,        // Mapeo: description -> descripcion
+    direccion: sucursal.address,              // Mapeo: address -> direccion
+    telefono: sucursal.phone,                 // Mapeo: phone -> telefono
+    email: sucursal.mail,                     // Mapeo: mail -> email
+    estado: sucursal.status,                  // Mapeo: status -> estado
+    estadoText: sucursal.status ? 'Activa' : 'Inactiva',
+    fechaCreacion: sucursal.dateCreated,      // Mapeo: dateCreated -> fechaCreacion
+    fechaActualizacion: sucursal.dateUpdated  // Mapeo: dateUpdated -> fechaActualizacion
+  }));
+
+  this.tableConfig = {
+    ...this.tableConfig,
+    data: this.sucursalesTabla
+  };
+}
 
   // Método principal para guardar (crea o actualiza según el estado)
   guardarSucursal(): void {

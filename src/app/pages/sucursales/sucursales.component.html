@@ -263,7 +263,7 @@
     <div class="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-6 rounded-t-3xl">
       <div class="flex items-center justify-between">
         <h2 class="text-xl font-bold">
-          {{ sucursalAEliminar?.estado ? 'Desactivar' : 'Activar' }} Sucursal
+          {{ sucursalAEliminar?.status ? 'Desactivar' : 'Activar' }} Sucursal
         </h2>
         <button (click)="cerrarModalEliminar()"
           class="text-white/80 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-colors duration-200">
@@ -275,26 +275,26 @@
     <!-- Modal Content -->
     <div class="p-8">
       <div class="text-center mb-8">
-        <div [class]="sucursalAEliminar?.estado ? 'bg-red-100' : 'bg-green-100'"
+        <div [class]="sucursalAEliminar?.status ? 'bg-red-100' : 'bg-green-100'"
           class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i [class]="sucursalAEliminar?.estado ? 'fas fa-ban text-red-600' : 'fas fa-check text-green-600'"
+          <i [class]="sucursalAEliminar?.status ? 'fas fa-ban text-red-600' : 'fas fa-check text-green-600'"
             class="text-3xl"></i>
         </div>
 
         <h3 class="text-lg font-semibold text-gray-900 mb-3">
-          ¿Estás seguro de {{ sucursalAEliminar?.estado ? 'desactivar' : 'activar' }} esta sucursal?
+          ¿Estás seguro de {{ sucursalAEliminar?.status ? 'desactivar' : 'activar' }} esta sucursal?
         </h3>
 
         <div class="bg-gray-50 rounded-xl p-4 mb-6">
           <div class="text-sm text-gray-600 space-y-1">
-            <div><strong>Descripción:</strong> {{ sucursalAEliminar?.descripcion }}</div>
-            <div><strong>Dirección:</strong> {{ sucursalAEliminar?.direccion }}</div>
-            <div><strong>Estado actual:</strong> {{ sucursalAEliminar?.estado ? 'Activa' : 'Inactiva' }}</div>
+            <div><strong>Descripción:</strong> {{ sucursalAEliminar?.description }}</div>
+            <div><strong>Dirección:</strong> {{ sucursalAEliminar?.address }}</div>
+            <div><strong>Estado actual:</strong> {{ sucursalAEliminar?.status ? 'Activa' : 'Inactiva' }}</div>
           </div>
         </div>
 
         <p class="text-gray-600 text-sm">
-          {{ sucursalAEliminar?.estado ? 'La sucursal será desactivada y no estará disponible para nuevas operaciones.'
+          {{ sucursalAEliminar?.status ? 'La sucursal será desactivada y no estará disponible para nuevas operaciones.'
           : 'La sucursal será reactivada y estará disponible para operaciones.' }}
         </p>
       </div>
@@ -306,10 +306,10 @@
           Cancelar
         </button>
         <button (click)="confirmarEliminacionModal()" [disabled]="loading"
-          [class]="sucursalAEliminar?.estado ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
+          [class]="sucursalAEliminar?.status ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
           class="flex-1 px-4 py-3 text-sm font-semibold text-white rounded-xl transition-colors duration-200 disabled:opacity-50">
           <i *ngIf="loading" class="fas fa-spinner fa-spin mr-2"></i>
-          {{ sucursalAEliminar?.estado ? 'Desactivar' : 'Activar' }}
+          {{ sucursalAEliminar?.status ? 'Desactivar' : 'Activar' }}
         </button>
       </div>
     </div>

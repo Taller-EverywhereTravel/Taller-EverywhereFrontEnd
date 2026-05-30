@@ -154,12 +154,21 @@ export class ProveedorComponent implements OnInit {
         color: 'green',
         handler: (item) => this.verDetalles(item.id)
       },
-      {
-        icon: 'fa-edit',
-        label: 'Editar',
-        color: 'blue',
-        handler: (item) => this.editarProveedor(item)
-      },
+      // En tu tableConfig -> actions
+{
+  icon: 'fa-edit',
+  label: 'Editar',
+  color: 'blue',
+  handler: (item: ProveedorTabla) => {
+    // 1. Buscamos el objeto original (ProveedorResponse) usando el ID del item de la tabla
+    const proveedorOriginal = this.proveedores.find(p => p.id === item.id);
+    
+    // 2. Si lo encontramos, se lo pasamos al método editar
+    if (proveedorOriginal) {
+      this.editarProveedor(proveedorOriginal);
+    }
+  }
+},
       {
         icon: 'fa-trash',
         label: 'Eliminar',

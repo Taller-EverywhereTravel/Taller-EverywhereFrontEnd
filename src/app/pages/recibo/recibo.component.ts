@@ -294,7 +294,7 @@ export class ReciboComponent implements OnInit, OnDestroy {
         // Verificar si ya existe un recibo para esta cotización
         const yaExisteRecibo = this.recibos.some(recibo =>
           recibo.quotationId === cotizacion.id ||
-          recibo.codeQuotation === cotizacion.codigoCotizacion
+          recibo.codeQuotation === cotizacion.codeQuotation
         );
         return !yaExisteRecibo;
       });

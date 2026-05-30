@@ -67,7 +67,7 @@
                                 <i class="fas fa-chevron-right mx-2"></i>
                             </li>
                             <li class="text-white font-medium">
-                                Detalle de Cotización{{ cotizacion.codigoCotizacion ? ' #' + cotizacion.codigoCotizacion
+                                Detalle de Cotización{{ cotizacion.codeQuotation ? ' #' + cotizacion.codeQuotation
                                 : '' }}
                             </li>
                         </ol>
@@ -82,7 +82,7 @@
                                 </div>
                                 <div>
                                     <h1 class="text-3xl font-bold">
-                                        Cotización{{ cotizacion.codigoCotizacion ? ' #' + cotizacion.codigoCotizacion :
+                                        Cotización{{ cotizacion.codeQuotation ? ' #' + cotizacion.codeQuotation :
                                         '' }}
                                     </h1>
                                     <p class="text-white/80 text-lg">
@@ -154,7 +154,7 @@
                                 </label>
                                 <div
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-900 font-medium">
-                                    {{ cotizacion.codigoCotizacion }}
+                                    {{ cotizacion.codeQuotation }}
                                 </div>
                             </div>
 
@@ -270,7 +270,7 @@
                                     <div class="relative">
                                         <div
                                             class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 pr-10 text-sm">
-                                            {{ cotizacion.origenDestino || 'No especificado' }}
+                                            {{ cotizacion.originDestination || 'No especificado' }}
                                         </div>
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                             <i class="fas fa-route text-gray-400 text-xs"></i>
@@ -346,7 +346,7 @@
                                         </label>
                                         <div
                                             class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 text-sm">
-                                            {{ cotizacion.moneda || 'USD' }}
+                                            {{ cotizacion.currency || 'USD' }}
                                         </div>
                                     </div>
                                     <div>
@@ -405,7 +405,7 @@
                                     </div>
                                     <!-- Producto -->
                                     <div class="text-sm text-gray-900">
-                                        {{ detalle.producto?.tipo || 'Sin producto' }}
+                                        {{ detalle.producto?.type || 'Sin producto' }}
                                     </div>
                                     <!-- Cantidad -->
                                     <div class="text-sm text-gray-900 text-center">
@@ -520,7 +520,7 @@
                                             </div>
                                             <!-- Producto -->
                                             <div class="text-sm text-gray-900">
-                                                {{ detalle.producto?.tipo || 'Sin producto' }}
+                                                {{ detalle.producto?.type || 'Sin producto' }}
                                             </div>
                                             <!-- Cantidad -->
                                             <div class="text-sm text-gray-900 text-center">
@@ -588,7 +588,7 @@
                                     class="flex justify-between items-center py-3 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg px-4 border border-emerald-200">
                                     <span class="font-semibold text-gray-900 text-lg">Cotización más económica:</span>
                                     <span class="font-bold text-emerald-600 text-2xl">
-                                        ${{ getTotalCotizacionCompleta() | number:'1.2-2' }} {{ cotizacion.moneda ||
+                                        ${{ getTotalCotizacionCompleta() | number:'1.2-2' }} {{ cotizacion.currency ||
                                         'USD' }}
                                     </span>
                                 </div>
@@ -1085,7 +1085,7 @@
                                                 <option value="">Seleccionar</option>
                                                 <option *ngFor="let producto of productos" [value]="producto.id"
                                                     [selected]="producto.id === detalle.producto?.id">
-                                                    {{ producto.tipo }}
+                                                    {{ producto.type }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1173,7 +1173,7 @@
                                                 [class.border-red-300]="isFieldInvalid(detalleForm, 'productoId')">
                                                 <option value="">Seleccionar</option>
                                                 <option *ngFor="let producto of productos" [value]="producto.id">
-                                                    {{ producto.tipo }}
+                                                    {{ producto.type }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1433,7 +1433,7 @@
                                                                 <option *ngFor="let producto of productos"
                                                                     [value]="producto.id"
                                                                     [selected]="producto.id === detalle.producto?.id">
-                                                                    {{ producto.tipo }}
+                                                                    {{ producto.type }}
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -1525,7 +1525,7 @@
                                                                 <option value="">Seleccionar</option>
                                                                 <option *ngFor="let producto of productos"
                                                                     [value]="producto.id">
-                                                                    {{ producto.tipo }}
+                                                                    {{ producto.type }}
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -1680,7 +1680,7 @@
                         Historial de Estado
                     </h3>
                     <p class="text-xs text-gray-600 mt-1">
-                        Cotización #{{ cotizacion?.codigoCotizacion || '---' }}
+                        Cotización #{{ cotizacion?.codeQuotation || '---' }}
                     </p>
                 </div>
 

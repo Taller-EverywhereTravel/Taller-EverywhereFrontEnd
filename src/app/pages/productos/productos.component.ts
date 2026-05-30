@@ -389,20 +389,27 @@ export class ProductosComponent implements OnInit {
 
 
   editarSeleccionados(): void {
-    if (this.selectedItems.length === 0) return;
+  if (this.selectedItems.length === 0) return;
 
-    if (this.selectedItems.length === 1) {
-      const producto = this.productos.find(p => p.id === this.selectedItems[0]);
-      if (producto) {
-        this.editarProducto(producto);
-      }
-    } else {
-      const producto = this.productos.find(p => p.id === this.selectedItems[0]);
-      if (producto) {
-        this.editarProducto(producto);
-      }
-    }
+  // Obtenemos el producto original del backend (que viene en inglés)
+  const productResponse = this.productos.find(p => p.id === this.selectedItems[0]);
+
+  if (productResponse) {
+    // Creamos el adaptador en tiempo de ejecución:
+    // Mapeamos el nombre en inglés (backend) al nombre en español (interfaz antigua)
+    const productoParaEditar: ProductoTabla = {
+      id: productResponse.id,
+      codigo: productResponse.code,           // Mapeo: code -> codigo
+      descripcion: productResponse.description, // Mapeo: description -> descripcion
+      tipo: productResponse.type,             // Mapeo: type -> tipo
+      creado: productResponse.created,        // Mapeo: created -> creado
+      actualizado: productResponse.updated    // Mapeo: updated -> actualizado
+    };
+
+    // Ahora le pasamos al método lo que espera: el objeto con los nombres en español
+    this.editarProducto(productoParaEditar);
   }
+}
 
   eliminarSeleccionados(): void {
     if (this.selectedItems.length === 0) return;

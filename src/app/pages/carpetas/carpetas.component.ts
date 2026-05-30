@@ -342,7 +342,7 @@ export class CarpetasComponent implements OnInit {
       ];
 
       camino.forEach(c => {
-        this.breadcrumbPath.push({ carpeta: c, label: c.nombre || 'Sin nombre' });
+        this.breadcrumbPath.push({ carpeta: c, label: c.name || 'Sin nombre' });
       });
 
       this.aplicarFiltrosBreadcrumb();
@@ -538,28 +538,32 @@ export class CarpetasComponent implements OnInit {
   }
 
   editarCarpeta(carpeta: CarpetaTabla | CarpetaResponse): void {
-    let carpetaCompleta: CarpetaResponse;
+  // 1. Usamos una variable local con el tipo correcto (CarpetaResponse)
+  let carpetaCompleta: CarpetaResponse;
 
-    // Si es CarpetaTabla, buscar la CarpetaResponse correspondiente
-    if ('esEspecial' in carpeta) {
-      const found = this.carpetas.find(c => c.id === carpeta.id);
-      if (!found) return;
-      carpetaCompleta = found;
-    } else {
-      // Ya es CarpetaResponse
-      carpetaCompleta = carpeta;
-    }
-
-    this.editandoCarpeta = true;
-    this.carpetaSeleccionada = carpetaCompleta;
-
-    this.carpetaForm.patchValue({
-      nombre: carpetaCompleta.name || 'Sin nombre',
-      descripcion: carpetaCompleta.description || 'Sin descripción'
-    });
-
-    this.mostrarModalCrear = true;
+  // 2. Usamos 'in' para validar qué propiedades tiene el objeto
+  // 'created' solo existe en CarpetaResponse, así que es una forma segura de diferenciar
+  if ('created' in carpeta) {
+    // Si tiene 'created', TypeScript sabe que YA es CarpetaResponse
+    carpetaCompleta = carpeta; 
+  } else {
+    // Si no tiene 'created', es CarpetaTabla. Buscamos el original en la lista maestra.
+    const found = this.carpetas.find(c => c.id === carpeta.id);
+    if (!found) return; // Protección por si no se encuentra
+    carpetaCompleta = found;
   }
+
+  this.editandoCarpeta = true;
+  this.carpetaSeleccionada = carpetaCompleta;
+
+  // 3. Patch con nombres en inglés (asegúrate que tu form use estos campos)
+  this.carpetaForm.patchValue({
+    name: carpetaCompleta.name || 'Sin nombre',
+    description: carpetaCompleta.description || 'Sin descripción'
+  });
+
+  this.mostrarModalCrear = true;
+}
 
   actualizarCarpeta(): void {
     if (this.carpetaForm.valid && this.carpetaSeleccionada) {
@@ -581,21 +585,20 @@ export class CarpetasComponent implements OnInit {
   }
 
   confirmarEliminar(carpeta: CarpetaTabla | CarpetaResponse): void {
-    let carpetaCompleta: CarpetaResponse;
+  // 1. Buscamos el original siempre. 
+  // Esto es más limpio que hacer un if-else porque garantiza 
+  // que 'carpetaAEliminar' SIEMPRE sea del tipo correcto.
+  
+  const carpetaCompleta = this.carpetas.find(c => c.id === carpeta.id);
 
-    // Si es CarpetaTabla, buscar la CarpetaResponse correspondiente
-    if ('esEspecial' in carpeta) {
-      const found = this.carpetas.find(c => c.id === carpeta.id);
-      if (!found) return;
-      carpetaCompleta = found;
-    } else {
-      // Ya es CarpetaResponse
-      carpetaCompleta = carpeta;
-    }
-
-    this.carpetaAEliminar = carpetaCompleta;
-    this.mostrarModalEliminar = true;
+  if (!carpetaCompleta) {
+    console.error('No se pudo encontrar la carpeta original para eliminar');
+    return;
   }
+
+  this.carpetaAEliminar = carpetaCompleta;
+  this.mostrarModalEliminar = true;
+}
 
   eliminarCarpetaDefinitivo(): void {
     if (this.carpetaAEliminar) {

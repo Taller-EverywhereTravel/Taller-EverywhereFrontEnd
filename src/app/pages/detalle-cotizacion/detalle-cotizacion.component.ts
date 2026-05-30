@@ -653,7 +653,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
                 this.clienteSeleccionado = persona;
                 if (!this.personasCache[personaId]) {
                     this.personasCache[personaId] = persona;
-                    this.personasDisplayMap[personaId] = persona.nombre || 'Sin nombre';
+                    this.personasDisplayMap[personaId] = persona.name || 'Sin nombre';
                 }
             }
         } catch (error) {
@@ -709,10 +709,10 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
                 // Incluir relaciones (ids) en el PATCH si están presentes o cambiaron
                 const relationFields: (keyof CotizacionPatchRequest)[] = [
                     'counterId',
-                    'formaPagoId',
-                    'estadoCotizacionId',
-                    'sucursalId',
-                    'carpetaId',
+                    'methodPaymentId',
+                    'statusQuotationId',
+                    'branchId',
+                    'folderId',
                 ];
 
                 relationFields.forEach((field) => {
@@ -755,7 +755,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
                     nameQuotation: formValue.nombreCotizacion || '',
                     numAdult: cantAdultos,
                     numChild: cantNinos,
-                    dateIssue: formValue.fechaVencimiento,
+                    dateExpiration: formValue.fechaVencimiento,
                     originDestination: formValue.origenDestino,
                     dateDeparture: formValue.fechaSalida,
                     dateReturn: formValue.fechaRegreso,
@@ -766,7 +766,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
                     methodPaymentId: formValue.formaPagoId,
                     statusQuotationId: formValue.estadoCotizacionId,
                     branchId: formValue.sucursalId,
-                    folder: formValue.carpetaId,
+                    folderId: formValue.carpetaId,
                 };
 
                 let createResult: CotizacionResponse | undefined = undefined;
@@ -834,13 +834,13 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
 
         // Campos a comparar para el PATCH
         const fieldsToCheck: (keyof CotizacionRequest)[] = [
-            'nombreCotizacion',
-            'origenDestino',
-            'fechaSalida',
-            'fechaRegreso',
-            'moneda',
-            'observacion',
-            'fechaVencimiento',
+            'nameQuotation',
+            'originDestination',
+            'dateDeparture',
+            'dateReturn',
+            'currency',
+            'observation',
+            'dateExpiration',
         ];
 
         // Manejar cantAdultos y cantNinos juntos - si alguno cambia, incluir ambos
@@ -933,7 +933,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         if (detalle.proveedor && detalle.proveedor.id === 0) {
             const nuevoProveedor = await this.proveedorService
                 .createProveedor({
-                    nombre: detalle.proveedor.name,
+                    name: detalle.proveedor.name,
                 })
                 .toPromise();
             proveedorId = nuevoProveedor?.id;
@@ -1033,8 +1033,8 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
                     this.cotizacion = cotizacion;
 
                     // Cargar detalles y agruparlos por categoría
-                    if (cotizacion.detalles && cotizacion.detalles.length > 0) {
-                        this.loadDetallesFromCotizacionCompleta(cotizacion.detalles);
+                    if (cotizacion.detail && cotizacion.detail.length > 0) {
+                        this.loadDetallesFromCotizacionCompleta(cotizacion.detail);
                     }
 
                     // Poblar formulario con datos existentes (tanto vista como edición)
@@ -1189,7 +1189,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         }
 
         // Si es personaDisplay (nuevo modelo unificado)
-        if ('tipo' in persona && 'identificador' in persona) {
+        if ('tipo' in persona && 'identifier' in persona) {
             const tipo = persona.type.toUpperCase();
             return tipo === 'JURIDICA' ? 'Empresa' : 'Cliente';
         }
@@ -1611,8 +1611,10 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
             return 'Cliente';
         }
         // Si es personaDisplay
-        if ('tipo' in persona && 'nombre' in persona) {
-            return persona.name;
+        if ('tipo' in persona) {
+            // name puede ser undefined o la cadena 'null'; asegurar string por defecto
+            const name = (persona as any).name;
+            return name && name !== 'null' ? name : 'Cliente';
         }
         // Compatibilidad con modelos antiguos (soporta apellidosPaterno/apellidosMaterno)
         if ('nombres' in persona) {

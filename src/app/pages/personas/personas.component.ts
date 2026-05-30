@@ -131,9 +131,9 @@ export class PersonasComponent implements OnInit {
               return {
                 natural,
                 documentos: documentos?.map(doc => ({
-                  numero: doc.numero || '',
-                  tipo: doc.documento?.tipo || '',
-                  origen: doc.origen || ''
+                  numero: doc.number || '',
+                  tipo: doc.document?.type || '',
+                  origen: doc.origin || ''
                 })) || []
               };
             } catch (error) {
@@ -147,14 +147,14 @@ export class PersonasComponent implements OnInit {
           personasTabla.push({
             id: natural.id,
             tipo: 'natural',
-            nombre: `${natural.nombres || ''} ${natural.apellidosPaterno || ''} ${natural.apellidosMaterno || ''}`.trim(),
-            nombres: natural.nombres,
-            apellidosPaterno: natural.apellidosPaterno || '',
-            apellidosMaterno: natural.apellidosMaterno || '',
-            documento: natural.documento || '',
-            email: natural.persona?.correos?.[0]?.email,
-            telefono: natural.persona?.telefonos?.[0]?.numero,
-            direccion: natural.persona?.direccion,
+            nombre: `${natural.name || ''} ${natural.surnamePaternal || ''} ${natural.surnameMaternal || ''}`.trim(),
+            nombres: natural.name,
+            apellidosPaterno: natural.surnamePaternal || '',
+            apellidosMaterno: natural.surnameMaternal || '',
+            documento: natural.document || '',
+            email: natural.person?.mail?.[0]?.mail,
+            telefono: natural.person?.phone?.[0]?.number,
+            direccion: natural.person?.address,
             documentos: documentos
           });
         });
@@ -165,14 +165,14 @@ export class PersonasComponent implements OnInit {
           personasTabla.push({
             id: juridica.id,
             tipo: 'juridica',
-            nombre: juridica.razonSocial || '',
+            nombre: juridica.nameCompany || '',
             apellidosPaterno: '',
-            razonSocial: juridica.razonSocial,
+            razonSocial: juridica.nameCompany,
             documento: juridica.ruc || '',
             ruc: juridica.ruc,
-            email: juridica.persona?.correos?.[0]?.email,
-            telefono: juridica.persona?.telefonos?.[0]?.numero,
-            direccion: juridica.persona?.direccion
+            email: juridica.person?.mail?.[0]?.mail,
+            telefono: juridica.person?.phone?.[0]?.number,
+            direccion: juridica.person?.address
           });
         });
       }
@@ -404,19 +404,19 @@ export class PersonasComponent implements OnInit {
         const personasDesdeDocumentos: PersonaTabla[] = [];
         
         resultados.forEach(doc => {
-          doc.personas.forEach(persona => {
+          doc.person.forEach(persona => {
             // Buscar los datos completos de la persona en la lista original
-            const personaCompleta = this.personasOriginales.find(p => p.id === persona.personaId);
+            const personaCompleta = this.personasOriginales.find(p => p.id === persona.personId);
             
             if (personaCompleta) {
               // Usar los datos de la persona pero mostrar el documento buscado
               personasDesdeDocumentos.push({
                 ...personaCompleta,
-                documento: doc.numeroDocumento,
+                documento: doc.numberDocument,
                 // Agregar info del tipo de documento para mostrarlo
                 documentos: [{
-                  numero: doc.numeroDocumento,
-                  tipo: doc.tipoDocumento,
+                  numero: doc.numberDocument,
+                  tipo: doc.typeDocument,
                   origen: ''
                 }]
               });

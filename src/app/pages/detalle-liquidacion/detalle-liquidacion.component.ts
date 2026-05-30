@@ -457,13 +457,13 @@ export class DetalleLiquidacionComponent implements OnInit, OnDestroy {
         };
 
         // Si la cotización/persona no viene en ConDetalles, traerla desde getLiquidacionById
-        if (!liquidacion.cotizacion?.personas?.id) {
+        if (!liquidacion.quotation?.person?.id) {
           this.liquidacionService.getLiquidacionById(id).subscribe({
             next: (liquidacionBasica) => {
-              if (liquidacionBasica?.cotizacion) {
+              if (liquidacionBasica?.quotation) {
                 applyLiquidacion({
                   ...liquidacion,
-                  quotation: liquidacionBasica.cotizacion
+                  quotation: liquidacionBasica.quotation
                 });
               } else {
                 applyLiquidacion(liquidacion);
@@ -808,13 +808,13 @@ export class DetalleLiquidacionComponent implements OnInit, OnDestroy {
         // Convertir PagoPaxResponse a PagoPaxTemp
         this.pagosPax = (pagosPax || []).map(pago => ({
           id: pago.id,
-          monto: pago.monto,
-          moneda: pago.moneda || 'USD',
-          detalle: pago.detalle,
-          formaPagoId: pago.formaPago?.id,
-          formaPago: pago.formaPago,
-          creado: pago.creado,
-          actualizado: pago.actualizado,
+          monto: pago.amount,
+          moneda: pago.currency || 'USD',
+          detalle: pago.detail,
+          formaPagoId: pago.methodPayment?.id,
+          formaPago: pago.methodPayment,
+          creado: pago.created,
+          actualizado: pago.updated,
           isTemporary: false
         }));
       });
