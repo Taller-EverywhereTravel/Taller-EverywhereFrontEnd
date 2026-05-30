@@ -254,11 +254,11 @@ export class DetalleProveedorComponent implements OnInit {
         if (colaborador) {
             this.editandoColaborador = colaborador;
             this.colaboradorForm.patchValue({
-                nombre: colaborador.nombre,
-                cargo: colaborador.cargo,
-                email: colaborador.email,
-                telefono: colaborador.telefono,
-                detalle: colaborador.detalle
+                nombre: colaborador.name,
+                cargo: colaborador.position,
+                email: colaborador.mail,
+                telefono: colaborador.phone,
+                detalle: colaborador.detail
             });
         } else {
             this.editandoColaborador = null;
@@ -278,7 +278,7 @@ export class DetalleProveedorComponent implements OnInit {
 
         const request: ProveedorColaboradorRequest = {
             ...this.colaboradorForm.value,
-            proveedorId: this.proveedorId
+            supplierId: this.proveedorId
         };
 
         if (this.editandoColaborador) {
@@ -301,7 +301,7 @@ export class DetalleProveedorComponent implements OnInit {
     }
 
     eliminarColaborador(colaborador: ProveedorColaboradorResponse): void {
-        if (confirm(`¿Eliminar colaborador ${colaborador.nombre}?`)) {
+        if (confirm(`¿Eliminar colaborador ${colaborador.name}?`)) {
             this.colaboradorService.delete(colaborador.id).subscribe({
                 next: () => this.loadColaboradores(),
                 error: (error) => console.error('Error deleting colaborador:', error)
@@ -316,10 +316,10 @@ export class DetalleProveedorComponent implements OnInit {
         if (contacto) {
             this.editandoContacto = contacto;
             this.contactoForm.patchValue({
-                descripcion: contacto.descripcion,
-                email: contacto.email,
-                numero: contacto.numero,
-                grupoContactoId: contacto.grupoContactoId
+                descripcion: contacto.description,
+                email: contacto.mail,
+                numero: contacto.number,
+                grupoContactoId: contacto.groupContactId
             });
         } else {
             this.editandoContacto = null;
@@ -339,7 +339,7 @@ export class DetalleProveedorComponent implements OnInit {
 
         const request: ProveedorContactoRequest = {
             ...this.contactoForm.value,
-            proveedorId: this.proveedorId
+            supplierId: this.proveedorId
         };
 
         if (this.editandoContacto) {
@@ -362,7 +362,7 @@ export class DetalleProveedorComponent implements OnInit {
     }
 
     eliminarContacto(contacto: ProveedorContactoResponse): void {
-        if (confirm(`¿Eliminar contacto ${contacto.email || contacto.numero}?`)) {
+        if (confirm(`¿Eliminar contacto ${contacto.mail || contacto.number}?`)) {
             this.contactoService.delete(contacto.id).subscribe({
                 next: () => this.loadContactos(),
                 error: (error) => console.error('Error deleting contacto:', error)
@@ -377,8 +377,8 @@ export class DetalleProveedorComponent implements OnInit {
         if (grupo) {
             this.editandoGrupoContacto = grupo;
             this.grupoContactoForm.patchValue({
-                nombre: grupo.nombre,
-                descripcion: grupo.descripcion
+                nombre: grupo.name,
+                descripcion: grupo.description
             });
         } else {
             this.editandoGrupoContacto = null;
@@ -418,7 +418,7 @@ export class DetalleProveedorComponent implements OnInit {
     }
 
     eliminarGrupoContacto(grupo: ProveedorGrupoContactoResponse): void {
-        if (confirm(`¿Eliminar grupo ${grupo.nombre}?`)) {
+        if (confirm(`¿Eliminar grupo ${grupo.name}?`)) {
             this.grupoContactoService.delete(grupo.id).subscribe({
                 next: () => this.loadGruposContacto(),
                 error: (error) => console.error('Error deleting grupo:', error)
@@ -433,8 +433,8 @@ export class DetalleProveedorComponent implements OnInit {
         this.editandoProveedor = true;
         if (this.proveedor) {
             this.proveedorForm.patchValue({
-                nombre: this.proveedor.nombre,
-                nombreJuridico: this.proveedor.nombreJuridico || '',
+                nombre: this.proveedor.name,
+                nombreJuridico: this.proveedor.nameJuridic || '',
                 ruc: this.proveedor.ruc || null
             });
         }
@@ -523,10 +523,10 @@ export class DetalleProveedorComponent implements OnInit {
     }
 
     getTelefonoCompleto(contacto: ProveedorContactoResponse): string {
-        if (contacto.codigoPais && contacto.numero) {
-            return `${contacto.codigoPais} ${contacto.numero}`;
+        if (contacto.codeCountry && contacto.number) {
+            return `${contacto.codeCountry} ${contacto.number}`;
         }
-        return contacto.numero || '';
+        return contacto.number || '';
     }
 
     // =================================================================

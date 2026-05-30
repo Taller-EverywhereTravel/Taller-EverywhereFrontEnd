@@ -1,14 +1,14 @@
 export interface CarpetaRequest {
-  nombre?: string
-  descripcion?: string
+  name?: string
+  description?: string
 }
 
 export interface CarpetaResponse {
   id: number
-  nombre?: string
-  descripcion?: string
-  creado: string
-  actualizado: string
-  nivel: number
-  carpetaPadreId?: number
+  name?: string
+  description?: string
+  created: string
+  updated: string
+  level: number
+  folderFatherId?: number
 }

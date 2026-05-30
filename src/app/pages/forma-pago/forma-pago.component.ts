@@ -189,10 +189,10 @@ export class FormaPagoComponent implements OnInit {
         // Convertir a FormaPagoTabla para filtrado y ordenamiento
         this.formaPagoTabla = this.formasPago.map(f => ({
           id: f.id,
-          codigo: f.codigo ? f.codigo.toString() : undefined,
-          descripcion: f.descripcion,
-          creado: f.fechaCreacion ? new Date(f.fechaCreacion).toISOString() : undefined,
-          actualizado: f.fechaActualizacion ? new Date(f.fechaActualizacion).toISOString() : undefined
+          codigo: f.code ? f.code.toString() : undefined,
+          descripcion: f.description,
+          creado: f.dateCreated ? new Date(f.dateCreated).toISOString() : undefined,
+          actualizado: f.dateUpdated ? new Date(f.dateUpdated).toISOString() : undefined
         }));
 
         // Actualizar la configuración del DataTable con los nuevos datos
@@ -231,8 +231,8 @@ export class FormaPagoComponent implements OnInit {
     this.isEditMode = true;
     this.editingId = formaPago.id;
     this.formaPagoForm.patchValue({
-      codigo: formaPago.codigo,
-      descripcion: formaPago.descripcion
+      codigo: formaPago.code,
+      descripcion: formaPago.description
     });
     this.showModal = true;
   }
@@ -249,8 +249,8 @@ export class FormaPagoComponent implements OnInit {
 
     this.loading = true;
     const payload: FormaPagoRequest = {
-      codigo: this.formaPagoForm.value.codigo,
-      descripcion: this.formaPagoForm.value.descripcion
+      code: this.formaPagoForm.value.codigo,
+      description: this.formaPagoForm.value.descripcion
     };
 
     const request = this.isEditMode && this.editingId
@@ -328,8 +328,8 @@ export class FormaPagoComponent implements OnInit {
 
   convertToModuleCard(f: FormaPagoResponse): ModuleCardData {
     return {
-      title: f.descripcion || `Forma ${f.id}`,
-      description: f.codigo ? `Código: ${f.codigo}` : 'Sin código',
+      title: f.description || `Forma ${f.id}`,
+      description: f.code ? `Código: ${f.code}` : 'Sin código',
       route: `/formas-pago`,
       icon: 'fas fa-money-bill-wave',
       iconType: 'documentos',

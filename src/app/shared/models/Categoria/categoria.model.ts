@@ -1,11 +1,11 @@
 export interface CategoriaRequest{
-    nombre?: string;
+    name?: string;
 }
 
 
 export interface CategoriaResponse{
     id?: number;
-    nombre?: string;
-    creado?: Date;
-    actualizado?: Date;
+    name?: string;
+    created?: Date;
+    updated?: Date;
 }

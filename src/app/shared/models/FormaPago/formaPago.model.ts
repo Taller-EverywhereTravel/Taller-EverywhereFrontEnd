@@ -1,12 +1,12 @@
 export interface FormaPagoResponse {
   id: number
-  codigo?: number
-  descripcion?: string
-  fechaCreacion?: string
-  fechaActualizacion?: string
+  code?: number
+  description?: string
+  dateCreated?: string
+  dateUpdated?: string
 }
 
 export interface FormaPagoRequest {
-  codigo?: number
-  descripcion?: string
+  code?: number
+  description?: string
 }

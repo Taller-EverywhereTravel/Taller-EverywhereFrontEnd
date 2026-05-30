@@ -33,7 +33,7 @@ export class HistorialCotizacionService {
   create(request: HistorialCotizacionRequest): Observable<HistorialCotizacionResponse> {
     return this.http.post<HistorialCotizacionResponse>(this.apiUrl, request).pipe(
       tap((response) => {
-        const cotizacionId = response.cotizacionId ?? request.cotizacionId;
+        const cotizacionId = response.cotizacionId ?? request.quotationId;
         if (cotizacionId) {
           this.cacheService.invalidatePattern(`/cotizaciones/${cotizacionId}`);
         }

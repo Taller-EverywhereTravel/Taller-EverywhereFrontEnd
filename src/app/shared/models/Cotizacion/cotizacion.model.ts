@@ -11,72 +11,72 @@ import { DetalleCotizacionSimpleDTO } from '../Cotizacion/detalleCotizacion.mode
  * Todos los campos son opcionales ya que usamos PATCH para actualizaciones
  */
 export interface CotizacionRequest {
-  nombreCotizacion?: string
-  cantAdultos?: number
-  cantNinos?: number
-  fechaVencimiento?: string
-  origenDestino?: string
-  fechaSalida?: string
-  fechaRegreso?: string
-  moneda?: string
-  observacion?: string
+  nameQuotation?: string
+  numAdult?: number
+  numChild?: number
+  dateExpiration?: string
+  originDestination?: string
+  dateDeparture?: string
+  dateReturn?: string
+  currency?: string
+  observation?: string
   counterId?: number
-  formaPagoId?: number
-  estadoCotizacionId?: number
-  sucursalId?: number
-  carpetaId?: number
+  methodPaymentId?: number
+  statusQuotationId?: number
+  branchId?: number
+  folder?: number
 }
 
 export type CotizacionPatchRequest = Partial<CotizacionRequest>
 
 export interface CotizacionResponse {
   id: number
-  nombreCotizacion?: string
-  codigoCotizacion: string
-  cantAdultos?: number
-  cantNinos?: number
-  fechaEmision: string
-  fechaVencimiento: string
-  actualizado: string
-  origenDestino: string
-  fechaSalida: string
-  fechaRegreso: string
-  moneda: string
-  observacion?: string
-  grupoSeleccionadoId?: number
+  nameQuotation?: string
+  codeQuotation: string
+  numAdult?: number
+  numChild?: number
+  dateIssue: string
+  dateExpiration: string
+  updated: string
+  originDestination: string
+  dateDeparture: string
+  dateReturn: string
+  currency: string
+  observation?: string
+  groupSelectedId?: number
 
   counter?: CounterResponse
-  formaPago?: FormaPagoResponse
-  estadoCotizacion?: EstadoCotizacionResponse
-  sucursal?: SucursalResponse
-  carpeta?: CarpetaResponse
-  personas?: PersonaResponse
+  methodPayment?: FormaPagoResponse
+  statusQuotation?: EstadoCotizacionResponse
+  branch?: SucursalResponse
+  folder?: CarpetaResponse
+  person?: PersonaResponse
 }
 
 export interface CotizacionConDetallesResponseDTO {
   id: number
-  nombreCotizacion?: string
-  codigoCotizacion: string
-  cantAdultos?: number
-  cantNinos?: number
-  fechaEmision: string
-  fechaVencimiento: string
-  actualizado: string
-  origenDestino: string
-  fechaSalida: string
-  fechaRegreso: string
-  moneda: string
-  observacion?: string
-  grupoSeleccionadoId?: number
+  nameQuotation?: string
+  codeQuotation: string
+  numAdult?: number
+  numChild?: number
+  dateIssue: string
+  dateExpiration: string
+  updated: string
+  originDestination: string
+  dateDeparture: string
+  dateReturn: string
+  currency: string
+  observation?: string
+  groupSelectedId?: number
 
   // Relaciones de la cotización
   counter?: CounterResponse
-  formaPago?: FormaPagoResponse
-  estadoCotizacion?: EstadoCotizacionResponse
-  sucursal?: SucursalResponse
-  carpeta?: CarpetaResponse
-  personas?: PersonaResponse
+  methodPayment?: FormaPagoResponse
+  statusQuotation?: EstadoCotizacionResponse
+  branch?: SucursalResponse
+  folder?: CarpetaResponse
+  person?: PersonaResponse
 
   // Lista de detalles anidados (sin la cotización repetida)
-  detalles: DetalleCotizacionSimpleDTO[]
+  detail: DetalleCotizacionSimpleDTO[]
 }

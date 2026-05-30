@@ -1,13 +1,13 @@
 export interface CounterRequest {
-  nombre?: string
-  codigo?: string
+  name?: string
+  code?: string
 }
 
 export interface CounterResponse {
   id: number
-  nombre?: string
-  estado?: boolean
-  codigo?: string
-  fechaCreacion?: string
-  fechaActualizacion?: string
+  name?: string
+  status?: boolean
+  code?: string
+  dateCreated?: string
+  dateUpdated?: string
 }

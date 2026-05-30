@@ -193,9 +193,9 @@ export class EstadoCotizacionComponent implements OnInit {
   private convertirATabla(): void {
     this.EstadoCotizacionTabla = this.estadosCotizacion.map(estadoCotizacion => ({
       id: estadoCotizacion.id,
-      descripcion: estadoCotizacion.descripcion || '',
-      creado: estadoCotizacion.fechaCreacion,
-      actualizado: estadoCotizacion.fechaActualizacion
+      descripcion: estadoCotizacion.description || '',
+      creado: estadoCotizacion.dateCreated,
+      actualizado: estadoCotizacion.dateUpdated
     }));
     this.totalEstadoCotizacion = this.EstadoCotizacionTabla.length;
   }
@@ -263,7 +263,7 @@ export class EstadoCotizacionComponent implements OnInit {
 
     if (this.estadoCotizacionSeleccionada) {
       this.estadoCotizacionForm.patchValue({
-        descripcion: this.estadoCotizacionSeleccionada.descripcion || ''
+        descripcion: this.estadoCotizacionSeleccionada.description || ''
       });
 
       this.mostrarModalCrear = true;

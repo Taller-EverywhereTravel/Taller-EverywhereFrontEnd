@@ -438,8 +438,8 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
           this.categoriasPersona = data.categoriasPersona;
 
           // Cargar viajeros frecuentes si la persona tiene viajero asociado
-          if (this.personaNatural?.viajero) {
-            this.loadViajerosFrecuentes(this.personaNatural.viajero.id);
+          if (this.personaNatural?.traveler) {
+            this.loadViajerosFrecuentes(this.personaNatural.traveler.id);
           }
         }),
         catchError(error => {
@@ -460,8 +460,8 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
     const empresas: PersonaJuridicaResponse[] = [];
 
     naturalJuridicaResponses.forEach(njResponse => {
-      if (njResponse.personaJuridica) {
-        empresas.push(njResponse.personaJuridica);
+      if (njResponse.personJuridic) {
+        empresas.push(njResponse.personJuridic);
       }
     });
 
@@ -547,11 +547,11 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
   // Utility methods
   getPersonaNombre(): string {
     if (!this.personaNatural) return '';
-    return `${this.personaNatural.nombres || ''} ${this.personaNatural.apellidosPaterno || ''} ${this.personaNatural.apellidosMaterno || ''}`.trim();
+    return `${this.personaNatural.name || ''} ${this.personaNatural.surnamePaternal || ''} ${this.personaNatural.surnameMaternal || ''}`.trim();
   }
 
   getTelefonoCompleto(telefono: TelefonoPersonaResponse): string {
-    return `${telefono.codigoPais} ${telefono.numero}`;
+    return `${telefono.codeCountry} ${telefono.number}`;
   }
 
   getPaisNombre(dialCode: string): string {
@@ -625,15 +625,15 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     // Preparar datos de PersonaNatural SIN documento (opcional)
     const personaNaturalData: PersonaNaturalRequest = {
-      documento: documentoData?.numero ? documentoData.numero.trim() : '', // Opcional
-      nombres: formValue.nombres,
-      apellidosPaterno: formValue.apellidosPaterno,
-      apellidosMaterno: formValue.apellidosMaterno,
-      sexo: formValue.sexo,
-      categoriaPersonaId: formValue.categoriaPersonaId || undefined,
-      persona: {
-        direccion: formValue.direccion,
-        observacion: formValue.observacion
+      document: documentoData?.numero ? documentoData.numero.trim() : '', // Opcional
+      name: formValue.nombres,
+      surnamePaternal: formValue.apellidosPaterno,
+      surnameMaternal: formValue.apellidosMaterno,
+      sex: formValue.sexo,
+      categoryPersonId: formValue.categoriaPersonaId || undefined,
+      person: {
+        address: formValue.direccion,
+        observation: formValue.observacion
       }
     };
 
@@ -649,12 +649,12 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
           if (tieneDocumentoCompleto) {
             const documentoId = parseInt(documentoData.documentoId, 10);
             const detalleDocumento: DetalleDocumentoRequest = {
-              numero: documentoData.numero.trim(),
-              origen: documentoData.origen.trim(),
-              documentoId: documentoId,
-              personaNaturalId: personaResponse.id,
-              fechaEmision: documentoData.fechaEmision || undefined,
-              fechaVencimiento: documentoData.fechaVencimiento || undefined
+              number: documentoData.numero.trim(),
+              origin: documentoData.origen.trim(),
+              documentId: documentoId,
+              personNaturalId: personaResponse.id,
+              dateIssue: documentoData.fechaEmision || undefined,
+              dateExpiration: documentoData.fechaVencimiento || undefined
             };
 
             // Crear detalleDocumento
@@ -716,16 +716,16 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
     }
 
     this.personaNaturalForm.patchValue({
-      nombres: this.personaNatural.nombres || '',
-      apellidosPaterno: this.personaNatural.apellidosPaterno || '',
-      apellidosMaterno: this.personaNatural.apellidosMaterno || '',
-      sexo: this.personaNatural.sexo || '',
-      direccion: this.personaNatural.persona?.direccion || '',
-      observacion: this.personaNatural.persona?.observacion || '',
-      fechaNacimiento: this.personaNatural.viajero?.fechaNacimiento || '',
-      nacionalidad: this.personaNatural.viajero?.nacionalidad || '',
-      residencia: this.personaNatural.viajero?.residencia || '',
-      categoriaPersonaId: this.personaNatural.categoriaPersona?.id || null
+      nombres: this.personaNatural.name || '',
+      apellidosPaterno: this.personaNatural.surnamePaternal || '',
+      apellidosMaterno: this.personaNatural.surnameMaternal || '',
+      sexo: this.personaNatural.sex || '',
+      direccion: this.personaNatural.person?.address || '',
+      observacion: this.personaNatural.person?.observation || '',
+      fechaNacimiento: this.personaNatural.traveler?.dateBirth || '',
+      nacionalidad: this.personaNatural.traveler?.nationality || '',
+      residencia: this.personaNatural.traveler?.residence || '',
+      categoriaPersonaId: this.personaNatural.categoryPerson?.id || null
     });
 
     this.showPersonaNaturalModal = true;
@@ -745,15 +745,15 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     // Preparar datos de persona natural
     const personaNaturalData: PersonaNaturalRequest = {
-      documento: formValue.documento,
-      nombres: formValue.nombres,
-      apellidosPaterno: formValue.apellidosPaterno,
-      apellidosMaterno: formValue.apellidosMaterno,
-      sexo: formValue.sexo,
-      categoriaPersonaId: formValue.categoriaPersonaId || undefined,
-      persona: {
-        direccion: formValue.direccion,
-        observacion: formValue.observacion
+      document: formValue.documento,
+      name: formValue.nombres,
+      surnamePaternal: formValue.apellidosPaterno,
+      surnameMaternal: formValue.apellidosMaterno,
+      sex: formValue.sexo,
+      categoryPersonId: formValue.categoriaPersonaId || undefined,
+      person: {
+        address: formValue.direccion,
+        observation: formValue.observacion
       }
     };
 
@@ -768,15 +768,15 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     if (tieneViajeroData) {
       const viajeroData: ViajeroRequest = {
-        fechaNacimiento: formValue.fechaNacimiento,
-        nacionalidad: formValue.nacionalidad,
-        residencia: formValue.residencia,
-        personaId: this.personaId
+        dateBirth: formValue.fechaNacimiento,
+        nationality: formValue.nacionalidad,
+        residence: formValue.residencia,
+        personId: this.personaId
       };
 
-      if (this.personaNatural?.viajero) {
+      if (this.personaNatural?.traveler) {
         // Actualizar viajero existente
-        viajeroOperation$ = this.viajeroService.update(this.personaNatural.viajero.id, viajeroData);
+        viajeroOperation$ = this.viajeroService.update(this.personaNatural.traveler.id, viajeroData);
       } else {
         // Crear nuevo viajero y asociarlo a la persona
         viajeroOperation$ = this.viajeroService.save(viajeroData).pipe(
@@ -820,10 +820,10 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     if (telefono) {
       this.telefonoForm.patchValue({
-        numero: telefono.numero,
-        codigoPais: telefono.codigoPais,
-        tipo: telefono.tipo,
-        descripcion: telefono.descripcion || ''
+        numero: telefono.number,
+        codigoPais: telefono.codeCountry,
+        tipo: telefono.type,
+        descripcion: telefono.description || ''
       });
     } else {
       this.telefonoForm.reset({
@@ -928,8 +928,8 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     if (correo) {
       this.correoForm.patchValue({
-        email: correo.email,
-        tipo: correo.tipo
+        email: correo.mail,
+        tipo: correo.type
       });
     } else {
       this.correoForm.reset({
@@ -1060,8 +1060,8 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
     this.loadingService.setLoading(true);
 
     const request: NaturalJuridicaRequest = {
-      personaNaturalId: this.personaNatural!.id,
-      personasJuridicasIds: empresaIds
+      personNaturalId: this.personaNatural!.id,
+      personJuridicaId: empresaIds
     };
 
     const subscription = this.naturalJuridicoService.create(request)
@@ -1085,7 +1085,7 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
   desasociarEmpresa(empresa: PersonaJuridicaResponse): void {
     if (!this.personaId) return;
-    if (!confirm(`¿Está seguro de desasociar la empresa "${empresa.razonSocial}"?`)) return;
+    if (!confirm(`¿Está seguro de desasociar la empresa "${empresa.nameCompany}"?`)) return;
     this.loadingService.setLoading(true);
 
     const subscription = this.naturalJuridicoService.deleteByPersonas(this.personaNatural!.id, empresa.id)
@@ -1112,8 +1112,8 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     if (viajero) {
       this.viajeroFrecuenteForm.patchValue({
-        areolinea: viajero.areolinea,
-        codigo: viajero.codigo
+        areolinea: viajero.airline,
+        codigo: viajero.code
       });
     } else {
       this.viajeroFrecuenteForm.reset();
@@ -1134,7 +1134,7 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
     const viajeroData: ViajeroFrecuenteRequest = this.viajeroFrecuenteForm.value;
 
     // Si la persona no tiene viajero asociado, crear uno primero
-    if (!this.personaNatural?.viajero) {
+    if (!this.personaNatural?.traveler) {
       this.crearViajeroYAsociarFrecuente(viajeroData);
       return;
     }
@@ -1145,12 +1145,12 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
     if (this.editingViajeroFrecuenteId)
       operation$ = this.viajeroFrecuenteService.actualizar(this.editingViajeroFrecuenteId, viajeroData);
     else
-      operation$ = this.viajeroFrecuenteService.crear(this.personaNatural.viajero.id, viajeroData);
+      operation$ = this.viajeroFrecuenteService.crear(this.personaNatural.traveler.id, viajeroData);
 
     const subscription = operation$
       .pipe(
         tap(() => {
-          this.loadViajerosFrecuentes(this.personaNatural!.viajero!.id);
+          this.loadViajerosFrecuentes(this.personaNatural!.traveler!.id);
           this.cerrarModalViajeroFrecuente();
         }),
         catchError(error => {
@@ -1168,10 +1168,10 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     // Crear un viajero básico con datos mínimos
     const viajeroRequest: ViajeroRequest = {
-      fechaNacimiento: undefined, // Se puede actualizar después
-      nacionalidad: 'Peruana', // Valor por defecto
-      residencia: 'Perú', // Valor por defecto
-      personaId: this.personaId!
+      dateBirth: undefined, // Se puede actualizar después
+      nationality: 'Peruana', // Valor por defecto
+      residence: 'Perú', // Valor por defecto
+      personId: this.personaId!
     };
 
     const subscription = this.viajeroService.save(viajeroRequest)
@@ -1196,15 +1196,15 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     // Actualizar la persona natural para asociarle el viajero
     const personaNaturalData: PersonaNaturalRequest = {
-      nombres: this.personaNatural?.nombres || '',
-      apellidosPaterno: this.personaNatural?.apellidosPaterno || '',
-      apellidosMaterno: this.personaNatural?.apellidosMaterno || '',
-      documento: this.personaNatural?.documento || '',
-      sexo: this.personaNatural?.sexo || '',
-      viajeroId: viajeroId, // Asociar el viajero recién creado
-      persona: {
-        direccion: this.personaNatural?.persona?.direccion || '',
-        observacion: this.personaNatural?.persona?.observacion || ''
+      name: this.personaNatural?.name || '',
+      surnamePaternal: this.personaNatural?.surnamePaternal || '',
+      surnameMaternal: this.personaNatural?.surnameMaternal || '',
+      document: this.personaNatural?.document || '',
+      sex: this.personaNatural?.sex || '',
+      travelerId: viajeroId, // Asociar el viajero recién creado
+      person: {
+        address: this.personaNatural?.person?.address || '',
+        observation: this.personaNatural?.person?.observation || ''
       }
     };
 
@@ -1251,8 +1251,8 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
     const subscription = this.viajeroFrecuenteService.eliminar(viajero.id)
       .pipe(
         tap(() => {
-          if (this.personaNatural?.viajero) {
-            this.loadViajerosFrecuentes(this.personaNatural.viajero.id);
+          if (this.personaNatural?.traveler) {
+            this.loadViajerosFrecuentes(this.personaNatural.traveler.id);
           }
         }),
         catchError(error => {
@@ -1271,11 +1271,11 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     if (documento) {
       this.documentoForm.patchValue({
-        numero: documento.numero,
-        fechaEmision: documento.fechaEmision || '',
-        fechaVencimiento: documento.fechaVencimiento || '',
-        origen: documento.origen,
-        documentoId: documento.documento.id
+        numero: documento.number,
+        fechaEmision: documento.dateIssue || '',
+        fechaVencimiento: documento.dateExpiration || '',
+        origen: documento.origin,
+        documentoId: documento.document.id
       });
     } else {
       this.documentoForm.reset();
@@ -1295,7 +1295,7 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
     const documentoData: DetalleDocumentoRequest = {
       ...this.documentoForm.value,
-      personaNaturalId: this.personaNatural!.id
+      personNaturalId: this.personaNatural!.id
     };
 
     let operation$: Observable<DetalleDocumentoResponse>;
@@ -1328,7 +1328,7 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
     this.documentoPendienteEliminar = documento;
     this.confirmationConfig = {
       title: '¿Eliminar documento?',
-      message: `¿Está seguro de eliminar el documento ${documento.documento.tipo} N° ${documento.numero}?`,
+      message: `¿Está seguro de eliminar el documento ${documento.document.type} N° ${documento.number}?`,
       confirmText: 'Sí, eliminar',
       cancelText: 'Cancelar',
       type: 'danger',
@@ -1376,7 +1376,7 @@ export class DetallePersonaComponent implements OnInit, OnDestroy {
 
   getTipoDocumentoNombre(documentoId: number): string {
     const doc = this.tiposDocumento.find(d => d.id === documentoId);
-    return doc ? doc.tipo : 'N/A';
+    return doc ? doc.type : 'N/A';
   }
 
   // Utility methods for display

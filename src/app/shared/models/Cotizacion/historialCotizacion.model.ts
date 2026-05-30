@@ -1,37 +1,37 @@
 export interface HistorialCotizacionRequest {
-  observacion?: string;
-  usuarioId?: number;
-  cotizacionId?: number;
-  estadoCotizacionId?: number;
+  observation?: string;
+  userId?: number;
+  quotationId?: number;
+  statusQuotationId?: number;
 }
 
 export interface HistorialCotizacionResponse {
   id: number;
   uuid?: string;
-  observacion?: string;
-  fechaCreacion?: string;
+  observation?: string;
+  dateCreated?: string;
 
-  usuarioId?: number;
-  usuarioNombre?: string;
-  usuarioEmail?: string;
+  userId?: number;
+  userName?: string;
+  userMail?: string;
 
-  cotizacionId?: number;
-  codigoCotizacion?: string;
+  quotationId?: number;
+  codeQuotation?: string;
 
-  estadoCotizacionId?: number;
-  estadoCotizacionDescripcion?: string;
+  statusQuotationId?: number;
+  statusQuotationDescription?: string;
 }
 
 export interface HistorialCotizacionSimple {
   id: number;
   uuid?: string;
-  observacion?: string;
-  fechaCreacion?: string;
+  observation?: string;
+  dateCreated?: string;
 
-  usuarioId?: number;
-  usuarioNombre?: string;
-  usuarioEmail?: string;
+  userId?: number;
+  userName?: string;
+  userMail?: string;
 
-  estadoCotizacionId?: number;
-  estadoCotizacionDescripcion?: string;
+  statusQuotationId?: number;
+  statusQuotationDescription?: string;
 }

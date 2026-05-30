@@ -297,8 +297,8 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
         // Verificar si ya existe un documento de cobranza para esta cotización
         const yaExisteDocumento = this.documentos.some(
           (documento) =>
-            documento.cotizacionId === cotizacion.id ||
-            documento.codigoCotizacion === cotizacion.codigoCotizacion,
+            documento.quotationId === cotizacion.id ||
+            documento.codeQuotation === cotizacion.codigoCotizacion,
         );
         return !yaExisteDocumento;
       });
@@ -362,10 +362,10 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
       this.filteredDocumentos = this.documentos.filter(
         (doc) =>
           doc.serie?.toLowerCase().includes(term) ||
-          doc.correlativo?.toString().includes(term) ||
+          doc.correlative?.toString().includes(term) ||
           doc.fileVenta?.toLowerCase().includes(term) ||
-          doc.clienteNombre?.toLowerCase().includes(term) ||
-          doc.codigoCotizacion?.toLowerCase().includes(term),
+          doc.clientName?.toLowerCase().includes(term) ||
+          doc.codeQuotation?.toLowerCase().includes(term),
       );
     }
     this.totalItems = this.filteredDocumentos.length;
@@ -377,10 +377,10 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
     this.documentosTabla = this.filteredDocumentos.map((doc) => ({
       id: doc.id || 0,
       numero: this.getNumeroDocumento(doc),
-      codigoCotizacion: doc.codigoCotizacion || 'Sin cotización',
-      clienteNombre: doc.clienteNombre || 'Sin nombre',
-      fechaEmision: this.formatDate(doc.fechaEmision),
-      moneda: doc.moneda || 'PEN',
+      codigoCotizacion: doc.codeQuotation || 'Sin cotización',
+      clienteNombre: doc.clientName || 'Sin nombre',
+      fechaEmision: this.formatDate(doc.dateIssue),
+      moneda: doc.currency || 'PEN',
       fileVenta: doc.fileVenta || 'Sin file',
       createdAt: this.formatDateTime(doc.createdAt),
       updatedAt: this.formatDateTime(doc.updatedAt),
@@ -484,19 +484,19 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
   private populateForm(documento: DocumentoCobranzaResponseDTO): void {
     this.documentoForm.patchValue({
       nroSerie: documento.serie,
-      correlativo: documento.correlativo,
+      correlativo: documento.correlative,
       fileVenta: documento.fileVenta,
-      costoEnvio: documento.costoEnvio,
-      fechaEmision: documento.fechaEmision ? documento.fechaEmision.split('T')[0] : '',
+      costoEnvio: documento.costShipping,
+      fechaEmision: documento.dateIssue ? documento.dateIssue.split('T')[0] : '',
       clienteEmail: '', // No disponible en ResponseDTO
       clienteTelefono: '', // No disponible en ResponseDTO
-      clienteNombre: documento.clienteNombre,
+      clienteNombre: documento.clientName,
       clienteDocumento: '', // No disponible en ResponseDTO
-      sucursalDescripcion: documento.sucursalDescripcion,
+      sucursalDescripcion: documento.branchDescription,
       puntoCompra: '', // No disponible en ResponseDTO
-      moneda: documento.moneda,
-      formaPago: documento.formaPagoDescripcion,
-      observaciones: documento.observaciones,
+      moneda: documento.currency,
+      formaPago: documento.methodPaymentDescription,
+      observaciones: documento.observation,
     });
   }
 
@@ -508,8 +508,8 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
       const term = this.searchCotizacion.toLowerCase();
       this.cotizacionesFiltradas = this.cotizaciones.filter(
         (cot) =>
-          cot.codigoCotizacion?.toLowerCase().includes(term) ||
-          cot.origenDestino?.toLowerCase().includes(term),
+          cot.codeQuotation?.toLowerCase().includes(term) ||
+          cot.originDestination?.toLowerCase().includes(term),
       );
     }
   }
@@ -535,9 +535,9 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
     }
 
     this.cotizacionesFiltradas = this.cotizaciones.filter((cotizacion) => {
-      const codigoCotizacion = cotizacion.codigoCotizacion?.toLowerCase() || '';
+      const codigoCotizacion = cotizacion.codeQuotation?.toLowerCase() || '';
       const personaDisplay = this.getPersonaDisplayName(cotizacion).toLowerCase();
-      const origenDestino = cotizacion.origenDestino?.toLowerCase() || '';
+      const origenDestino = cotizacion.originDestination?.toLowerCase() || '';
 
       return (
         codigoCotizacion.includes(searchTerm) ||
@@ -554,7 +554,7 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!documento.correlativo) {
+    if (!documento.correlative) {
       this.showError('No se puede generar PDF: documento sin correlativo');
       return;
     }
@@ -568,7 +568,7 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
     this.pdfService.downloadDocumentoCobranzaPdf(
       documentoId,
       documento.serie,
-      documento.correlativo,
+      documento.correlative,
     );
   }
 
@@ -596,17 +596,17 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
   // ===== UTILITY METHODS =====
   getPersonaDisplayName(cotizacion: CotizacionResponse): string {
     // Intentar obtener el primer email de la persona
-    if (cotizacion.personas?.correos && cotizacion.personas.correos.length > 0) {
-      return cotizacion.personas.correos[0].email;
+    if (cotizacion.person?.mail && cotizacion.person.mail.length > 0) {
+      return cotizacion.person.mail[0].mail;
     }
 
     // Si no hay email, intentar mostrar dirección o ID
-    if (cotizacion.personas?.direccion) {
-      return cotizacion.personas.direccion;
+    if (cotizacion.person?.address) {
+      return cotizacion.person.address;
     }
 
-    if (cotizacion.personas?.id) {
-      return `Cliente ID: ${cotizacion.personas.id}`;
+    if (cotizacion.person?.id) {
+      return `Cliente ID: ${cotizacion.person.id}`;
     }
 
     return 'Cliente no especificado';
@@ -666,10 +666,10 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
   getNumeroDocumento(documento: DocumentoCobranzaResponseDTO): string {
     if (
       documento?.serie &&
-      documento?.correlativo !== undefined &&
-      documento?.correlativo !== null
+      documento?.correlative !== undefined &&
+      documento?.correlative !== null
     ) {
-      return `${documento.serie}-${String(documento.correlativo).padStart(9, '0')}`;
+      return `${documento.serie}-${String(documento.correlative).padStart(9, '0')}`;
     }
     return 'Sin número';
   }
@@ -688,9 +688,9 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
 
       // Obtener personaId de la cotización (ID de tabla 'personas')
       // El backend tiene PersonaNaturalRepository.findByPersonasId() que convierte automáticamente
-      if (cotizacion.personas?.id) {
+      if (cotizacion.person?.id) {
         try {
-          const personaId = cotizacion.personas.id;
+          const personaId = cotizacion.person.id;
           this.personaNaturalIdActual = personaId;
 
           // Cargar personas jurídicas asociadas
@@ -721,7 +721,7 @@ export class DocumentoCobranzaComponent implements OnInit, OnDestroy {
     try {
       this.isLoading = true;
 
-      const personaJuridicaId = this.personaJuridicaSeleccionada?.personaJuridica?.id;
+      const personaJuridicaId = this.personaJuridicaSeleccionada?.personJuridic?.id;
       const sucursalId = this.sucursalSeleccionada?.id;
 
       this.documentoCobranzaService.createDocumentoCobranza(

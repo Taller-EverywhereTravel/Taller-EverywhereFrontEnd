@@ -1,17 +1,17 @@
 export interface UserProfileResponse {
   id: number;
   name: string;
-  email: string;
+  mail: string;
   role: string | null;
-  sucursal: {
+  branch: {
     id: number;
-    descripcion: string;
-    direccion: string;
-    telefono: string;
-    email: string;
-    estado: boolean;
-    fechaCreacion: string;
-    fechaActualizacion: string;
+    description: string;
+    address: string;
+    phone: string;
+    mail: string;
+    status: boolean;
+    dateCreated: string;
+    dateUpdated: string;
   } | null;
 }
 

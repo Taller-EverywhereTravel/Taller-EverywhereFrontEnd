@@ -6,45 +6,45 @@ import { DetalleLiquidacionSimple } from './detalleLiquidacion.model'
 import { ObservacionLiquidacionSimple } from './observacionLiquidacion.model'
 
 export interface LiquidacionRequest {
-  numero?: string
-  fechaCompra?: string
-  destino?: string
-  numeroPasajeros?: number
-  productoId?: number
-  formaPagoId?: number
-  cotizacionId?: number
+  number?: string
+  datePurchase?: string
+  destiny?: string
+  numberPassenger?: number
+  productId?: number
+  methodPaymentId?: number
+  quotationId?: number
 }
 
 export interface LiquidacionResponse {
   id: number
-  numero?: string
-  fechaCompra?: string
-  destino?: string
-  numeroPasajeros?: number
-  creado?: string
-  actualizado?: string
+  number?: string
+  datePurchase?: string
+  destiny?: string
+  numberPassenger?: number
+  created?: string
+  updated?: string
 
-  cotizacion?: CotizacionResponse
-  producto?: ProductoResponse
-  formaPago?: FormaPagoResponse
-  carpeta?: CarpetaResponse
-  observacionesLiquidacion?: ObservacionLiquidacionSimple[]
+  quotation?: CotizacionResponse
+  product?: ProductoResponse
+  methodPayment?: FormaPagoResponse
+  folder?: CarpetaResponse
+  observationLiquidation?: ObservacionLiquidacionSimple[]
 }
 
 export interface LiquidacionConDetallesResponse {
   id: number
-  numero?: string
-  fechaCompra?: string
-  destino?: string
-  numeroPasajeros?: number
-  creado?: string
-  actualizado?: string
+  number?: string
+  datePurchase?: string
+  destiny?: string
+  numberPassenger?: number
+  created?: string
+  updated?: string
 
-  cotizacion?: CotizacionResponse
-  producto?: ProductoResponse
-  formaPago?: FormaPagoResponse
-  carpeta?: CarpetaResponse
+  quotation?: CotizacionResponse
+  product?: ProductoResponse
+  methodPayment?: FormaPagoResponse
+  folder?: CarpetaResponse
 
-  detalles?: DetalleLiquidacionSimple[]
-  observaciones?: ObservacionLiquidacionSimple[]
+  detail?: DetalleLiquidacionSimple[]
+  observation?: ObservacionLiquidacionSimple[]
 }

@@ -223,11 +223,11 @@ export class ProductosComponent implements OnInit {
   private convertirATabla(): void {
     this.productosTabla = this.productos.map(producto => ({
       id: producto.id,
-      codigo: producto.codigo,
-      descripcion: producto.descripcion,
-      tipo: producto.tipo,
-      creado: producto.creado,
-      actualizado: producto.actualizado
+      codigo: producto.code,
+      descripcion: producto.description,
+      tipo: producto.type,
+      creado: producto.created,
+      actualizado: producto.updated
     }));
     this.totalProductos = this.productosTabla.length;
     // Actualizar data del DataTable - Recrear tableConfig para forzar detección de cambios
@@ -363,8 +363,8 @@ export class ProductosComponent implements OnInit {
 
       // Cargar los datos del producto en el formulario
       this.productoForm.patchValue({
-        descripcion: productoCompleto.descripcion || '',
-        tipo: productoCompleto.tipo || ''
+        descripcion: productoCompleto.description || '',
+        tipo: productoCompleto.type || ''
       });
 
       this.mostrarModalCrear = true;
@@ -644,7 +644,7 @@ export class ProductosComponent implements OnInit {
   }
 
   getUniqueTypesCount(): number {
-    const tipos = new Set(this.productos.map(p => p.tipo));
+    const tipos = new Set(this.productos.map(p => p.type));
     return tipos.size;
   }
 

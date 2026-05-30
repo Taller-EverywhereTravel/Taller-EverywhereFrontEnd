@@ -1,13 +1,13 @@
 export interface ProductoRequest {
-  descripcion: string;
-  tipo: string;
+  description: string;
+  type: string;
 }
 
 export interface ProductoResponse {
   id: number;
-  codigo: string;
-  descripcion: string;
-  tipo: string;
-  creado: string;
-  actualizado: string;
+  code: string;
+  description: string;
+  type: string;
+  created: string;
+  updated: string;
 }

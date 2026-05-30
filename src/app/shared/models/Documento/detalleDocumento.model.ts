@@ -3,33 +3,33 @@ import { ViajeroResponse } from '../Viajero/viajero.model';
 import { DocumentoResponse } from './documento.model';
 
 export interface DetalleDocumentoRequest {
-  numero: string
-  fechaEmision?: string
-  fechaVencimiento?: string
-  origen: string
-  documentoId: number
-  personaNaturalId: number
+  number: string
+  dateIssue?: string
+  dateExpiration?: string
+  origin: string
+  documentId: number
+  personNaturalId: number
 }
 
 export interface DetalleDocumentoResponse {
   id: number
-  numero: string
-  fechaEmision?: string
-  fechaVencimiento?: string
-  origen: string
-  creado: string
-  actualizado: string
-  documento: DocumentoResponse
-  personaNatural: PersonaNaturalResponse
+  number: string
+  dateIssue?: string
+  dateExpiration?: string
+  origin: string
+  created: string
+  updated: string
+  document: DocumentoResponse
+  personNatural: PersonaNaturalResponse
 }
 
 export interface PersonaInfo {
-  personaId: number;
+  personId: number;
   nombreCompleto: string;
 }
 
 export interface DetalleDocumentoConPersonasDto {
-  numeroDocumento: string;
-  tipoDocumento: string;
-  personas: PersonaInfo[];
+  numberDocument: string;
+  typeDocument: string;
+  person: PersonaInfo[];
 }

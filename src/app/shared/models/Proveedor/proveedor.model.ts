@@ -1,13 +1,13 @@
 
 export interface ProveedorRequest {
-  nombre: string;
+  name: string;
 }
 
 export interface ProveedorResponse {
   id: number;
-  nombre: string;
-  nombreJuridico?: string;
+  name: string;
+  nameJuridic?: string;
   ruc?: number;
-  creado: string;
-  actualizado: string;
+  created: string;
+  updated: string;
 }

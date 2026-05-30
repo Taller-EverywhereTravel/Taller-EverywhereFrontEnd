@@ -1,15 +1,15 @@
 import { ViajeroResponse } from './viajero.model';
 
 export interface ViajeroFrecuenteRequest {
-  areolinea: string;
-  codigo: string;
+  airline: string;
+  code: string;
 }
 
 export interface ViajeroFrecuenteResponse {
   id: number;
-  areolinea: string;
-  codigo: string;
-  viajero: ViajeroResponse;
-  creado: string;
-  actualizado: string;
+  airline: string;
+  code: string;
+  traveler: ViajeroResponse;
+  created: string;
+  updated: string;
 }

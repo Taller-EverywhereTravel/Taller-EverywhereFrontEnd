@@ -254,7 +254,7 @@ export class SucursalesComponent implements OnInit {
   private transformarDataParaTabla(): void {
     this.sucursalesTabla = this.sucursales.map(sucursal => ({
       ...sucursal,
-      estadoText: sucursal.estado ? 'Activa' : 'Inactiva'
+      estadoText: sucursal.status ? 'Activa' : 'Inactiva'
     }));
     this.tableConfig = {
       ...this.tableConfig,
@@ -334,7 +334,7 @@ export class SucursalesComponent implements OnInit {
   }
 
   cambiarEstadoSucursal(sucursal: SucursalResponse): void {
-    const nuevoEstado = !sucursal.estado;
+    const nuevoEstado = !sucursal.status;
 
     this.loading = true;
     this.sucursalService.cambiarEstadoSucursal(sucursal.id, nuevoEstado).subscribe({
@@ -540,8 +540,8 @@ export class SucursalesComponent implements OnInit {
   // Estadísticas
   calcularEstadisticas(): void {
     this.totalSucursales = this.sucursales.length;
-    this.totalActivas = this.sucursales.filter(s => s.estado).length;
-    this.totalInactivas = this.sucursales.filter(s => !s.estado).length;
+    this.totalActivas = this.sucursales.filter(s => s.status).length;
+    this.totalInactivas = this.sucursales.filter(s => !s.status).length;
   }
 
   // Sidebar methods

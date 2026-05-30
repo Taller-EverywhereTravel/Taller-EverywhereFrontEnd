@@ -580,7 +580,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       // Poblar cache usando ENFOQUE HÍBRIDO (tabla padre SI existe, sino tabla hija)
       this.personas.forEach((persona) => {
         // Intentar usar ID de tabla padre PRIMERO, si no existe usar tabla hija
-        const personaId = persona.persona?.id || persona.id; // persona.id exists on both responses
+        const personaId = persona.person?.id || persona.id; // persona.id exists on both responses
 
         if (!personaId) return;
 
@@ -590,24 +590,24 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
           const pj = persona as PersonaJuridicaResponse;
           this.personasCache[personaId] = {
             id: personaId,
-            identificador: pj.ruc || '',
-            nombre: pj.razonSocial || 'Sin nombre',
-            tipo: 'JURIDICA',
+            identifier: pj.ruc || '',
+            name: pj.nameCompany || 'Sin nombre',
+            type: 'JURIDICA',
           };
         } else {
           // Persona natural
           const pn = persona as PersonaNaturalResponse;
-          const apellidos = `${pn.apellidosPaterno || ''} ${pn.apellidosMaterno || ''}`.trim();
+          const apellidos = `${pn.surnamePaternal || ''} ${pn.surnameMaternal || ''}`.trim();
           this.personasCache[personaId] = {
             id: personaId,
-            identificador: pn.documento || '',
-            nombre: `${pn.nombres || ''} ${apellidos}`.trim() || 'Sin nombre',
-            tipo: 'NATURAL',
+            identifier: pn.document || '',
+            name: `${pn.name || ''} ${apellidos}`.trim() || 'Sin nombre',
+            type: 'NATURAL',
           };
         }
 
         const cached = this.personasCache[personaId];
-        this.personasDisplayMap[personaId] = cached.nombre;
+        this.personasDisplayMap[personaId] = cached.name;
       });
     } catch (error) {
       this.showError(
@@ -627,8 +627,8 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       // Obtener IDs únicos de personas desde las cotizaciones cargadas
       const personaIdsEnCotizaciones = new Set<number>();
       this.cotizaciones.forEach((cotizacion) => {
-        if (cotizacion.personas?.id) {
-          personaIdsEnCotizaciones.add(cotizacion.personas.id);
+        if (cotizacion.person?.id) {
+          personaIdsEnCotizaciones.add(cotizacion.person.id);
         }
       });
 
@@ -664,19 +664,19 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
           this.personasCache[cliente.id] = {
             id: cliente.id,
-            identificador: cliente.identificador || '',
-            nombre: cliente.nombre || `Cliente ID: ${cliente.id}`,
-            tipo: esGenerico ? 'UNKNOWN' : cliente.tipo,
+            identifier: cliente.identificador || '',
+            name: cliente.nombre || `Cliente ID: ${cliente.id}`,
+            type: esGenerico ? 'UNKNOWN' : cliente.tipo,
           };
 
           const cached = this.personasCache[cliente.id];
-          if (cached.identificador) {
+          if (cached.identifier) {
             this.personasDisplayMap[cliente.id] =
-              `${cached.tipo === 'JURIDICA' ? 'RUC' : cached.tipo === 'NATURAL' ? 'DNI' : 'DOC'}: ${cached.identificador} - ${cached.nombre}`;
+              `${cached.type === 'JURIDICA' ? 'RUC' : cached.type === 'NATURAL' ? 'DNI' : 'DOC'}: ${cached.identifier} - ${cached.name}`;
           } else {
             this.personasDisplayMap[cliente.id] = esGenerico
               ? `Cliente ID: ${cliente.id} (Sin datos)`
-              : cached.nombre;
+              : cached.name;
           }
 
           // Agregar a las listas para búsqueda (solo si no es genérico)
@@ -769,12 +769,12 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       const term = this.searchTerm.toLowerCase();
       this.filteredCotizaciones = this.cotizaciones.filter((cotizacion) => {
         return (
-          cotizacion.codigoCotizacion?.toLowerCase().includes(term) ||
-          (cotizacion.nombreCotizacion || '').toLowerCase().includes(term) ||
-          this.getPersonaDisplayName(cotizacion.personas?.id || 0)
+          cotizacion.codeQuotation?.toLowerCase().includes(term) ||
+          (cotizacion.nameQuotation || '').toLowerCase().includes(term) ||
+          this.getPersonaDisplayName(cotizacion.person?.id || 0)
             .toLowerCase()
             .includes(term) ||
-          cotizacion.origenDestino?.toLowerCase().includes(term)
+          cotizacion.originDestination?.toLowerCase().includes(term)
         );
       });
     }
@@ -787,17 +787,17 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
   private updateTableConfig(): void {
     this.cotizacionesTabla = this.filteredCotizaciones.map((c) => ({
       id: c.id,
-      codigoCotizacion: c.codigoCotizacion || '',
-      nombreCotizacion: c.nombreCotizacion || 'Sin nombre',
-      cliente: this.getPersonaDisplayName(c.personas?.id || 0),
-      clienteId: c.personas?.id || 0,
-      fechaEmision: c.fechaEmision || '',
-      fechaVencimiento: c.fechaVencimiento || '',
-      cantAdultos: c.cantAdultos || 0,
-      cantNinos: c.cantNinos || 0,
-      estado: c.estadoCotizacion?.descripcion || 'Sin estado',
-      estadoId: c.estadoCotizacion?.id || 0,
-      moneda: c.moneda || 'USD',
+      codigoCotizacion: c.codeQuotation || '',
+      nombreCotizacion: c.nameQuotation || 'Sin nombre',
+      cliente: this.getPersonaDisplayName(c.person?.id || 0),
+      clienteId: c.person?.id || 0,
+      fechaEmision: c.dateIssue || '',
+      fechaVencimiento: c.dateExpiration || '',
+      cantAdultos: c.numAdult || 0,
+      cantNinos: c.numChild || 0,
+      estado: c.statusQuotation?.description || 'Sin estado',
+      estadoId: c.statusQuotation?.id || 0,
+      moneda: c.currency || 'USD',
       total: 0,
       cotizacionOriginal: c,
     }));
@@ -956,7 +956,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if (this.cotizacionCompleta) {
       this.mostrarFormularioEditar({
         id: this.cotizacionCompleta.id,
-        codigoCotizacion: this.cotizacionCompleta.codigoCotizacion,
+        codigoCotizacion: this.cotizacionCompleta.codeQuotation,
       } as any);
       this.cerrarModalVer();
     }
@@ -969,7 +969,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     }
 
     this.isLoading = true;
-    this.cotizacionService.descargarDocx(cotizacion.id, cotizacion.codigoCotizacion);
+    this.cotizacionService.descargarDocx(cotizacion.id, cotizacion.codeQuotation);
 
     // Simulamos un pequeño delay para mostrar feedback al usuario
     setTimeout(() => {
@@ -1101,7 +1101,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
   private generateNextCode(): string {
     const maxCotizacion = this.cotizaciones.reduce((max, cotizacion) => {
-      const codigo = cotizacion.codigoCotizacion || '';
+      const codigo = cotizacion.codeQuotation || '';
       const numero = parseInt(codigo.replace(/[^0-9]/g, '')) || 0;
       return Math.max(max, numero);
     }, 0);
@@ -1123,9 +1123,9 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
         await this.populateFormFromCotizacionCompleta(this.cotizacionCompleta);
       } else {
         // Si estamos visualizando, también cargar los detalles para mostrar los grupos seleccionados
-        if (this.cotizacionCompleta.detalles && this.cotizacionCompleta.detalles.length > 0) {
+        if (this.cotizacionCompleta.detail && this.cotizacionCompleta.detail.length > 0) {
           this.loadDetallesFromCotizacionCompleta(
-            this.cotizacionCompleta.detalles,
+            this.cotizacionCompleta.detail,
             this.cotizacionCompleta,
           );
         }
@@ -1141,39 +1141,39 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
   ): Promise<void> {
     // Poblar formulario principal
     this.cotizacionForm.patchValue({
-      codigoCotizacion: cotizacion.codigoCotizacion,
-      nombreCotizacion: cotizacion.nombreCotizacion || '',
-      personaId: cotizacion.personas?.id,
-      fechaEmision: cotizacion.fechaEmision
-        ? this.formatDateTimeLocal(new Date(cotizacion.fechaEmision))
+      codigoCotizacion: cotizacion.codeQuotation,
+      nombreCotizacion: cotizacion.nameQuotation || '',
+      personaId: cotizacion.person?.id,
+      fechaEmision: cotizacion.dateIssue
+        ? this.formatDateTimeLocal(new Date(cotizacion.dateIssue))
         : '',
-      fechaVencimiento: cotizacion.fechaVencimiento
-        ? this.formatDateTimeLocal(new Date(cotizacion.fechaVencimiento))
+      fechaVencimiento: cotizacion.dateExpiration
+        ? this.formatDateTimeLocal(new Date(cotizacion.dateExpiration))
         : '',
-      estadoCotizacionId: cotizacion.estadoCotizacion?.id,
-      sucursalId: cotizacion.sucursal?.id,
-      origenDestino: cotizacion.origenDestino,
-      fechaSalida: cotizacion.fechaSalida
-        ? this.formatDateForInput(new Date(cotizacion.fechaSalida))
+      estadoCotizacionId: cotizacion.statusQuotation?.id,
+      sucursalId: cotizacion.branch?.id,
+      origenDestino: cotizacion.originDestination,
+      fechaSalida: cotizacion.dateDeparture
+        ? this.formatDateForInput(new Date(cotizacion.dateDeparture))
         : '',
-      fechaRegreso: cotizacion.fechaRegreso
-        ? this.formatDateForInput(new Date(cotizacion.fechaRegreso))
+      fechaRegreso: cotizacion.dateReturn
+        ? this.formatDateForInput(new Date(cotizacion.dateReturn))
         : '',
-      formaPagoId: cotizacion.formaPago?.id,
-      cantAdultos: cotizacion.cantAdultos || 1,
-      cantNinos: cotizacion.cantNinos || 0,
-      moneda: cotizacion.moneda || 'USD',
-      observacion: cotizacion.observacion || '',
+      formaPagoId: cotizacion.methodPayment?.id,
+      cantAdultos: cotizacion.numAdult || 1,
+      cantNinos: cotizacion.numChild || 0,
+      moneda: cotizacion.currency || 'USD',
+      observacion: cotizacion.observation || '',
     });
 
     // Cargar cliente si existe
-    if (cotizacion.personas?.id) {
-      await this.loadClienteForEdit(cotizacion.personas.id);
+    if (cotizacion.person?.id) {
+      await this.loadClienteForEdit(cotizacion.person.id);
     }
 
     // Cargar detalles desde la respuesta completa
-    if (cotizacion.detalles && cotizacion.detalles.length > 0) {
-      this.loadDetallesFromCotizacionCompleta(cotizacion.detalles, cotizacion);
+    if (cotizacion.detail && cotizacion.detail.length > 0) {
+      this.loadDetallesFromCotizacionCompleta(cotizacion.detail, cotizacion);
     }
   }
 
@@ -1263,32 +1263,32 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
   private async loadCotizacionForEdit(cotizacion: CotizacionResponse): Promise<void> {
     this.cotizacionForm.patchValue({
-      codigoCotizacion: cotizacion.codigoCotizacion,
-      nombreCotizacion: cotizacion.nombreCotizacion || '',
-      personaId: cotizacion.personas?.id,
-      fechaEmision: cotizacion.fechaEmision
-        ? this.formatDateTimeLocal(new Date(cotizacion.fechaEmision))
+      codigoCotizacion: cotizacion.codeQuotation,
+      nombreCotizacion: cotizacion.nameQuotation || '',
+      personaId: cotizacion.person?.id,
+      fechaEmision: cotizacion.dateIssue
+        ? this.formatDateTimeLocal(new Date(cotizacion.dateIssue))
         : '',
-      fechaVencimiento: cotizacion.fechaVencimiento
-        ? this.formatDateTimeLocal(new Date(cotizacion.fechaVencimiento))
+      fechaVencimiento: cotizacion.dateExpiration
+        ? this.formatDateTimeLocal(new Date(cotizacion.dateExpiration))
         : '',
-      estadoCotizacionId: cotizacion.estadoCotizacion?.id,
-      sucursalId: cotizacion.sucursal?.id,
-      origenDestino: cotizacion.origenDestino,
-      fechaSalida: cotizacion.fechaSalida
-        ? this.formatDateForInput(new Date(cotizacion.fechaSalida))
+      estadoCotizacionId: cotizacion.statusQuotation?.id,
+      sucursalId: cotizacion.branch?.id,
+      origenDestino: cotizacion.originDestination,
+      fechaSalida: cotizacion.dateDeparture
+        ? this.formatDateForInput(new Date(cotizacion.dateDeparture))
         : '',
-      fechaRegreso: cotizacion.fechaRegreso
-        ? this.formatDateForInput(new Date(cotizacion.fechaRegreso))
+      fechaRegreso: cotizacion.dateReturn
+        ? this.formatDateForInput(new Date(cotizacion.dateReturn))
         : '',
-      formaPagoId: cotizacion.formaPago?.id,
-      cantAdultos: cotizacion.cantAdultos || 1,
-      cantNinos: cotizacion.cantNinos || 0,
-      moneda: cotizacion.moneda || 'USD',
-      observacion: cotizacion.observacion || '',
+      formaPagoId: cotizacion.methodPayment?.id,
+      cantAdultos: cotizacion.numAdult || 1,
+      cantNinos: cotizacion.numChild || 0,
+      moneda: cotizacion.currency || 'USD',
+      observacion: cotizacion.observation || '',
     });
 
-    if (cotizacion.personas?.id) await this.loadClienteForEdit(cotizacion.personas.id);
+    if (cotizacion.person?.id) await this.loadClienteForEdit(cotizacion.person.id);
 
     if (this.categorias.length === 0) await this.loadCategorias();
 
@@ -1348,7 +1348,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
     // Separate detalles by category
     detalles.forEach((detalle) => {
-      if (detalle.categoria?.id === 1) {
+      if (detalle.category?.id === 1) {
         // Productos fijos
         const detalleTemp = this.convertDetalleToTemp(detalle);
         this.detallesFijos.push(detalleTemp);
@@ -1389,26 +1389,26 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
   }
 
   private convertDetalleToTemp(detalle: DetalleCotizacionResponse): DetalleCotizacionTemp {
-    const categoriaId = detalle.categoria?.id ?? detalle.categoria ?? 1;
+    const categoriaId = detalle.category?.id ?? detalle.category ?? 1;
 
     return {
       id: detalle.id,
-      proveedor: detalle.proveedor,
-      producto: detalle.producto,
+      proveedor: detalle.supplier,
+      producto: detalle.product,
       categoria: categoriaId, // Nunca undefined
-      descripcion: detalle.descripcion || 'Sin descripción',
-      precioHistorico: detalle.precioHistorico || 0,
-      comision: detalle.comision || 0,
-      cantidad: detalle.cantidad || 1,
-      unidad: detalle.unidad || 1,
-      total: (detalle.precioHistorico || 0) + (detalle.comision || 0),
+      descripcion: detalle.description || 'Sin descripción',
+      precioHistorico: detalle.priceHistory || 0,
+      comision: detalle.comission || 0,
+      cantidad: detalle.quantity || 1,
+      unidad: detalle.unit || 1,
+      total: (detalle.priceHistory || 0) + (detalle.comission || 0),
       isTemporary: false,
-      seleccionado: categoriaId === 1 ? true : detalle.seleccionado || false,
+      seleccionado: categoriaId === 1 ? true : detalle.selected || false,
     };
   }
 
   private addDetalleToGrupoHotel(detalle: DetalleCotizacionResponse): void {
-    const categoriaId = detalle.categoria?.id;
+    const categoriaId = detalle.category?.id;
     let grupo = this.gruposHoteles.find((g) => g.categoria.id === categoriaId);
     if (!grupo) {
       const categoriaObj = this.categorias.find((c) => c.id === categoriaId);
@@ -1471,9 +1471,9 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       // This would create a new proveedor, for now we'll simulate it
       proveedor = {
         id: 0, // temporary ID
-        nombre: formValue.nuevoProveedor.trim(),
-        creado: this.getCurrentLimaISOString(),
-        actualizado: this.getCurrentLimaISOString(),
+        name: formValue.nuevoProveedor.trim(),
+        created: this.getCurrentLimaISOString(),
+        updated: this.getCurrentLimaISOString(),
       } as ProveedorResponse;
     }
 
@@ -1980,7 +1980,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
       const detallesSeleccionados = selecciones.filter((s) => s.seleccionado).length;
       this.showSuccess(
-        `Selecciones guardadas exitosamente: ${detallesSeleccionados} detalles seleccionados del grupo "${grupoSeleccionado.categoria.nombre}"`,
+        `Selecciones guardadas exitosamente: ${detallesSeleccionados} detalles seleccionados del grupo "${grupoSeleccionado.categoria.name}"`,
       );
     } catch (error) {
       this.showError('Error al guardar las selecciones. Por favor, intente nuevamente.');
@@ -2011,8 +2011,8 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       };
 
       // Agregar "(Copia)" al nombre de la categoría
-      if (grupoDuplicado.categoria.nombre) {
-        grupoDuplicado.categoria.nombre = `${grupoOriginal.categoria.nombre} (Copia)`;
+      if (grupoDuplicado.categoria.name) {
+        grupoDuplicado.categoria.name = `${grupoOriginal.categoria.name} (Copia)`;
       }
       this.gruposHoteles.push(grupoDuplicado);
     }
@@ -2082,7 +2082,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
     // Crear nueva categoría
     const nuevaCategoria: CategoriaRequest = {
-      nombre: formValue.nombre,
+      name: formValue.nombre,
     };
 
     // Llamar al servicio para crear la categoría
@@ -2113,7 +2113,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       this.categoriaEditandose = index;
       // Guardar datos originales para poder cancelar
       this.categoriaDatosOriginales = {
-        nombre: this.categorias[index].nombre,
+        nombre: this.categorias[index].name,
       };
     }
   }
@@ -2124,14 +2124,14 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       const categoria = this.categorias[index];
 
       // Validar que el nombre no esté vacío
-      if (!categoria.nombre || categoria.nombre.trim().length < 3) {
+      if (!categoria.name || categoria.name.trim().length < 3) {
         this.showError('El nombre de la categoría debe tener al menos 3 caracteres');
         return;
       }
 
       // Crear objeto para actualizar
       const categoriaActualizada: CategoriaRequest = {
-        nombre: categoria.nombre,
+        name: categoria.name,
       };
 
       // Llamar al servicio para actualizar
@@ -2155,7 +2155,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
   cancelarEdicionCategoria(index: number): void {
     if (index >= 0 && index < this.categorias.length && this.categoriaDatosOriginales) {
       // Restaurar datos originales
-      this.categorias[index].nombre = this.categoriaDatosOriginales.nombre;
+      this.categorias[index].name = this.categoriaDatosOriginales.nombre;
       this.categoriaEditandose = null;
       this.categoriaDatosOriginales = null;
     }
@@ -2166,7 +2166,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if (index >= 0 && index < this.categorias.length) {
       const categoria = this.categorias[index];
       const mensaje =
-        `¿Estás seguro de que quieres eliminar la categoría "${categoria.nombre}"?\n\n` +
+        `¿Estás seguro de que quieres eliminar la categoría "${categoria.name}"?\n\n` +
         `Esta acción no se puede deshacer y podría afectar grupos existentes.`;
 
       if (confirm(mensaje)) {
@@ -2240,9 +2240,9 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     } else if (formValue.nuevoProveedor?.trim()) {
       proveedor = {
         id: 0,
-        nombre: formValue.nuevoProveedor.trim(),
-        creado: this.getCurrentLimaISOString(),
-        actualizado: this.getCurrentLimaISOString(),
+        name: formValue.nuevoProveedor.trim(),
+        created: this.getCurrentLimaISOString(),
+        updated: this.getCurrentLimaISOString(),
       } as ProveedorResponse;
     }
 
@@ -2379,21 +2379,21 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       } else {
         // ===== CREATE con POST (creación completa) =====
         const cotizacionRequest: CotizacionRequest = {
-          nombreCotizacion: formValue.nombreCotizacion || '',
-          cantAdultos: formValue.cantAdultos ?? 1,
-          cantNinos: formValue.cantNinos ?? 0,
-          fechaVencimiento: formValue.fechaVencimiento,
-          origenDestino: formValue.origenDestino,
-          fechaSalida: formValue.fechaSalida,
-          fechaRegreso: formValue.fechaRegreso,
-          moneda: formValue.moneda ?? 'USD',
-          observacion: formValue.observacion || '',
+          nameQuotation: formValue.nombreCotizacion || '',
+          numAdult: formValue.cantAdultos ?? 1,
+          numChild: formValue.cantNinos ?? 0,
+          dateIssue: formValue.fechaVencimiento,
+          originDestination: formValue.origenDestino,
+          dateDeparture: formValue.fechaSalida,
+          dateReturn: formValue.fechaRegreso,
+          currency: formValue.moneda ?? 'USD',
+          observation: formValue.observacion || '',
           // Incluir relaciones en el create si vienen del formulario
           counterId: formValue.counterId,
-          formaPagoId: formValue.formaPagoId,
-          estadoCotizacionId: formValue.estadoCotizacionId,
-          sucursalId: formValue.sucursalId,
-          carpetaId: formValue.carpetaId,
+          methodPaymentId: formValue.formaPagoId,
+          statusQuotationId: formValue.estadoCotizacionId,
+          branchId: formValue.sucursalId,
+          folder: formValue.carpetaId,
         };
 
         let createResult: CotizacionResponse | undefined = undefined;
@@ -2458,12 +2458,12 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     ];
 
     // Manejar cantAdultos y cantNinos juntos - si alguno cambia, incluir ambos
-    const originalAdultos = this.cotizacionOriginal.cantAdultos ?? 1;
-    const originalNinos = this.cotizacionOriginal.cantNinos ?? 0;
+    const originalAdultos = this.cotizacionOriginal.numAdult ?? 1;
+    const originalNinos = this.cotizacionOriginal.numChild ?? 0;
 
     if (cantAdultos !== originalAdultos || cantNinos !== originalNinos) {
-      patch.cantAdultos = cantAdultos;
-      patch.cantNinos = cantNinos;
+      patch.numAdult = cantAdultos;
+      patch.numChild = cantNinos;
     }
 
     // Comparar resto de campos
@@ -2560,7 +2560,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if (detalle.proveedor && detalle.proveedor.id === 0) {
       const nuevoProveedor = await this.proveedorService
         .createProveedor({
-          nombre: detalle.proveedor.nombre,
+          nombre: detalle.proveedor.name,
         })
         .toPromise();
       proveedorId = nuevoProveedor?.id;
@@ -2568,20 +2568,20 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
     const productoId = detalle.producto?.id;
     const request: DetalleCotizacionRequest = {
-      cantidad: detalle.cantidad || 1, // Default 1
-      unidad: detalle.unidad || 1, // Default 1
-      descripcion: detalle.descripcion || '', // Default empty
-      categoria: categoria, // Mantener para compatibilidad local
-      categoriaId: categoria, // Enviar categoriaId al backend
-      productoId: productoId, // Enviar productoId si existe
-      proveedorId: proveedorId, // Enviar proveedorId si existe
-      comision: detalle.comision || 0, // Default 0
-      precioHistorico: detalle.precioHistorico || 0, // Default 0
-      seleccionado: detalle.seleccionado || false, // Campo de selección
+      quantity: detalle.cantidad || 1, // Default 1
+      unit: detalle.unidad || 1, // Default 1
+      description: detalle.descripcion || '', // Default empty
+      category: categoria, // Mantener para compatibilidad local
+      categoryId: categoria, // Enviar categoriaId al backend
+      productId: productoId, // Enviar productoId si existe
+      supplierId: proveedorId, // Enviar proveedorId si existe
+      comission: detalle.comision || 0, // Default 0
+      priceHistory: detalle.precioHistorico || 0, // Default 0
+      selected: detalle.seleccionado || false, // Campo de selección
     };
 
     // Validación final antes de enviar
-    if (!request.categoria) {
+    if (!request.category) {
       throw new Error('categoria es requerido para crear detalle');
     }
 
@@ -2620,16 +2620,16 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     const proveedorId = detalle.proveedor?.id;
 
     const request: DetalleCotizacionRequest = {
-      cantidad: detalle.cantidad || 1,
-      unidad: detalle.unidad !== undefined && detalle.unidad !== null ? detalle.unidad : 0,
-      descripcion: detalle.descripcion || '',
-      categoria: categoriaId,
-      categoriaId: categoriaId,
-      productoId: productoId,
-      proveedorId: proveedorId,
-      comision: detalle.comision || 0,
-      precioHistorico: detalle.precioHistorico || 0,
-      seleccionado: detalle.seleccionado || false, // Campo de selección
+      quantity: detalle.cantidad || 1,
+      unit: detalle.unidad !== undefined && detalle.unidad !== null ? detalle.unidad : 0,
+      description: detalle.descripcion || '',
+      category: categoriaId,
+      categoryId: categoriaId,
+      productId: productoId,
+      supplierId: proveedorId,
+      comission: detalle.comision || 0,
+      priceHistory: detalle.precioHistorico || 0,
+      selected: detalle.seleccionado || false, // Campo de selección
     };
 
     await this.detalleCotizacionService.updateDetalleCotizacion(detalle.id, request).toPromise();
@@ -2758,8 +2758,8 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     // Buscar en el cache
     if (this.personasCache[personaId]) {
       const cached = this.personasCache[personaId];
-      if (cached.identificador) {
-        return `${cached.tipo === 'JURIDICA' ? 'RUC' : 'DNI'}: ${cached.identificador}`;
+      if (cached.identifier) {
+        return `${cached.type === 'JURIDICA' ? 'RUC' : 'DNI'}: ${cached.identifier}`;
       }
       return 'Sin documento';
     }
@@ -2784,9 +2784,9 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       const pj = persona as PersonaJuridicaResponse;
       this.personasCache[persona.id] = {
         id: persona.id,
-        identificador: pj.ruc || '',
-        nombre: pj.razonSocial || 'Sin nombre',
-        tipo: 'JURIDICA',
+        identifier: pj.ruc || '',
+        name: pj.nameCompany || 'Sin nombre',
+        type: 'JURIDICA',
       };
     } else {
       // Persona natural
@@ -2794,9 +2794,9 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
       // Filtrar valores null/undefined y construir nombre limpio
       // IMPORTANTE: Convertir a string y limpiar valores null/undefined
-      const nombres = pn.nombres != null ? String(pn.nombres).trim() : '';
-      const apellidoPaterno = pn.apellidosPaterno != null ? String(pn.apellidosPaterno).trim() : '';
-      const apellidoMaterno = pn.apellidosMaterno != null ? String(pn.apellidosMaterno).trim() : '';
+      const nombres = pn.name != null ? String(pn.name).trim() : '';
+      const apellidoPaterno = pn.surnamePaternal != null ? String(pn.surnamePaternal).trim() : '';
+      const apellidoMaterno = pn.surnameMaternal != null ? String(pn.surnameMaternal).trim() : '';
 
       const partesNombre = [nombres, apellidoPaterno, apellidoMaterno].filter(
         (parte) => parte && parte !== 'null' && parte !== 'undefined',
@@ -2804,16 +2804,16 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
       this.personasCache[persona.id] = {
         id: persona.id,
-        identificador: pn.documento || '',
-        nombre: partesNombre.join(' ').trim() || 'Sin nombre',
-        tipo: 'NATURAL',
+        identifier: pn.document || '',
+        name: partesNombre.join(' ').trim() || 'Sin nombre',
+        type: 'NATURAL',
       };
     }
 
     // Registrar SOLO EL NOMBRE para el map de display (usado en la tabla)
     // El formato completo (DNI: xxx - Nombre) solo debe usarse en el buscador de clientes
     const cached = this.personasCache[persona.id];
-    this.personasDisplayMap[persona.id] = cached.nombre;
+    this.personasDisplayMap[persona.id] = cached.name;
 
     // Si la entidad tiene una relación `persona` (tabla padre) y su id difiere, duplicar la entrada
     if (
@@ -2860,7 +2860,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
       return 'bg-gray-100 text-gray-800'; // estilo por defecto para estados null/undefined
     }
 
-    const descripcion = estado.descripcion?.toLowerCase();
+    const descripcion = estado.description?.toLowerCase();
     switch (descripcion) {
       case 'aprobada':
         return 'bg-green-100 text-green-800';
@@ -2902,7 +2902,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
   // ===== MÉTODOS PARA MODAL DE VISTA =====
   getTotalCotizacionCompleta(): number {
-    if (!this.cotizacionCompleta?.detalles) return 0;
+    if (!this.cotizacionCompleta?.detail) return 0;
 
     const totalFijos = this.getTotalProductosFijos();
 
@@ -2924,20 +2924,20 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
   }
 
   getDetallesByCategoria(categoriaId: number): any[] {
-    if (!this.cotizacionCompleta?.detalles) return [];
-    return this.cotizacionCompleta.detalles.filter(
-      (detalle) => detalle.categoria?.id === categoriaId,
+    if (!this.cotizacionCompleta?.detail) return [];
+    return this.cotizacionCompleta.detail.filter(
+      (detalle) => detalle.category?.id === categoriaId,
     );
   }
 
   getCategoriasConDetalles(): any[] {
-    if (!this.cotizacionCompleta?.detalles) return [];
+    if (!this.cotizacionCompleta?.detail) return [];
 
     const categoriasMap = new Map();
 
-    this.cotizacionCompleta.detalles.forEach((detalle) => {
-      const categoriaId = detalle.categoria?.id || 1;
-      const categoriaNombre = detalle.categoria?.nombre || 'Productos Fijos';
+    this.cotizacionCompleta.detail.forEach((detalle) => {
+      const categoriaId = detalle.category?.id || 1;
+      const categoriaNombre = detalle.category?.name || 'Productos Fijos';
 
       if (!categoriasMap.has(categoriaId)) {
         categoriasMap.set(categoriaId, {
@@ -3071,7 +3071,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
     // Si es personaDisplay (nuevo modelo unificado)
     if ('tipo' in persona && 'identificador' in persona) {
-      const tipo = persona.tipo.toUpperCase();
+      const tipo = persona.type.toUpperCase();
       return tipo === 'JURIDICA' ? 'Empresa' : 'Cliente';
     }
 
@@ -3090,13 +3090,13 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
     // Si es personaDisplay (nuevo modelo unificado)
     if ('tipo' in persona && 'identificador' in persona) {
-      return persona.identificador || '';
+      return persona.identifier || '';
     }
 
     // Si es persona jurídica, devolver RUC
     if ('ruc' in persona && persona.ruc) return persona.ruc;
     // Si es persona natural, devolver documento
-    if ('documento' in persona && persona.documento) return persona.documento;
+    if ('documento' in persona && persona.document) return persona.document;
 
     return '';
   }
@@ -3108,10 +3108,10 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
     // Si es personaDisplay (nuevo modelo unificado)
     if ('tipo' in persona && 'identificador' in persona) {
-      return !!persona.identificador;
+      return !!persona.identifier;
     }
 
-    return !!('documento' in persona && persona.documento) || !!('ruc' in persona && persona.ruc);
+    return !!('documento' in persona && persona.document) || !!('ruc' in persona && persona.ruc);
   }
 
   getSelectedClienteName(): string {
@@ -3130,7 +3130,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     if (!persona) return 'Cliente';
     // Si es personaDisplay (modelo unificado)
     if ('tipo' in persona && 'nombre' in persona) {
-      const nombreLimpio = persona.nombre
+      const nombreLimpio = persona.name
         .replace(/null|undefined/gi, '')
         .replace(/\s+/g, ' ')
         .trim();
@@ -3175,7 +3175,7 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
     }
     // Si es personaDisplay
     if ('tipo' in persona && 'nombre' in persona) {
-      return persona.nombre.replace(/null|undefined/gi, '').replace(/\s+/g, ' ').trim();
+      return persona.name.replace(/null|undefined/gi, '').replace(/\s+/g, ' ').trim();
     }
     // Compatibilidad con modelos antiguos (soporta apellidosPaterno/apellidosMaterno)
     if ('nombres' in persona) {
@@ -3208,19 +3208,19 @@ export class CotizacionesComponent implements OnInit, OnDestroy {
 
   getCotizacionesPendientes(): number {
     return this.cotizaciones.filter(
-      (cot) => cot.estadoCotizacion?.descripcion?.toLowerCase() === 'pendiente',
+      (cot) => cot.statusQuotation?.description?.toLowerCase() === 'pendiente',
     ).length;
   }
 
   getCotizacionesAprobadas(): number {
     return this.cotizaciones.filter(
-      (cot) => cot.estadoCotizacion?.descripcion?.toLowerCase() === 'aprobada',
+      (cot) => cot.statusQuotation?.description?.toLowerCase() === 'aprobada',
     ).length;
   }
 
   getCotizacionesPorConfirmar(): number {
     return this.cotizaciones.filter(
-      (cot) => cot.estadoCotizacion?.descripcion?.toLowerCase() === 'pendiente',
+      (cot) => cot.statusQuotation?.description?.toLowerCase() === 'pendiente',
     ).length;
   }
 

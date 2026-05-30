@@ -1,24 +1,24 @@
 // Modelo para respuesta de detalle de documento de cobranza (equivalente a DetalleDocumentoCobranzaResponseDTO)
 export interface DetalleDocumentoCobranzaResponseDTO {
   id?: number;
-  cantidad?: number;
-  descripcion?: string;
-  precio?: number;
-  fechaCreacion?: string; // ISO string format for LocalDateTime
+  quantity?: number;
+  description?: string;
+  price?: number;
+  dateCreation?: string; // ISO string format for LocalDateTime
 
   // IDs de relaciones para evitar lazy loading
-  documentoCobranzaId?: number;
-  documentoCobranzaNumero?: string;
+  documentCollectionId?: number;
+  documentCollectionNumber?: string;
 
-  productoId?: number;
-  productoDescripcion?: string;
+  productId?: number;
+  productDescription?: string;
 }
 
 // Modelo para request de detalle de documento de cobranza (equivalente a DetalleDocumentoCobranzaRequestDTO)
 export interface DetalleDocumentoCobranzaRequestDTO {
-  cantidad?: number; // @Positive validation should be handled in the component
-  descripcion?: string;
-  precio?: number; // @Positive validation should be handled in the component
-  documentoCobranzaId?: number;
-  productoId?: number;
+  quantity?: number; // @Positive validation should be handled in the component
+  description?: string;
+  price?: number; // @Positive validation should be handled in the component
+  documentCollectionId?: number;
+  productId?: number;
 }

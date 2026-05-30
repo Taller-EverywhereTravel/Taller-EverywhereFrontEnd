@@ -1,31 +1,31 @@
 // Modelo para el detalle del documento de cobranza (básico)
 export interface DetalleDocumentoCobranza {
-  cantidad: number;
-  codigoProducto: string;
-  descripcion: string;
-  precioUnitario: number;
+  quantity: number;
+  codeProduct: string;
+  description: string;
+  priceUnit: number;
   total?: number;
-  nombreProducto?: string;
+  nameProduct?: string;
 }
 
 // Modelo principal para el documento de cobranza (DTO)
 export interface DocumentoCobranzaDTO {
   // Campos manuales
   fileVenta?: string;
-  costoEnvio?: number;
+  costShipping?: number;
 
   // Campos de cotización
-  codigoCotizacion?: string;   // Número de cotización
-  fechaEmision?: string; // ISO string format for LocalDateTime
-  clienteNombre?: string;      // Nombre completo del cliente
-  clienteTelefono?: string;
-  clienteDocumento?: string;   // DNI o RUC del cliente
-  clienteDireccion?: string;   // Dirección del cliente
-  sucursalDescripcion?: string;
-  puntoCompra?: string;
-  moneda?: string;
-  formaPago?: string;
-  observaciones?: string;
+  codeQuotation?: string;   // Número de cotización
+  dateIssue?: string; // ISO string format for LocalDateTime
+  clientName?: string;      // Nombre completo del cliente
+  clientPhone?: string;
+  clientDocument?: string;   // DNI o RUC del cliente
+  clientAddress?: string;   // Dirección del cliente
+  branchDescription?: string;
+  pointPurchase?: string;
+  currency?: string;
+  methodPayment?: string;
+  observations?: string;
 
   // Totales
   subtotal?: number;
@@ -33,45 +33,45 @@ export interface DocumentoCobranzaDTO {
   importeEnLetras?: string;
 
   // Detalles
-  detalles?: DetalleDocumentoCobranza[];
+  detail?: DetalleDocumentoCobranza[];
 }
 
 // Modelo para la respuesta de listado de documentos (ResponseDTO)
 export interface DocumentoCobranzaResponseDTO {
   id?: number;
   serie?: string;
-  correlativo?: number;
-  fechaEmision?: string; // ISO string format for LocalDateTime
-  observaciones?: string;
+  correlative?: number;
+  dateIssue?: string; // ISO string format for LocalDateTime
+  observation?: string;
   fileVenta?: string;
-  costoEnvio?: number;
-  moneda?: string;
+  costShipping?: number;
+  currency?: string;
 
   // Información de relaciones
-  cotizacionId?: number;
-  codigoCotizacion?: string;  // Número de cotización
-  personaId?: number;
-  sucursalId?: number;
-  formaPagoId?: number;
+  quotationId?: number;
+  codeQuotation?: string;  // Número de cotización
+  personId?: number;
+  branchId?: number;
+  methodPaymentId?: number;
 
   // Información básica para mostrar
-  clienteNombre?: string;     // Nombre de la persona
-  clienteDocumento?: string;  // DNI o RUC de la persona
-  tipoDocumentoCliente?: string; // Tipo de documento (DNI, RUC, etc.)
-  sucursalDescripcion?: string;
-  formaPagoDescripcion?: string;
+  clientName?: string;     // Nombre de la persona
+  clientDocument?: string;  // DNI o RUC de la persona
+  typeDocumentClient?: string; // Tipo de documento (DNI, RUC, etc.)
+  branchDescription?: string;
+  methodPaymentDescription?: string;
 
   // Información de carpeta
-  carpetaId?: number;
-  carpetaNombre?: string;
+  folderId?: number;
+  folderName?: string;
 
   // Información de PersonaJuridica (si fue seleccionada)
-  personaJuridicaId?: number;
-  personaJuridicaRuc?: string;
-  personaJuridicaRazonSocial?: string;
+  personJuridicId?: number;
+  personJuridicRuc?: string;
+  personJuridicNameCompany?: string;
 
   // Información de DetalleDocumento (si fue seleccionado un documento personal)
-  detalleDocumentoId?: number;
+  detailDocumentId?: number;
 
   // Campos de auditoría
   createdAt?: string; // ISO string format for LocalDateTime
@@ -80,12 +80,12 @@ export interface DocumentoCobranzaResponseDTO {
 
 // DTO para actualización de documento de cobranza (equivalente a DocumentoCobranzaUpdateDTO)
 export interface DocumentoCobranzaUpdateDTO {
-  fechaEmision?: string; // ISO string format for LocalDateTime
+  dateIssue?: string; // ISO string format for LocalDateTime
   fileVenta?: string;
-  costoEnvio?: number;
-  observaciones?: string;
-  detalleDocumentoId?: number;
-  sucursalId?: number;
-  personaJuridicaId?: number;
-  formaPagoId?: number;
+  costShipping?: number;
+  observation?: string;
+  detailDocumentId?: number;
+  branchId?: number;
+  personJuridicId?: number;
+  methodPaymentId?: number;
 }

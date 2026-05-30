@@ -1,16 +1,16 @@
 export interface TelefonoPersonaRequest {
-   numero: string
-   codigoPais: string
-   tipo: string
-   descripcion?: string
+   number: string
+   codeCountry: string
+   type: string
+   description?: string
 }
 
 export interface TelefonoPersonaResponse {
    id: number
-   numero: string
-   codigoPais: string
-   tipo: string
-   descripcion?: string
-   creado: string
-   actualizado: string
+   number: string
+   codeCountry: string
+   type: string
+   description?: string
+   created: string
+   updated: string
 }

@@ -186,11 +186,11 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
   }
 
   private loadDetallesDocumento(): void {
-    if (!this.documento?.personaId) {
+    if (!this.documento?.personId) {
       return;
     }
 
-    const subscription = this.detalleDocumentoService.findByPersonaId(this.documento.personaId)
+    const subscription = this.detalleDocumentoService.findByPersonaId(this.documento.personId)
       .pipe(
         catchError(error => {
           return of([]);
@@ -240,11 +240,11 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
 
     const formValue = this.detalleForm.value;
     const detalleRequest: DetalleDocumentoCobranzaRequestDTO = {
-      cantidad: formValue.cantidad,
-      descripcion: formValue.descripcion,
-      precio: formValue.precio,
-      productoId: formValue.productoId,
-      documentoCobranzaId: this.documentoId
+      quantity: formValue.cantidad,
+      description: formValue.descripcion,
+      price: formValue.precio,
+      productId: formValue.productoId,
+      documentCollectionId: this.documentoId
     };
 
     this.isLoading = true;
@@ -297,10 +297,10 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
     this.showDetalleForm = true;
 
     this.detalleForm.patchValue({
-      cantidad: detalle.cantidad,
-      descripcion: detalle.descripcion,
-      precio: detalle.precio,
-      productoId: detalle.productoId
+      cantidad: detalle.quantity,
+      descripcion: detalle.description,
+      precio: detalle.price,
+      productoId: detalle.productId
     });
   }
 
@@ -351,12 +351,12 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
 
     const updateDTO: DocumentoCobranzaUpdateDTO = {
       fileVenta: formValue.fileVenta?.trim() || '',
-      costoEnvio: formValue.costoEnvio || 0,
-      observaciones: formValue.observaciones?.trim() || '',
-      detalleDocumentoId: detalleDocumentoId,
-      sucursalId: formValue.sucursalId || undefined,
-      personaJuridicaId: personaJuridicaId,
-      formaPagoId: formValue.formaPagoId || undefined
+      costShipping: formValue.costoEnvio || 0,
+      observation: formValue.observaciones?.trim() || '',
+      detailDocumentId: detalleDocumentoId,
+      branchId: formValue.sucursalId || undefined,
+      personJuridicId: personaJuridicaId,
+      methodPaymentId: formValue.formaPagoId || undefined
     };
 
     this.isLoading = true;
@@ -389,8 +389,8 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
     if (this.documento) {
       this.documentoForm.patchValue({
         fileVenta: this.documento.fileVenta || '',
-        costoEnvio: this.documento.costoEnvio || 0,
-        observaciones: this.documento.observaciones || ''
+        costoEnvio: this.documento.costShipping || 0,
+        observaciones: this.documento.observation || ''
       });
       this.showDocumentoForm = true;
     }
@@ -437,27 +437,27 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
 
     // Llenar formulario con datos actuales
     let valorCombinado = null;
-    if (this.documento.personaJuridicaId) {
-      valorCombinado = 'pj_' + this.documento.personaJuridicaId;
-    } else if (this.documento.detalleDocumentoId) {
-      valorCombinado = 'doc_' + this.documento.detalleDocumentoId;
+    if (this.documento.personJuridicId) {
+      valorCombinado = 'pj_' + this.documento.personJuridicId;
+    } else if (this.documento.detailDocumentId) {
+      valorCombinado = 'doc_' + this.documento.detailDocumentId;
     }
 
     // Convertir fechaEmision de ISO datetime a solo fecha (YYYY-MM-DD) para el input type="date"
-    const fechaEmisionValue = this.documento.fechaEmision
-      ? this.documento.fechaEmision.split('T')[0]
+    const fechaEmisionValue = this.documento.dateIssue
+      ? this.documento.dateIssue.split('T')[0]
       : '';
 
     this.documentoForm.patchValue({
       fechaEmision: fechaEmisionValue,
       fileVenta: this.documento.fileVenta || '',
-      costoEnvio: this.documento.costoEnvio || 0,
-      observaciones: this.documento.observaciones || '',
+      costoEnvio: this.documento.costShipping || 0,
+      observaciones: this.documento.observation || '',
       detalleDocumentoId: valorCombinado,
-      sucursalId: this.documento.sucursalId || null,
-      formaPagoId: this.documento.formaPagoId || null
+      sucursalId: this.documento.branchId || null,
+      formaPagoId: this.documento.methodPaymentId || null
     });
-    this.sucursalSeleccionada = this.documento.sucursalId || null;
+    this.sucursalSeleccionada = this.documento.branchId || null;
   }
 
   salirModoEdicion(): void {
@@ -488,14 +488,14 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
     // Convertir a número para comparar
     const id = typeof productoId === 'string' ? parseInt(productoId, 10) : productoId;
     const producto = this.productos.find(p => p.id === id);
-    return producto ? producto.tipo : 'Producto no encontrado';
+    return producto ? producto.type : 'Producto no encontrado';
   }
 
   calcularTotal(): number {
     const totalDetalles = this.detalles.reduce((total, detalle) => {
-      return total + ((detalle.cantidad || 0) * (detalle.precio || 0));
+      return total + ((detalle.quantity || 0) * (detalle.price || 0));
     }, 0);
-    const costoEnvio = this.documento?.costoEnvio || 0;
+    const costoEnvio = this.documento?.costShipping || 0;
     return totalDetalles + costoEnvio;
   }
 
@@ -514,7 +514,7 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
       this.sucursales = await this.sucursalService.findAllSucursal().toPromise() || []; // Cargar sucursales
       this.formasPago = await this.formaPagoService.getAllFormasPago().toPromise() || []; // Cargar formas de pago
 
-      const personaId = this.documento?.personaId; // Cargar documentos del cliente (DNI, Pasaporte, etc.)
+      const personaId = this.documento?.personId; // Cargar documentos del cliente (DNI, Pasaporte, etc.)
 
       if (personaId) {
         try {
@@ -524,20 +524,20 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
 
           if (this.documentosCliente.length > 0) {
             // Usar el personaNaturalId del primer documento
-            const personaNaturalId = this.documentosCliente[0].personaNatural.id;
+            const personaNaturalId = this.documentosCliente[0].personNatural.id;
             const relaciones = await this.naturalJuridicoService
               .findByPersonaNaturalId(personaNaturalId)
               .toPromise() || [];
             this.personasJuridicas = relaciones.map(r => r.personaJuridica);
           } else {
-            if (this.documento?.personaJuridicaId) {
+            if (this.documento?.personJuridicId) {
               this.personasJuridicas = [{
-                id: this.documento.personaJuridicaId,
-                ruc: this.documento.personaJuridicaRuc || '',
-                razonSocial: this.documento.personaJuridicaRazonSocial || '',
-                persona: {} as any,
-                creado: new Date().toISOString(),
-                actualizado: new Date().toISOString()
+                id: this.documento.personJuridicId,
+                ruc: this.documento.personJuridicRuc || '',
+                nameCompany: this.documento.personJuridicNameCompany || '',
+                person: {} as any,
+                created: new Date().toISOString(),
+                updated: new Date().toISOString()
               }];
             } else {
               this.personasJuridicas = [];
@@ -548,14 +548,14 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
           this.documentosCliente = [];
 
           // Verificar si es PersonaJuridica y cargarla
-          if (this.documento?.personaJuridicaId) {
+          if (this.documento?.personJuridicId) {
             this.personasJuridicas = [{
-              id: this.documento.personaJuridicaId,
-              ruc: this.documento.personaJuridicaRuc || '',
-              razonSocial: this.documento.personaJuridicaRazonSocial || '',
-              persona: {} as any,
-              creado: new Date().toISOString(),
-              actualizado: new Date().toISOString()
+              id: this.documento.personJuridicId,
+              ruc: this.documento.personJuridicRuc || '',
+              nameCompany: this.documento.personJuridicNameCompany || '',
+              person: {} as any,
+              created: new Date().toISOString(),
+              updated: new Date().toISOString()
             }];
           } else {
             this.personasJuridicas = [];
@@ -573,7 +573,7 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
     if (!detalleDocId) return 'Sin detalle de documento';
     const detalle = this.detallesDocumento.find(d => d.id === detalleDocId);
     if (!detalle) return 'Sin detalle de documento';
-    return `${detalle.numero} - ${detalle.documento?.tipo || 'N/A'}`;
+    return `${detalle.number} - ${detalle.document?.type || 'N/A'}`;
   }
 
   getDetalleDocumentoInfo(id: number): DetalleDocumentoResponse | undefined {
@@ -581,8 +581,8 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
   }
 
   getNumeroDocumento(documento: DocumentoCobranzaResponseDTO | null): string {
-    if (documento?.serie && documento?.correlativo !== undefined && documento?.correlativo !== null) {
-      return `${documento.serie}-${String(documento.correlativo).padStart(9, '0')}`;
+    if (documento?.serie && documento?.correlative !== undefined && documento?.correlative !== null) {
+      return `${documento.serie}-${String(documento.correlative).padStart(9, '0')}`;
     }
     return 'Sin número';
   }
@@ -649,11 +649,11 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
 
     const formValue = this.detalleForm.value;
     const nuevoDetalle: DetalleDocumentoCobranzaResponseDTO = {
-      cantidad: formValue.cantidad || 1,
-      descripcion: formValue.descripcion || '',
-      precio: formValue.precio || 0,
-      productoId: formValue.productoId || undefined,
-      documentoCobranzaId: this.documentoId || undefined
+      quantity: formValue.cantidad || 1,
+      description: formValue.descripcion || '',
+      price: formValue.precio || 0,
+      productId: formValue.productoId || undefined,
+      documentCollectionId: this.documentoId || undefined
     };
 
     this.detallesFijos.push(nuevoDetalle);
@@ -686,11 +686,11 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
       for (const detalle of this.detalles) {
         if (detalle.id) {
           const updateDTO: DetalleDocumentoCobranzaRequestDTO = {
-            cantidad: detalle.cantidad,
-            descripcion: detalle.descripcion || '',
-            precio: detalle.precio,
-            productoId: detalle.productoId || 0,
-            documentoCobranzaId: this.documentoId
+            quantity: detalle.quantity,
+            description: detalle.description || '',
+            price: detalle.price,
+            productId: detalle.productId || 0,
+            documentCollectionId: this.documentoId
           };
 
           await this.detalleDocumentoCobranzaService.updateDetalle(detalle.id, updateDTO).toPromise();
@@ -700,11 +700,11 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
       // 3. Crear nuevos detalles fijos
       for (const detalleFijo of this.detallesFijos) {
         const createDTO: DetalleDocumentoCobranzaRequestDTO = {
-          cantidad: detalleFijo.cantidad,
-          descripcion: detalleFijo.descripcion || '',
-          precio: detalleFijo.precio,
-          productoId: detalleFijo.productoId || 0,
-          documentoCobranzaId: this.documentoId
+          quantity: detalleFijo.quantity,
+          description: detalleFijo.description || '',
+          price: detalleFijo.price,
+          productId: detalleFijo.productId || 0,
+          documentCollectionId: this.documentoId
         };
 
         await this.detalleDocumentoCobranzaService.createDetalle(createDTO).toPromise();
@@ -757,14 +757,14 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
     }
 
     const updateDTO: DocumentoCobranzaUpdateDTO = {
-      fechaEmision: formValue.fechaEmision || undefined,
+      dateIssue: formValue.fechaEmision || undefined,
       fileVenta: formValue.fileVenta?.trim() || '',
-      costoEnvio: formValue.costoEnvio || 0,
-      observaciones: formValue.observaciones?.trim() || '',
-      detalleDocumentoId: detalleDocumentoId,
-      sucursalId: formValue.sucursalId || undefined,
-      personaJuridicaId: personaJuridicaId,
-      formaPagoId: formValue.formaPagoId || undefined
+      costShipping: formValue.costoEnvio || 0,
+      observation: formValue.observaciones?.trim() || '',
+      detailDocumentId: detalleDocumentoId,
+      branchId: formValue.sucursalId || undefined,
+      personJuridicId: personaJuridicaId,
+      methodPaymentId: formValue.formaPagoId || undefined
     };
 
     const response = await this.documentoCobranzaService.updateDocumento(this.documentoId, updateDTO).toPromise();
@@ -785,7 +785,7 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.documento.correlativo) {
+    if (!this.documento.correlative) {
       this.error = 'No se puede generar PDF: documento sin correlativo';
       return;
     }
@@ -796,7 +796,7 @@ export class DetalleDocumentoCobranzaComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.pdfService.downloadDocumentoCobranzaPdf(documentoId, this.documento.serie, this.documento.correlativo);
+    this.pdfService.downloadDocumentoCobranzaPdf(documentoId, this.documento.serie, this.documento.correlative);
   }
 
   verPDF(): void {

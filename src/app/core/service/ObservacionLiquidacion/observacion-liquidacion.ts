@@ -27,8 +27,8 @@ export class ObservacionLiquidacionService {
       tap((response) => {
         if (response.liquidacion?.id) {
           this.cacheService.invalidatePattern(`/liquidaciones/${response.liquidacion.id}`);
-        } else if (requestDTO.liquidacionId) {
-          this.cacheService.invalidatePattern(`/liquidaciones/${requestDTO.liquidacionId}`);
+        } else if (requestDTO.liquidationId) {
+          this.cacheService.invalidatePattern(`/liquidaciones/${requestDTO.liquidationId}`);
         }
       })
     );

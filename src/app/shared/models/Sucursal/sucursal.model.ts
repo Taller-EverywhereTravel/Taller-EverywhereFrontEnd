@@ -1,18 +1,18 @@
 export interface SucursalRequest {
-  descripcion: string;
-  direccion: string;
-  telefono: string;
-  email: string;
-  estado: boolean;
+  description: string;
+  address: string;
+  phone: string;
+  mail: string;
+  status: boolean;
 }
 
 export interface SucursalResponse {
   id: number;
-  descripcion: string;
-  direccion: string;
-  telefono: string;
-  email: string;
-  estado: boolean;
-  fechaCreacion: string;
-  fechaActualizacion: string;
+  description: string;
+  address: string;
+  phone: string;
+  mail: string;
+  status: boolean;
+  dateCreated: string;
+  dateUpdated: string;
 }

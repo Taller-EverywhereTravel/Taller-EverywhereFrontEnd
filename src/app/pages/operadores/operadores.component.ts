@@ -88,7 +88,7 @@ export class OperadoresComponent implements OnInit {
         header: 'Nombre',
         icon: 'fa-user',
         sortable: true,
-        render: (item) => item.nombre || 'N/A'
+        render: (item) => item.name || 'N/A'
       },
       {
         key: 'creado',
@@ -96,7 +96,7 @@ export class OperadoresComponent implements OnInit {
         icon: 'fa-calendar-alt',
         sortable: true,
         width: '150px',
-        render: (item) => this.formatDate(item.creado)
+        render: (item) => this.formatDate(item.created)
       }
     ],
     enableSearch: true,
@@ -196,7 +196,7 @@ export class OperadoresComponent implements OnInit {
     if (this.searchQuery.trim()) {
       const term = this.searchQuery.toLowerCase();
       filtered = filtered.filter(operador =>
-        operador.nombre?.toLowerCase().includes(term)
+        operador.name?.toLowerCase().includes(term)
       );
     }
 
@@ -216,12 +216,12 @@ export class OperadoresComponent implements OnInit {
 
       switch (this.sortColumn) {
         case 'nombre':
-          valueA = a.nombre?.toLowerCase() || '';
-          valueB = b.nombre?.toLowerCase() || '';
+          valueA = a.name?.toLowerCase() || '';
+          valueB = b.name?.toLowerCase() || '';
           break;
         case 'creado':
-          valueA = new Date(a.creado);
-          valueB = new Date(b.creado);
+          valueA = new Date(a.created);
+          valueB = new Date(b.created);
           break;
         default:
           return 0;
@@ -278,7 +278,7 @@ export class OperadoresComponent implements OnInit {
     this.isEditMode = true;
     this.editingId = operador.id;
     this.operadorForm.patchValue({
-      nombre: operador.nombre || ''
+      nombre: operador.name || ''
     });
     this.showModal = true;
   }
@@ -305,7 +305,7 @@ export class OperadoresComponent implements OnInit {
 
     const formData = this.operadorForm.value;
     const request: OperadorRequest = {
-      nombre: formData.nombre?.trim()
+      name: formData.nombre?.trim()
     };
 
     this.loading = true;
@@ -349,7 +349,7 @@ export class OperadoresComponent implements OnInit {
       this.loading = true;
       // Intentar desactivar vía update (si el backend soporta estado).
       const id = this.operadorToDelete.id;
-      const payload: any = { nombre: this.operadorToDelete.nombre, estado: false };
+      const payload: any = { nombre: this.operadorToDelete.name, estado: false };
 
       this.operadorService.updateOperador(id, payload).subscribe({
         next: () => {
@@ -520,7 +520,7 @@ export class OperadoresComponent implements OnInit {
   }
 
   getOperadorInitials(operador: OperadorResponse): string {
-    const nombre = operador.nombre || '';
+    const nombre = operador.name || '';
     return nombre.substring(0, 2).toUpperCase();
   }
 

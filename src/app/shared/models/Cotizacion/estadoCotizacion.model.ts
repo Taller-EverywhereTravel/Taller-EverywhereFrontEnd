@@ -1,10 +1,10 @@
 export interface EstadoCotizacionResponse {
   id: number
-  descripcion?: string
-  fechaCreacion:string
-  fechaActualizacion: string
+  description?: string
+  dateCreated:string
+  dateUpdated: string
 }
 
 export interface EstadoCotizacionRequest {
-  descripcion?: string
+  description?: string
 }

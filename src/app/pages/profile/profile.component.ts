@@ -109,7 +109,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   get sucursalLabel(): string {
-    return this.profile?.sucursal?.descripcion || 'Sin sucursal asignada';
+    return this.profile?.branch?.description || 'Sin sucursal asignada';
   }
 
 }

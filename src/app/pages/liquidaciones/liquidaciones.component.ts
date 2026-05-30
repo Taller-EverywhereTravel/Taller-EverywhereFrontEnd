@@ -450,16 +450,16 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
   private convertToLiquidacionTabla(liquidaciones: LiquidacionResponse[]): LiquidacionTabla[] {
     return liquidaciones.map(liq => ({
       id: liq.id,
-      numeroLiquidacion: liq.numero,
-      numeroCotizacion: liq.cotizacion?.codigoCotizacion,
-      personaNombre: liq.cotizacion?.personas?.id
-        ? this.getPersonaDisplayName(liq.cotizacion.personas.id)
+      numeroLiquidacion: liq.number,
+      numeroCotizacion: liq.quotation?.codeQuotation,
+      personaNombre: liq.quotation?.person?.id
+        ? this.getPersonaDisplayName(liq.quotation.person.id)
         : 'Sin cliente',
-      destino: liq.destino,
-      fechaCompra: liq.fechaCompra,
-      numeroPasajeros: liq.numeroPasajeros,
-      producto: liq.producto?.descripcion,
-      formaPago: liq.formaPago?.descripcion
+      destino: liq.destiny,
+      fechaCompra: liq.datePurchase,
+      numeroPasajeros: liq.numberPassenger,
+      producto: liq.product?.description,
+      formaPago: liq.methodPayment?.description
     }));
   }
 
@@ -507,8 +507,8 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
       // Obtener IDs únicos de personas desde las liquidaciones cargadas
       const personaIdsEnLiquidaciones = new Set<number>();
       this.liquidaciones.forEach(liquidacion => {
-        if (liquidacion.cotizacion?.personas?.id) {
-          personaIdsEnLiquidaciones.add(liquidacion.cotizacion.personas.id);
+        if (liquidacion.quotation?.person?.id) {
+          personaIdsEnLiquidaciones.add(liquidacion.quotation.person.id);
         }
       });
 
@@ -721,13 +721,13 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
   private async populateLiquidacionForm(liquidacion: LiquidacionResponse): Promise<void> {
     try {
       this.liquidacionForm.patchValue({
-        numero: liquidacion.numero || '',
-        cotizacionId: liquidacion.cotizacion?.id || '',
-        destino: liquidacion.destino || '',
-        fechaCompra: liquidacion.fechaCompra ? this.formatDateForInput(new Date(liquidacion.fechaCompra)) : '',
-        numeroPasajeros: liquidacion.numeroPasajeros || 1,
-        productoId: liquidacion.producto?.id || '',
-        formaPagoId: liquidacion.formaPago?.id || ''
+        numero: liquidacion.number || '',
+        cotizacionId: liquidacion.quotation?.id || '',
+        destino: liquidacion.destiny || '',
+        fechaCompra: liquidacion.datePurchase ? this.formatDateForInput(new Date(liquidacion.datePurchase)) : '',
+        numeroPasajeros: liquidacion.numberPassenger || 1,
+        productoId: liquidacion.product?.id || '',
+        formaPagoId: liquidacion.methodPayment?.id || ''
       });
 
       if (liquidacion.id) {
@@ -892,11 +892,11 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
   }
 
   getLiquidacionesProcesadas(): number {
-    return this.liquidaciones.filter(liq => liq.producto !== null && liq.formaPago !== null).length;
+    return this.liquidaciones.filter(liq => liq.product !== null && liq.methodPayment !== null).length;
   }
 
   getLiquidacionesPendientes(): number {
-    return this.liquidaciones.filter(liq => liq.producto === null || liq.formaPago === null).length;
+    return this.liquidaciones.filter(liq => liq.product === null || liq.methodPayment === null).length;
   }
 
   trackByDetalle(index: number, detalle: DetalleLiquidacionResponse): number {
@@ -985,12 +985,12 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
       const formValue = this.liquidacionForm.value;
       // Preparar el request de liquidación
       const liquidacionRequest: LiquidacionRequest = {
-        numero: formValue.numero || '',
-        fechaCompra: formValue.fechaCompra,
-        destino: formValue.destino || '',
-        numeroPasajeros: formValue.numeroPasajeros || 1,
-        productoId: formValue.productoId || null,
-        formaPagoId: formValue.formaPagoId || null
+        number: formValue.numero || '',
+        datePurchase: formValue.fechaCompra,
+        destiny: formValue.destino || '',
+        numberPassenger: formValue.numeroPasajeros || 1,
+        productId: formValue.productoId || null,
+        methodPaymentId: formValue.formaPagoId || null
       };
 
       let liquidacionResponse: LiquidacionResponse;
@@ -1051,23 +1051,23 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
   private async crearDetalleLiquidacion(liquidacionId: number, detalle: DetalleLiquidacionTemp): Promise<void> {
     try {
       const detalleRequest: DetalleLiquidacionRequest = {
-        viajeroId: detalle.viajero?.id || undefined,
-        productoId: detalle.producto?.id || undefined,
-        proveedorId: detalle.proveedor?.id || undefined,
-        operadorId: detalle.operador?.id || undefined,
+        travelerId: detalle.viajero?.id || undefined,
+        productId: detalle.producto?.id || undefined,
+        supplierId: detalle.proveedor?.id || undefined,
+        operatorId: detalle.operador?.id || undefined,
         ticket: this.sanitizeText(detalle.ticket),
-        documentoCobro: this.sanitizeText(detalle.documentoCobro),
-        costoTicket: detalle.costoTicket || 0,
-        cargoServicio: detalle.cargoServicio || 0,
-        valorVenta: detalle.valorVenta || 0,
+        documentCollection: this.sanitizeText(detalle.documentoCobro),
+        costTicket: detalle.costoTicket || 0,
+        chargeService: detalle.cargoServicio || 0,
+        valueSale: detalle.valorVenta || 0,
         feeEmision: this.sanitizeText(detalle.feeEmision),
-        documentoFee: this.sanitizeText(detalle.documentoFee),
-        comision: this.sanitizeText(detalle.comision),
-        facturaCompra: this.sanitizeText(detalle.facturaCompra),
-        boletaPasajero: this.sanitizeText(detalle.boletaPasajero),
-        montoDescuento: detalle.montoDescuento || 0,
-        pagoPaxUSD: detalle.pagoPaxUSD || 0,
-        pagoPaxPEN: detalle.pagoPaxPEN || 0
+        documentFee: this.sanitizeText(detalle.documentoFee),
+        comission: this.sanitizeText(detalle.comision),
+        invoicePurchase: this.sanitizeText(detalle.facturaCompra),
+        ticketPassenger: this.sanitizeText(detalle.boletaPasajero),
+        amountDiscount: detalle.montoDescuento || 0,
+        paymentPaxUSD: detalle.pagoPaxUSD || 0,
+        paymentPaxPEN: detalle.pagoPaxPEN || 0
       };
       await this.detalleLiquidacionService.createDetalleLiquidacion(liquidacionId, detalleRequest).toPromise();
     } catch (error) {
@@ -1080,23 +1080,23 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
       if (!detalle.id) return;
 
       const detalleRequest: DetalleLiquidacionRequest = {
-        costoTicket: detalle.costoTicket || 0,
-        cargoServicio: detalle.cargoServicio || 0,
-        valorVenta: detalle.valorVenta || 0,
+        costTicket: detalle.costoTicket || 0,
+        chargeService: detalle.cargoServicio || 0,
+        valueSale: detalle.valorVenta || 0,
         feeEmision: this.sanitizeText(detalle.feeEmision),
-        documentoFee: this.sanitizeText(detalle.documentoFee),
-        comision: this.sanitizeText(detalle.comision),
-        facturaCompra: this.sanitizeText(detalle.facturaCompra),
-        boletaPasajero: this.sanitizeText(detalle.boletaPasajero),
-        montoDescuento: detalle.montoDescuento || 0,
-        pagoPaxUSD: detalle.pagoPaxUSD || 0,
-        pagoPaxPEN: detalle.pagoPaxPEN || 0,
-        viajeroId: detalle.viajero?.id || undefined,
-        productoId: detalle.producto?.id || undefined,
-        proveedorId: detalle.proveedor?.id || undefined,
-        operadorId: detalle.operador?.id || undefined,
+        documentFee: this.sanitizeText(detalle.documentoFee),
+        comission: this.sanitizeText(detalle.comision),
+        invoicePurchase: this.sanitizeText(detalle.facturaCompra),
+        ticketPassenger: this.sanitizeText(detalle.boletaPasajero),
+        amountDiscount: detalle.montoDescuento || 0,
+        paymentPaxUSD: detalle.pagoPaxUSD || 0,
+        paymentPaxPEN: detalle.pagoPaxPEN || 0,
+        travelerId: detalle.viajero?.id || undefined,
+        productId: detalle.producto?.id || undefined,
+        supplierId: detalle.proveedor?.id || undefined,
+        operatorId: detalle.operador?.id || undefined,
         ticket: this.sanitizeText(detalle.ticket),
-        documentoCobro: this.sanitizeText(detalle.documentoCobro)
+        documentCollection: this.sanitizeText(detalle.documentoCobro)
       };
       await this.detalleLiquidacionService.updateDetalleLiquidacion(detalle.id, detalleRequest).toPromise();
     } catch (error) {
@@ -1126,8 +1126,8 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
       return;
     }
     this.cotizacionesFiltradas = this.cotizaciones.filter(cotizacion =>
-      cotizacion.codigoCotizacion?.toLowerCase().includes(term) ||
-      cotizacion.origenDestino?.toLowerCase().includes(term)
+      cotizacion.codeQuotation?.toLowerCase().includes(term) ||
+      cotizacion.originDestination?.toLowerCase().includes(term)
     );
   }
 
@@ -1152,11 +1152,11 @@ export class LiquidacionesComponent implements OnInit, OnDestroy {
 
       // Mapear datos de cotización a liquidación
       const liquidacionRequest: LiquidacionRequest = {
-        cotizacionId: cotizacion.id,
-        fechaCompra: cotizacion.fechaEmision ? this.formatDateForInput(new Date(cotizacion.fechaEmision)) : undefined,
-        destino: cotizacion.origenDestino,
-        numeroPasajeros: (cotizacion.cantAdultos || 0) + (cotizacion.cantNinos || 0),
-        formaPagoId: cotizacion.formaPago?.id
+        quotationId: cotizacion.id,
+        datePurchase: cotizacion.dateIssue ? this.formatDateForInput(new Date(cotizacion.dateIssue)) : undefined,
+        destiny: cotizacion.originDestination,
+        numberPassenger: (cotizacion.numAdult || 0) + (cotizacion.numChild || 0),
+        methodPaymentId: cotizacion.methodPayment?.id
       };
 
       // Crear la liquidación

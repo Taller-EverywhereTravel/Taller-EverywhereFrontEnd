@@ -1,22 +1,22 @@
 // Modelo para el detalle del recibo (ResponseDTO)
 export interface DetalleReciboResponseDTO {
   id?: number;
-  cantidad?: number;
-  descripcion?: string;
-  precio?: number;
-  productoId?: number;
-  productoDescripcion?: string;
-  reciboId?: number;
-  reciboNumero?: string;
-  fechaCreacion?: string;
-  fechaActualizacion?: string;
+  amount?: number;
+  description?: string;
+  price?: number;
+  productId?: number;
+  productDescription?: string;
+  receiptId?: number;
+  receiptNumber?: string;
+  dateCreated?: string;
+  dateUpdated?: string;
 }
 
 // DTO para crear/actualizar detalle de recibo
 export interface DetalleReciboRequestDTO {
-  cantidad?: number;
-  descripcion?: string;
-  precio?: number;
-  reciboId?: number;
-  productoId?: number;
+  amount?: number;
+  description?: string;
+  price?: number;
+  receiptId?: number;
+  productId?: number;
 }

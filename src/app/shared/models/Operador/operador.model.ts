@@ -1,10 +1,10 @@
 export interface OperadorRequest {
-  nombre?: string
+  name?: string
 }
 
 export interface OperadorResponse {
   id: number
-  nombre?: string
-  creado: string
-  actualizado: string
+  name?: string
+  created: string
+  updated: string
 }

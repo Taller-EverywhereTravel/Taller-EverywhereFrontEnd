@@ -2,23 +2,23 @@ import { TelefonoPersonaResponse } from '../TelefonoPersona/telefonoPersona.mode
 import { CorreoPersonaResponse } from '../CorreoPersona/correoPersona.model';
 
 export interface PersonaRequest {
-  direccion?: string
-  observacion?: string
+  address?: string
+  observation?: string
 }
 
 export interface PersonaResponse {
   id: number
-  direccion?: string
-  observacion?: string
-  creado: string
-  actualizado: string
-  telefonos?: TelefonoPersonaResponse[]
-  correos?: CorreoPersonaResponse[]
+  address?: string
+  observation?: string
+  created: string
+  updated: string
+  phone?: TelefonoPersonaResponse[]
+  mail?: CorreoPersonaResponse[]
 }
 
 export interface personaDisplay {
   id: number;
-  tipo: string;
-  identificador: string;
-  nombre: string;
+  type: string;
+  identifier: string;
+  name: string;
 }

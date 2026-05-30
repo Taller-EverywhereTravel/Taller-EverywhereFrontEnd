@@ -113,14 +113,14 @@ export class ReciboComponent implements OnInit, OnDestroy {
         icon: 'fa-hashtag',
         sortable: true,
         width: '180px',
-        render: (item) => item.codigoCotizacion || 'N/A'
+        render: (item) => item.codeQuotation || 'N/A'
       },
       {
         key: 'clienteNombre',
         header: 'Cliente',
         icon: 'fa-user',
         sortable: true,
-        render: (item) => item.clienteNombre || 'N/A'
+        render: (item) => item.clientName || 'N/A'
       },
       {
         key: 'fechaEmision',
@@ -128,7 +128,7 @@ export class ReciboComponent implements OnInit, OnDestroy {
         icon: 'fa-calendar',
         sortable: true,
         width: '150px',
-        render: (item) => this.formatDate(item.fechaEmision)
+        render: (item) => this.formatDate(item.dateIssue)
       },
       {
         key: 'creado',
@@ -293,8 +293,8 @@ export class ReciboComponent implements OnInit, OnDestroy {
       this.cotizaciones = todasLasCotizaciones.filter(cotizacion => {
         // Verificar si ya existe un recibo para esta cotización
         const yaExisteRecibo = this.recibos.some(recibo =>
-          recibo.cotizacionId === cotizacion.id ||
-          recibo.codigoCotizacion === cotizacion.codigoCotizacion
+          recibo.quotationId === cotizacion.id ||
+          recibo.codeQuotation === cotizacion.codigoCotizacion
         );
         return !yaExisteRecibo;
       });
@@ -357,10 +357,10 @@ export class ReciboComponent implements OnInit, OnDestroy {
       const term = this.searchTerm.toLowerCase();
       this.filteredRecibos = this.recibos.filter(recibo =>
         recibo.serie?.toLowerCase().includes(term) ||
-        recibo.correlativo?.toString().includes(term) ||
+        recibo.correlative?.toString().includes(term) ||
         recibo.fileVenta?.toLowerCase().includes(term) ||
-        recibo.clienteNombre?.toLowerCase().includes(term) ||
-        recibo.codigoCotizacion?.toLowerCase().includes(term)
+        recibo.clientName?.toLowerCase().includes(term) ||
+        recibo.codeQuotation?.toLowerCase().includes(term)
       );
     }
     this.totalItems = this.filteredRecibos.length;
@@ -453,18 +453,18 @@ export class ReciboComponent implements OnInit, OnDestroy {
   private populateForm(documento: ReciboResponseDTO): void {
     this.documentoForm.patchValue({
       nroSerie: documento.serie,
-      correlativo: documento.correlativo,
+      correlativo: documento.correlative,
       fileVenta: documento.fileVenta,
-      fechaEmision: documento.fechaEmision ? documento.fechaEmision.split('T')[0] : '',
+      fechaEmision: documento.dateIssue ? documento.dateIssue.split('T')[0] : '',
       clienteEmail: '', // No disponible en ResponseDTO
       clienteTelefono: '', // No disponible en ResponseDTO
-      clienteNombre: documento.clienteNombre,
+      clienteNombre: documento.clientName,
       clienteDocumento: '', // No disponible en ResponseDTO
-      sucursalDescripcion: documento.sucursalDescripcion,
+      sucursalDescripcion: documento.branchDescription,
       puntoCompra: '', // No disponible en ResponseDTO
-      moneda: documento.moneda,
-      formaPago: documento.formaPagoDescripcion,
-      observaciones: documento.observaciones
+      moneda: documento.currency,
+      formaPago: documento.methodPaymentDescription,
+      observaciones: documento.observation
     });
   }
 
@@ -475,8 +475,8 @@ export class ReciboComponent implements OnInit, OnDestroy {
     } else {
       const term = this.searchCotizacion.toLowerCase();
       this.cotizacionesFiltradas = this.cotizaciones.filter(cot =>
-        cot.codigoCotizacion?.toLowerCase().includes(term) ||
-        cot.origenDestino?.toLowerCase().includes(term)
+        cot.codeQuotation?.toLowerCase().includes(term) ||
+        cot.originDestination?.toLowerCase().includes(term)
       );
     }
   }
@@ -502,9 +502,9 @@ export class ReciboComponent implements OnInit, OnDestroy {
     }
 
     this.cotizacionesFiltradas = this.cotizaciones.filter(cotizacion => {
-      const codigoCotizacion = cotizacion.codigoCotizacion?.toLowerCase() || '';
+      const codigoCotizacion = cotizacion.codeQuotation?.toLowerCase() || '';
       const personaDisplay = this.getPersonaDisplayName(cotizacion).toLowerCase();
-      const origenDestino = cotizacion.origenDestino?.toLowerCase() || '';
+      const origenDestino = cotizacion.originDestination?.toLowerCase() || '';
 
       return codigoCotizacion.includes(searchTerm) ||
         personaDisplay.includes(searchTerm) ||
@@ -519,7 +519,7 @@ export class ReciboComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!recibo.correlativo) {
+    if (!recibo.correlative) {
       this.showError('No se puede generar PDF: recibo sin correlativo');
       return;
     }
@@ -530,7 +530,7 @@ export class ReciboComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.pdfService.downloadReciboPdf(reciboId, recibo.serie, recibo.correlativo);
+    this.pdfService.downloadReciboPdf(reciboId, recibo.serie, recibo.correlative);
   }
 
   verPDF(recibo: ReciboResponseDTO): void {
@@ -648,17 +648,17 @@ export class ReciboComponent implements OnInit, OnDestroy {
   // ===== UTILITY METHODS =====
   getPersonaDisplayName(cotizacion: CotizacionResponse): string {
     // Intentar obtener el primer email de la persona
-    if (cotizacion.personas?.correos && cotizacion.personas.correos.length > 0) {
-      return cotizacion.personas.correos[0].email;
+    if (cotizacion.person?.mail && cotizacion.person.mail.length > 0) {
+      return cotizacion.person.mail[0].mail;
     }
 
     // Si no hay email, intentar mostrar dirección o ID
-    if (cotizacion.personas?.direccion) {
-      return cotizacion.personas.direccion;
+    if (cotizacion.person?.address) {
+      return cotizacion.person.address;
     }
 
-    if (cotizacion.personas?.id) {
-      return `Cliente ID: ${cotizacion.personas.id}`;
+    if (cotizacion.person?.id) {
+      return `Cliente ID: ${cotizacion.person.id}`;
     }
 
     return 'Cliente no especificado';
@@ -716,8 +716,8 @@ export class ReciboComponent implements OnInit, OnDestroy {
   }
 
   getNumeroRecibo(recibo: ReciboResponseDTO): string {
-    if (recibo?.serie && recibo?.correlativo !== undefined && recibo?.correlativo !== null) {
-      return `${recibo.serie}-${String(recibo.correlativo).padStart(9, '0')}`;
+    if (recibo?.serie && recibo?.correlative !== undefined && recibo?.correlative !== null) {
+      return `${recibo.serie}-${String(recibo.correlative).padStart(9, '0')}`;
     }
     return 'Sin número';
   }
@@ -736,9 +736,9 @@ export class ReciboComponent implements OnInit, OnDestroy {
 
       // Obtener personaId de la cotización (ID de tabla 'personas')
       // El backend tiene PersonaNaturalRepository.findByPersonasId() que convierte automáticamente
-      if (cotizacion.personas?.id) {
+      if (cotizacion.person?.id) {
         try {
-          const personaId = cotizacion.personas.id;
+          const personaId = cotizacion.person.id;
           this.personaNaturalIdActual = personaId;
 
           // Cargar personas jurídicas asociadas
@@ -770,7 +770,7 @@ export class ReciboComponent implements OnInit, OnDestroy {
     try {
       this.isLoading = true;
 
-      const personaJuridicaId = this.personaJuridicaSeleccionada?.personaJuridica?.id;
+      const personaJuridicaId = this.personaJuridicaSeleccionada?.personJuridic?.id;
       const sucursalId = this.sucursalSeleccionada?.id;
 
       this.reciboService.createRecibo(

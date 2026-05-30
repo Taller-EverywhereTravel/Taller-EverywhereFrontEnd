@@ -233,8 +233,8 @@ export class DetalleJuridicoComponent implements OnInit, OnDestroy {
     const clientes: PersonaNaturalResponse[] = [];
 
     naturalJuridicaResponses.forEach(njResponse => {
-      if (njResponse.personaNatural) {
-        clientes.push(njResponse.personaNatural);
+      if (njResponse.personNatural) {
+        clientes.push(njResponse.personNatural);
       }
     });
 
@@ -281,11 +281,11 @@ export class DetalleJuridicoComponent implements OnInit, OnDestroy {
   // Utility methods
   getEmpresaNombre(): string {
     if (!this.personaJuridica) return '';
-    return `${this.personaJuridica.razonSocial || ''}`.trim();
+    return `${this.personaJuridica.nameCompany || ''}`.trim();
   }
 
   getTelefonoCompleto(telefono: TelefonoPersonaResponse): string {
-    return `${telefono.codigoPais} ${telefono.numero}`;
+    return `${telefono.codeCountry} ${telefono.number}`;
   }
 
   getPaisNombre(dialCode: string): string {
@@ -314,10 +314,10 @@ export class DetalleJuridicoComponent implements OnInit, OnDestroy {
     const formValue = this.personaJuridicaForm.value;
     const personaJuridicaData: PersonaJuridicaRequest = {
       ruc: formValue.ruc,
-      razonSocial: formValue.razonSocial,
-      persona: {
-        direccion: formValue.direccion,
-        observacion: formValue.observacion
+      nameCompany: formValue.razonSocial,
+      person: {
+        address: formValue.direccion,
+        observation: formValue.observacion
       }
     };
 
@@ -365,9 +365,9 @@ export class DetalleJuridicoComponent implements OnInit, OnDestroy {
 
     this.personaJuridicaForm.patchValue({
       ruc: this.personaJuridica.ruc || '',
-      razonSocial: this.personaJuridica.razonSocial || '',
-      direccion: this.personaJuridica.persona?.direccion || '',
-      observacion: this.personaJuridica.persona?.observacion || '',
+      razonSocial: this.personaJuridica.nameCompany || '',
+      direccion: this.personaJuridica.person?.address || '',
+      observacion: this.personaJuridica.person?.observation || '',
     });
 
     this.showPersonaJuridicaModal = true;
@@ -388,10 +388,10 @@ export class DetalleJuridicoComponent implements OnInit, OnDestroy {
     // Preparar datos de persona juridica
     const personaJuridicaData: PersonaJuridicaRequest = {
       ruc: formValue.ruc,
-      razonSocial: formValue.razonSocial,
-      persona: {
-        direccion: formValue.direccion,
-        observacion: formValue.observacion
+      nameCompany: formValue.razonSocial,
+      person: {
+        address: formValue.direccion,
+        observation: formValue.observacion
       }
     };
 
@@ -427,10 +427,10 @@ export class DetalleJuridicoComponent implements OnInit, OnDestroy {
 
     if (telefono) {
       this.telefonoForm.patchValue({
-        numero: telefono.numero,
-        codigoPais: telefono.codigoPais,
-        tipo: telefono.tipo,
-        descripcion: telefono.descripcion || ''
+        numero: telefono.number,
+        codigoPais: telefono.codeCountry,
+        tipo: telefono.type,
+        descripcion: telefono.description || ''
       });
     } else {
       this.telefonoForm.reset({
@@ -513,8 +513,8 @@ export class DetalleJuridicoComponent implements OnInit, OnDestroy {
 
     if (correo) {
       this.correoForm.patchValue({
-        email: correo.email,
-        tipo: correo.tipo
+        email: correo.mail,
+        tipo: correo.type
       });
     } else {
       this.correoForm.reset({

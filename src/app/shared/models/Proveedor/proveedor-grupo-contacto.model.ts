@@ -1,12 +1,12 @@
 export interface ProveedorGrupoContactoRequest {
-    nombre: string;
-    descripcion?: string;
+    name: string;
+    description?: string;
 }
 
 export interface ProveedorGrupoContactoResponse {
     id: number;
-    nombre: string;
-    descripcion?: string;
-    creado: string;
-    actualizado: string;
+    name: string;
+    description?: string;
+    created: string;
+    updated: string;
 }

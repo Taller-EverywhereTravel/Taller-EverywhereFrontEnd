@@ -183,11 +183,11 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
   }
 
   private loadDetallesRecibo(): void {
-    if (!this.recibo?.personaId) {
+    if (!this.recibo?.personId) {
       return;
     }
 
-    const subscription = this.detalleDocumentoService.findByPersonaId(this.recibo.personaId)
+    const subscription = this.detalleDocumentoService.findByPersonaId(this.recibo.personId)
       .pipe(
         catchError(error => {
           return of([]);
@@ -237,11 +237,11 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
 
     const formValue = this.detalleForm.value;
     const detalleRequest: DetalleReciboRequestDTO = {
-      cantidad: formValue.cantidad,
-      descripcion: formValue.descripcion,
-      precio: formValue.precio,
-      productoId: formValue.productoId,
-      reciboId: this.reciboId
+      amount: formValue.cantidad,
+      description: formValue.descripcion,
+      price: formValue.precio,
+      productId: formValue.productoId,
+      receiptId: this.reciboId
     };
 
     this.isLoading = true;
@@ -294,10 +294,10 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
     this.showDetalleForm = true;
 
     this.detalleForm.patchValue({
-      cantidad: detalle.cantidad,
-      descripcion: detalle.descripcion,
-      precio: detalle.precio,
-      productoId: detalle.productoId
+      cantidad: detalle.amount,
+      descripcion: detalle.description,
+      precio: detalle.price,
+      productoId: detalle.productId
     });
   }
 
@@ -347,11 +347,11 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
 
     const updateDTO: ReciboUpdateDTO = {
       fileVenta: formValue.fileVenta?.trim() || '',
-      observaciones: formValue.observaciones?.trim() || '',
-      detalleDocumentoId: detalleDocumentoId,
-      sucursalId: formValue.sucursalId || undefined,
-      personaJuridicaId: personaJuridicaId,
-      formaPagoId: formValue.formaPagoId || undefined
+      observation: formValue.observaciones?.trim() || '',
+      detailDocumentId: detalleDocumentoId,
+      branchId: formValue.sucursalId || undefined,
+      personJuridicId: personaJuridicaId,
+      methodPaymentId: formValue.formaPagoId || undefined
     };
 
     this.isLoading = true;
@@ -384,7 +384,7 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
     if (this.recibo) {
       this.reciboForm.patchValue({
         fileVenta: this.recibo.fileVenta || '',
-        observaciones: this.recibo.observaciones || ''
+        observaciones: this.recibo.observation || ''
       });
       this.showReciboForm = true;
     }
@@ -431,31 +431,31 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
 
     // Llenar formulario con datos actuales
     let valorCombinado = null;
-    if (this.recibo.personaJuridicaId) {
-      valorCombinado = 'pj_' + this.recibo.personaJuridicaId;
-    } else if (this.recibo.detalleDocumentoId) {
-      valorCombinado = 'doc_' + this.recibo.detalleDocumentoId;
+    if (this.recibo.personJuridicId) {
+      valorCombinado = 'pj_' + this.recibo.personJuridicId;
+    } else if (this.recibo.detailDocumentId) {
+      valorCombinado = 'doc_' + this.recibo.detailDocumentId;
     }
 
     // Convertir fechaEmision de ISO datetime a solo fecha (YYYY-MM-DD) para el input type="date"
-    const fechaEmisionValue = this.recibo.fechaEmision
-      ? this.recibo.fechaEmision.split('T')[0]
+    const fechaEmisionValue = this.recibo.dateIssue
+      ? this.recibo.dateIssue.split('T')[0]
       : '';
 
-    const fechaVencimientoValue = this.recibo.fechaVencimiento
-      ? this.recibo.fechaVencimiento.split('T')[0]
+    const fechaVencimientoValue = this.recibo.dateExpiration
+      ? this.recibo.dateExpiration.split('T')[0]
       : '';
 
     this.reciboForm.patchValue({
       fechaEmision: fechaEmisionValue,
       fechaVencimiento: fechaVencimientoValue,
       fileVenta: this.recibo.fileVenta || '',
-      observaciones: this.recibo.observaciones || '',
+      observaciones: this.recibo.observation || '',
       detalleDocumentoId: valorCombinado,
-      sucursalId: this.recibo.sucursalId || null,
-      formaPagoId: this.recibo.formaPagoId || null
+      sucursalId: this.recibo.BranchId || null,
+      formaPagoId: this.recibo.methodPaymentId || null
     });
-    this.sucursalSeleccionada = this.recibo.sucursalId || null;
+    this.sucursalSeleccionada = this.recibo.BranchId || null;
   }
 
   salirModoEdicion(): void {
@@ -486,12 +486,12 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
     // Convertir a número para comparar
     const id = typeof productoId === 'string' ? parseInt(productoId, 10) : productoId;
     const producto = this.productos.find(p => p.id === id);
-    return producto ? producto.tipo : 'Producto no encontrado';
+    return producto ? producto.type : 'Producto no encontrado';
   }
 
   calcularTotal(): number {
     const totalDetalles = this.detalles.reduce((total, detalle) => {
-      return total + ((detalle.cantidad || 0) * (detalle.precio || 0));
+      return total + ((detalle.amount || 0) * (detalle.price || 0));
     }, 0);
     return totalDetalles;
   }
@@ -511,7 +511,7 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
       this.sucursales = await this.sucursalService.findAllSucursal().toPromise() || []; // Cargar sucursales
       this.formasPago = await this.formaPagoService.getAllFormasPago().toPromise() || []; // Cargar formas de pago
 
-      const personaId = this.recibo?.personaId; // Cargar documentos del cliente (DNI, Pasaporte, etc.)
+      const personaId = this.recibo?.personId; // Cargar documentos del cliente (DNI, Pasaporte, etc.)
 
       if (personaId) {
         try {
@@ -521,20 +521,20 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
 
           if (this.documentosCliente.length > 0) {
             // Usar el personaNaturalId del primer documento
-            const personaNaturalId = this.documentosCliente[0].personaNatural.id;
+            const personaNaturalId = this.documentosCliente[0].personNatural.id;
             const relaciones = await this.naturalJuridicoService
               .findByPersonaNaturalId(personaNaturalId)
               .toPromise() || [];
             this.personasJuridicas = relaciones.map(r => r.personaJuridica);
           } else {
-            if (this.recibo?.personaJuridicaId) {
+            if (this.recibo?.personJuridicId) {
               this.personasJuridicas = [{
-                id: this.recibo.personaJuridicaId,
-                ruc: this.recibo.personaJuridicaRuc || '',
-                razonSocial: this.recibo.personaJuridicaRazonSocial || '',
-                persona: {} as any,
-                creado: new Date().toISOString(),
-                actualizado: new Date().toISOString()
+                id: this.recibo.personJuridicId,
+                ruc: this.recibo.personJuridicRuc || '',
+                nameCompany: this.recibo.personJuridicNameCompany || '',
+                person: {} as any,
+                created: new Date().toISOString(),
+                updated: new Date().toISOString()
               }];
             } else {
               this.personasJuridicas = [];
@@ -545,14 +545,14 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
           this.documentosCliente = [];
 
           // Verificar si es PersonaJuridica y cargarla
-          if (this.recibo?.personaJuridicaId) {
+          if (this.recibo?.personJuridicId) {
             this.personasJuridicas = [{
-              id: this.recibo.personaJuridicaId,
-              ruc: this.recibo.personaJuridicaRuc || '',
-              razonSocial: this.recibo.personaJuridicaRazonSocial || '',
-              persona: {} as any,
-              creado: new Date().toISOString(),
-              actualizado: new Date().toISOString()
+              id: this.recibo.personJuridicId,
+              ruc: this.recibo.personJuridicRuc || '',
+              nameCompany: this.recibo.personJuridicNameCompany || '',
+              person: {} as any,
+              created: new Date().toISOString(),
+              updated: new Date().toISOString()
             }];
           } else {
             this.personasJuridicas = [];
@@ -570,7 +570,7 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
     if (!detalleDocId) return 'Sin detalle de documento';
     const detalle = this.detallesDocumento.find(d => d.id === detalleDocId);
     if (!detalle) return 'Sin detalle de documento';
-    return `${detalle.numero} - ${detalle.documento?.tipo || 'N/A'}`;
+    return `${detalle.number} - ${detalle.document?.type || 'N/A'}`;
   }
 
   getDetalleDocumentoInfo(id: number): DetalleDocumentoResponse | undefined {
@@ -578,8 +578,8 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
   }
 
   getNumeroRecibo(recibo: ReciboResponseDTO | null): string {
-    if (recibo?.serie && recibo?.correlativo !== undefined && recibo?.correlativo !== null) {
-      return `${recibo.serie}-${String(recibo.correlativo).padStart(9, '0')}`;
+    if (recibo?.serie && recibo?.correlative !== undefined && recibo?.correlative !== null) {
+      return `${recibo.serie}-${String(recibo.correlative).padStart(9, '0')}`;
     }
     return 'Sin número';
   }
@@ -646,11 +646,11 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
 
     const formValue = this.detalleForm.value;
     const nuevoDetalle: DetalleReciboResponseDTO = {
-      cantidad: formValue.cantidad || 1,
-      descripcion: formValue.descripcion || '',
-      precio: formValue.precio || 0,
-      productoId: formValue.productoId || undefined,
-      reciboId: this.reciboId || undefined
+      amount: formValue.cantidad || 1,
+      description: formValue.descripcion || '',
+      price: formValue.precio || 0,
+      productId: formValue.productoId || undefined,
+      receiptId: this.reciboId || undefined
     };
 
     this.detallesFijos.push(nuevoDetalle);
@@ -683,11 +683,11 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
       for (const detalle of this.detalles) {
         if (detalle.id) {
           const updateDTO: DetalleReciboRequestDTO = {
-            cantidad: detalle.cantidad,
-            descripcion: detalle.descripcion || '',
-            precio: detalle.precio,
-            productoId: detalle.productoId || 0,
-            reciboId: this.reciboId
+            amount: detalle.amount,
+            description: detalle.description || '',
+            price: detalle.price,
+            productId: detalle.productId || 0,
+            receiptId: this.reciboId
           };
 
           await this.detalleReciboService.updateDetalle(detalle.id, updateDTO).toPromise();
@@ -697,11 +697,11 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
       // 3. Crear nuevos detalles fijos
       for (const detalleFijo of this.detallesFijos) {
         const createDTO: DetalleReciboRequestDTO = {
-          cantidad: detalleFijo.cantidad,
-          descripcion: detalleFijo.descripcion || '',
-          precio: detalleFijo.precio,
-          productoId: detalleFijo.productoId || 0,
-          reciboId: this.reciboId
+          amount: detalleFijo.amount,
+          description: detalleFijo.description || '',
+          price: detalleFijo.price,
+          productId: detalleFijo.productId || 0,
+          receiptId: this.reciboId
         };
 
         await this.detalleReciboService.createDetalle(createDTO).toPromise();
@@ -754,14 +754,14 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
     }
 
     const updateDTO: ReciboUpdateDTO = {
-      fechaEmision: formValue.fechaEmision || undefined,
-      fechaVencimiento: formValue.fechaVencimiento || undefined,
+      dateIssue: formValue.fechaEmision || undefined,
+      dateExpiration: formValue.fechaVencimiento || undefined,
       fileVenta: formValue.fileVenta?.trim() || '',
-      observaciones: formValue.observaciones?.trim() || '',
-      detalleDocumentoId: detalleDocumentoId,
-      sucursalId: formValue.sucursalId || undefined,
-      personaJuridicaId: personaJuridicaId,
-      formaPagoId: formValue.formaPagoId || undefined
+      observation: formValue.observaciones?.trim() || '',
+      detailDocumentId: detalleDocumentoId,
+      branchId: formValue.sucursalId || undefined,
+      personJuridicId: personaJuridicaId,
+      methodPaymentId: formValue.formaPagoId || undefined
     };
 
     const response = await this.reciboService.updateRecibo(this.reciboId, updateDTO).toPromise();
@@ -782,7 +782,7 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.recibo.correlativo) {
+    if (!this.recibo.correlative) {
       this.error = 'No se puede generar PDF: recibo sin correlativo';
       return;
     }
@@ -793,7 +793,7 @@ export class DetalleReciboComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.pdfService.downloadReciboPdf(reciboId, this.recibo.serie, this.recibo.correlativo);
+    this.pdfService.downloadReciboPdf(reciboId, this.recibo.serie, this.recibo.correlative);
   }
 
   verPDF(): void {

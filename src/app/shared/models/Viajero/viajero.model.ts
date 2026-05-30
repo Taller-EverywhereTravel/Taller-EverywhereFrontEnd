@@ -2,37 +2,37 @@ import { PersonaResponse } from "../Persona/persona.model";
 import { PersonaNaturalSinViajero, PersonaNaturalSinViajeroResponse } from "../Persona/personaNatural.model";
 
 export interface ViajeroRequest {
-  fechaNacimiento?: string;
-  nacionalidad?: string;
-  residencia?: string;
-  personaId: number;
+  dateBirth?: string;
+  nationality?: string;
+  residence?: string;
+  personId: number;
 }
 
 export interface ViajeroResponse {
   id: number;
-  fechaNacimiento?: string;
-  nacionalidad?: string;
-  residencia?: string;
-  creado: string;
-  actualizado: string;
+  dateBirth?: string;
+  nationality?: string;
+  residence?: string;
+  created: string;
+  updated: string;
 }
 
 export interface ViajeroConPersonaNatural {
   id: number;
-  fechaNacimiento?: string;
-  nacionalidad?: string;
-  residencia?: string;
-  creado?: string;
-  actualizado?: string;
-  personaNatural?: PersonaNaturalSinViajero
+  dateBirth?: string;
+  nationality?: string;
+  residence?: string;
+  created?: string;
+  updated?: string;
+  personNatural?: PersonaNaturalSinViajero
 }
 
 export interface ViajeroConPersonaResponse {
   id: number;
-  fechaNacimiento?: string;
-  nacionalidad?: string;
-  residencia?: string;
-  creado: string;
-  actualizado: string;
-  personaNatural: PersonaNaturalSinViajeroResponse;
+  dateBirth?: string;
+  nationality?: string;
+  residence?: string;
+  created: string;
+  updated: string;
+  personNatural: PersonaNaturalSinViajeroResponse;
 }

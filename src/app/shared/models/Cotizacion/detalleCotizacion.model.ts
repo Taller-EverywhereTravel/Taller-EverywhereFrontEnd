@@ -10,17 +10,17 @@ import { OperadorResponse } from '../Operador/operador.model';
  * Todos los campos son opcionales para flexibilidad con PATCH
  */
 export interface DetalleCotizacionRequest {
-  cantidad?: number;          // ✅ Opcional para flexibilidad
-  unidad?: number;           // ✅ Opcional
-  descripcion?: string;      // ✅ Opcional
-  categoria?: number;        // ✅ Cambio: categoriaId → categoria (número/ID)
-  comision?: number;         // ✅ Opcional
-  precioHistorico?: number;  // ✅ Opcional
-  seleccionado?: boolean;    // ✅ Campo para marcar si está seleccionado
-  categoriaId?: number;      // Para compatibilidad con backend DTO
-  productoId?: number;       // ✅ ID de producto (enviado en el payload)
-  proveedorId?: number;      // ✅ ID de proveedor (enviado en el payload)
-  operadorId?: number;       // ✅ ID de operador (enviado en el payload)
+  quantity?: number;          // ✅ Opcional para flexibilidad
+  unit?: number;           // ✅ Opcional
+  description?: string;      // ✅ Opcional
+  category?: number;        // ✅ Cambio: categoriaId → categoria (número/ID)
+  comission?: number;         // ✅ Opcional
+  priceHistory?: number;  // ✅ Opcional
+  selected?: boolean;    // ✅ Campo para marcar si está seleccionado
+  categoryId?: number;      // Para compatibilidad con backend DTO
+  productId?: number;       // ✅ ID de producto (enviado en el payload)
+  supplierId?: number;      // ✅ ID de proveedor (enviado en el payload)
+  operatorId?: number;       // ✅ ID de operador (enviado en el payload)
 }
 
 /**
@@ -30,33 +30,33 @@ export type DetalleCotizacionPatchRequest = Partial<DetalleCotizacionRequest>
 
 export interface DetalleCotizacionResponse {
   id: number
-  cantidad?: number
-  unidad?: number
-  descripcion?: string
-  creado?: string
-  actualizado?: string
-  cotizacion?: CotizacionResponse
-  producto?: ProductoResponse
-  proveedor?: ProveedorResponse
-  operador?: OperadorResponse
-  categoria?: CategoriaResponse        // ✅ Cambio: categoriaId → categoria (objeto)
-  comision?: number
-  precioHistorico?: number
-  seleccionado?: boolean
+  quantity?: number
+  unit?: number
+  description?: string
+  created?: string
+  updated?: string
+  quotation?: CotizacionResponse
+  product?: ProductoResponse
+  supplier?: ProveedorResponse
+  operator?: OperadorResponse
+  category?: CategoriaResponse        // ✅ Cambio: categoriaId → categoria (objeto)
+  comission?: number
+  priceHistory?: number
+  selected?: boolean
 }
 
 export interface DetalleCotizacionSimpleDTO{
   id: number;
-  cantidad?: number;
-  unidad?: number;
-  descripcion?: string;
-  precioHistorico?: number;
-  creado?: string | Date;
-  actualizado?: string | Date;
-  comision?: number;
+  quantity?: number;
+  unit?: number;
+  description?: string;
+  priceHistory?: number;
+  created?: string | Date;
+  updated?: string | Date;
+  comission?: number;
 
-  categoria?: CategoriaResponse;
-  producto?: ProductoResponse;
-  proveedor?: ProveedorResponse;
-  operador?: OperadorResponse;
+  category?: CategoriaResponse;
+  product?: ProductoResponse;
+  supplier?: ProveedorResponse;
+  operator?: OperadorResponse;
 }

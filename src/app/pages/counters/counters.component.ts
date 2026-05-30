@@ -379,12 +379,12 @@ export class CountersComponent implements OnInit {
   private transformarDataParaTabla(): void {
     this.countersTabla = this.counters.map(counter => ({
       id: counter.id,
-      nombre: counter.nombre || '',
-      codigo: counter.codigo || '',
-      estado: counter.estado || false,
-      estadoText: counter.estado ? 'Activo' : 'Inactivo',
-      fechaCreacion: counter.fechaCreacion || '',
-      fechaActualizacion: counter.fechaActualizacion || ''
+      nombre: counter.name || '',
+      codigo: counter.code || '',
+      estado: counter.status || false,
+      estadoText: counter.status ? 'Activo' : 'Inactivo',
+      fechaCreacion: counter.dateCreated || '',
+      fechaActualizacion: counter.dateUpdated || ''
     }));
   }
 
@@ -456,11 +456,11 @@ export class CountersComponent implements OnInit {
   cambiarEstadoCounter(counter: CounterResponse): void {
     this.loading = true;
     const request: CounterRequest = {
-      nombre: counter.nombre,
-      codigo: counter.codigo
+      name: counter.name,
+      code: counter.code
     };
 
-    const operacion = counter.estado ?
+    const operacion = counter.status ?
       this.counterService.deactivateCounter(request) :
       this.counterService.activateCounter(request);
 
@@ -491,8 +491,8 @@ export class CountersComponent implements OnInit {
       this.editandoCounter = true;
       this.counterSeleccionado = counterOriginal;
       this.counterForm.patchValue({
-        nombre: counterOriginal.nombre,
-        codigo: counterOriginal.codigo
+        nombre: counterOriginal.name,
+        codigo: counterOriginal.code
       });
       this.mostrarModalCrear = true;
     }
@@ -628,7 +628,7 @@ export class CountersComponent implements OnInit {
   // Estadísticas
   calcularEstadisticas(): void {
     this.totalCounters = this.counters.length;
-    this.totalActivos = this.counters.filter(c => c.estado).length;
+    this.totalActivos = this.counters.filter(c => c.status).length;
     this.totalInactivos = this.totalCounters - this.totalActivos;
   }
 

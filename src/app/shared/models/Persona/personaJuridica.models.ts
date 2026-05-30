@@ -2,15 +2,15 @@ import { PersonaRequest, PersonaResponse } from './persona.model'
 
 export interface PersonaJuridicaRequest {
   ruc?: string
-  razonSocial?: string
-  persona?: PersonaRequest
+  nameCompany?: string
+  person?: PersonaRequest
 }
 
 export interface PersonaJuridicaResponse {
   id: number
   ruc?: string
-  razonSocial?: string
-  creado: string
-  actualizado: string
-  persona: PersonaResponse
+  nameCompany?: string
+  created: string
+  updated: string
+  person: PersonaResponse
 }

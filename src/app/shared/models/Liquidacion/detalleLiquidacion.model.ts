@@ -7,94 +7,94 @@ import { LiquidacionResponse } from './liquidacion.model'
 export interface DetalleLiquidacionResponse {
   id: number
   ticket?: string
-  documentoCobro?: string
-  costoTicket?: number
-  cargoServicio?: number
-  valorVenta?: number
+  documentCollection?: string
+  costTicket?: number
+  chargeService?: number
+  valueSale?: number
   feeEmision?: string
-  documentoFee?: string
-  comision?: string
-  facturaCompra?: string
-  boletaPasajero?: string
-  montoDescuento?: number
-  pagoPaxUSD?: number
-  pagoPaxPEN?: number
-  creado?: string
-  actualizado?: string
+  documentFee?: string
+  comission?: string
+  invoicePurchase?: string
+  ticketPassenger?: string
+  amountDiscount?: number
+  paymentPaxUSD?: number
+  paymentPaxPEN?: number
+  created?: string
+  updated?: string
 
-  liquidacion?: LiquidacionResponse
-  viajero?: ViajeroConPersonaNatural
+  liquidation?: LiquidacionResponse
+  traveler?: ViajeroConPersonaNatural
 
-  producto?: ProductoResponse
-  proveedor?: ProveedorResponse
-  operador?: OperadorResponse
+  product?: ProductoResponse
+  supplier?: ProveedorResponse
+  operator?: OperadorResponse
 }
 
 export interface DetalleLiquidacionRequest {
-  liquidacionId?: number    // Requerido para creación (se agrega automáticamente en servicio)
+  liquidationId?: number    // Requerido para creación (se agrega automáticamente en servicio)
   ticket?: string
-  documentoCobro?: string
-  costoTicket?: number
-  cargoServicio?: number
-  valorVenta?: number
+  documentCollection?: string
+  costTicket?: number
+  chargeService?: number
+  valueSale?: number
   feeEmision?: string
-  documentoFee?: string
-  comision?: string
-  facturaCompra?: string
-  boletaPasajero?: string
-  montoDescuento?: number
-  pagoPaxUSD?: number
-  pagoPaxPEN?: number
+  documentFee?: string
+  comission?: string
+  invoicePurchase?: string
+  ticketPassenger?: string
+  amountDiscount?: number
+  paymentPaxUSD?: number
+  paymentPaxPEN?: number
 
   // Campos opcionales - se pueden asignar después en edición
-  viajeroId?: number    // Opcional
-  productoId?: number   // Opcional
-  proveedorId?: number  // Opcional
-  operadorId?: number   // Opcional
+  travelerId?: number    // Opcional
+  productId?: number   // Opcional
+  supplierId?: number  // Opcional
+  operatorId?: number   // Opcional
 }
 
 export interface DetalleLiquidacionSimple{
   id: number
   ticket?: string
-  documentoCobro?: string
-  costoTicket?: number
-  cargoServicio?: number
-  valorVenta?: number
+  documentCollection?: string
+  costTicket?: number
+  chargeService?: number
+  valueSale?: number
   feeEmision?: string
-  documentoFee?: string
-  comision?: string
-  facturaCompra?: string
-  boletaPasajero?: string
-  montoDescuento?: number
-  pagoPaxUSD?: number
-  pagoPaxPEN?: number
+  documentFee?: string
+  comission?: string
+  invoicePurchase?: string
+  ticketPassenger?: string
+  amountDiscount?: number
+  paymentPaxUSD?: number
+  paymentPaxPEN?: number
 
-  viajero?: ViajeroConPersonaNatural
-  producto?: ProductoResponse
-  proveedor?: ProveedorResponse
-  operador?: OperadorResponse
+  traveler?: ViajeroConPersonaNatural
+  product?: ProductoResponse
+  supplier?: ProveedorResponse
+  operator?: OperadorResponse
 }
 
 export interface DetalleLiquidacionSinLiquidacion{
   id: number
   ticket?: string
-  documentoCobro?: string
-  costoTicket?: number
-  cargoServicio?: number
-  valorVenta?: number
+  documentCollection?: string
+  costTicket?: number
+  chargeService?: number
+  valueSale?: number
   feeEmision?: string
-  documentoFee?: string
-  comision?: string
-  facturaCompra?: string
-  boletaPasajero?: string
-  montoDescuento?: number
-  pagoPaxUSD?: number
-  pagoPaxPEN?: number
-  creado?: string
-  actualizado?: string
+  documentFee?: string
+  comission?: string
+  invoicePurchase?: string
+  ticketPassenger?: string
+  amountDiscount?: number
+  paymentPaxUSD?: number
+  paymentPaxPEN?: number
+  created?: string
+  updated?: string
 
-  viajero?: ViajeroConPersonaNatural
-  producto?: ProductoResponse
-  proveedor?: ProveedorResponse
-  operador?: OperadorResponse
+  traveler?: ViajeroConPersonaNatural
+  product?: ProductoResponse
+  supplier?: ProveedorResponse
+  operator?: OperadorResponse
 }

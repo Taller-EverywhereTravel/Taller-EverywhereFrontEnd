@@ -305,7 +305,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
 
             // Poblar cache
             this.personas.forEach((persona) => {
-                const personaId = persona.persona?.id || persona.id;
+                const personaId = persona.person?.id || persona.id;
                 if (!personaId) return;
 
                 if ('ruc' in persona) {
@@ -313,16 +313,16 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
                     this.personasCache[personaId] = {
                         id: personaId,
                         identificador: pj.ruc || '',
-                        nombre: pj.razonSocial || 'Sin nombre',
+                        nombre: pj.nameCompany || 'Sin nombre',
                         tipo: 'JURIDICA',
                     };
                 } else {
                     const pn = persona as PersonaNaturalResponse;
-                    const apellidos = `${pn.apellidosPaterno || ''} ${pn.apellidosMaterno || ''}`.trim();
+                    const apellidos = `${pn.surnamePaternal || ''} ${pn.surnameMaternal || ''}`.trim();
                     this.personasCache[personaId] = {
                         id: personaId,
-                        identificador: pn.documento || '',
-                        nombre: `${pn.nombres || ''} ${apellidos}`.trim() || 'Sin nombre',
+                        identificador: pn.document || '',
+                        nombre: `${pn.name || ''} ${apellidos}`.trim() || 'Sin nombre',
                         tipo: 'NATURAL',
                     };
                 }
@@ -607,37 +607,37 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
      */
     private async populateFormFromCotizacion(cotizacion: CotizacionConDetallesResponseDTO): Promise<void> {
         this.cotizacionForm.patchValue({
-            codigoCotizacion: cotizacion.codigoCotizacion,
-            nombreCotizacion: cotizacion.nombreCotizacion || '',
-            personaId: cotizacion.personas?.id,
-            fechaEmision: cotizacion.fechaEmision
-                ? this.formatDateTimeLocal(new Date(cotizacion.fechaEmision))
+            codigoCotizacion: cotizacion.codeQuotation,
+            nombreCotizacion: cotizacion.nameQuotation || '',
+            personaId: cotizacion.person?.id,
+            fechaEmision: cotizacion.dateIssue
+                ? this.formatDateTimeLocal(new Date(cotizacion.dateIssue))
                 : '',
-            fechaVencimiento: cotizacion.fechaVencimiento
-                ? this.formatDateTimeLocal(new Date(cotizacion.fechaVencimiento))
+            fechaVencimiento: cotizacion.dateExpiration
+                ? this.formatDateTimeLocal(new Date(cotizacion.dateExpiration))
                 : '',
-            estadoCotizacionId: cotizacion.estadoCotizacion?.id,
-            sucursalId: cotizacion.sucursal?.id,
-            origenDestino: cotizacion.origenDestino,
-            fechaSalida: cotizacion.fechaSalida
-                ? this.formatDateForInput(new Date(cotizacion.fechaSalida))
+            estadoCotizacionId: cotizacion.statusQuotation?.id,
+            sucursalId: cotizacion.branch?.id,
+            origenDestino: cotizacion.originDestination,
+            fechaSalida: cotizacion.dateDeparture
+                ? this.formatDateForInput(new Date(cotizacion.dateDeparture))
                 : '',
-            fechaRegreso: cotizacion.fechaRegreso
-                ? this.formatDateForInput(new Date(cotizacion.fechaRegreso))
+            fechaRegreso: cotizacion.dateReturn
+                ? this.formatDateForInput(new Date(cotizacion.dateReturn))
                 : '',
-            formaPagoId: cotizacion.formaPago?.id,
-            cantAdultos: cotizacion.cantAdultos || 1,
-            cantNinos: cotizacion.cantNinos || 0,
-            moneda: cotizacion.moneda || 'USD',
-            observacion: cotizacion.observacion || '',
+            formaPagoId: cotizacion.methodPayment?.id,
+            cantAdultos: cotizacion.numAdult || 1,
+            cantNinos: cotizacion.numChild || 0,
+            moneda: cotizacion.currency || 'USD',
+            observacion: cotizacion.observation || '',
         });
 
         // Guardar referencia original para el PATCH
         this.cotizacionOriginal = cotizacion as any;
 
         // Cargar cliente seleccionado si existe
-        if (cotizacion.personas?.id) {
-            await this.loadClienteForEdit(cotizacion.personas.id);
+        if (cotizacion.person?.id) {
+            await this.loadClienteForEdit(cotizacion.person.id);
         }
     }
 
@@ -752,21 +752,21 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
                 const cantNinos = this.normalizeCount(formValue.cantNinos, 0);
 
                 const cotizacionRequest: CotizacionRequest = {
-                    nombreCotizacion: formValue.nombreCotizacion || '',
-                    cantAdultos: cantAdultos,
-                    cantNinos: cantNinos,
-                    fechaVencimiento: formValue.fechaVencimiento,
-                    origenDestino: formValue.origenDestino,
-                    fechaSalida: formValue.fechaSalida,
-                    fechaRegreso: formValue.fechaRegreso,
-                    moneda: formValue.moneda ?? 'USD',
-                    observacion: formValue.observacion || '',
+                    nameQuotation: formValue.nombreCotizacion || '',
+                    numAdult: cantAdultos,
+                    numChild: cantNinos,
+                    dateIssue: formValue.fechaVencimiento,
+                    originDestination: formValue.origenDestino,
+                    dateDeparture: formValue.fechaSalida,
+                    dateReturn: formValue.fechaRegreso,
+                    currency: formValue.moneda ?? 'USD',
+                    observation: formValue.observacion || '',
                     // Incluir relaciones en el create si vienen del formulario
                     counterId: formValue.counterId,
-                    formaPagoId: formValue.formaPagoId,
-                    estadoCotizacionId: formValue.estadoCotizacionId,
-                    sucursalId: formValue.sucursalId,
-                    carpetaId: formValue.carpetaId,
+                    methodPaymentId: formValue.formaPagoId,
+                    statusQuotationId: formValue.estadoCotizacionId,
+                    branchId: formValue.sucursalId,
+                    folder: formValue.carpetaId,
                 };
 
                 let createResult: CotizacionResponse | undefined = undefined;
@@ -844,12 +844,12 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         ];
 
         // Manejar cantAdultos y cantNinos juntos - si alguno cambia, incluir ambos
-        const originalAdultos = this.cotizacionOriginal.cantAdultos ?? 1;
-        const originalNinos = this.cotizacionOriginal.cantNinos ?? 0;
+        const originalAdultos = this.cotizacionOriginal.numAdult ?? 1;
+        const originalNinos = this.cotizacionOriginal.numChild ?? 0;
 
         if (cantAdultos !== originalAdultos || cantNinos !== originalNinos) {
-            patch.cantAdultos = cantAdultos;
-            patch.cantNinos = cantNinos;
+            patch.numAdult = cantAdultos;
+            patch.numChild = cantNinos;
         }
 
         // Comparar resto de campos
@@ -933,7 +933,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         if (detalle.proveedor && detalle.proveedor.id === 0) {
             const nuevoProveedor = await this.proveedorService
                 .createProveedor({
-                    nombre: detalle.proveedor.nombre,
+                    nombre: detalle.proveedor.name,
                 })
                 .toPromise();
             proveedorId = nuevoProveedor?.id;
@@ -942,21 +942,21 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         const productoId = detalle.producto?.id;
         const operadorId = detalle.operador?.id;
         const request: DetalleCotizacionRequest = {
-            cantidad: detalle.cantidad || 1, // Default 1
-            unidad: detalle.unidad || 1, // Default 1
-            descripcion: detalle.descripcion || '', // Default empty
-            categoria: categoria, // Mantener para compatibilidad local
-            categoriaId: categoria, // Enviar categoriaId al backend
-            productoId: productoId, // Enviar productoId si existe
-            proveedorId: proveedorId, // Enviar proveedorId si existe
-            operadorId: operadorId, // Enviar operadorId si existe
-            comision: detalle.comision || 0, // Default 0
-            precioHistorico: detalle.precioHistorico || 0, // Default 0
-            seleccionado: detalle.seleccionado || false, // Campo de selección
+            quantity: detalle.cantidad || 1, // Default 1
+            unit: detalle.unidad || 1, // Default 1
+            description: detalle.descripcion || '', // Default empty
+            category: categoria, // Mantener para compatibilidad local
+            categoryId: categoria, // Enviar categoriaId al backend
+            productId: productoId, // Enviar productoId si existe
+            supplierId: proveedorId, // Enviar proveedorId si existe
+            operatorId: operadorId, // Enviar operadorId si existe
+            comission: detalle.comision || 0, // Default 0
+            priceHistory: detalle.precioHistorico || 0, // Default 0
+            selected: detalle.seleccionado || false, // Campo de selección
         };
 
         // Validación final antes de enviar
-        if (!request.categoria) {
+        if (!request.category) {
             throw new Error('categoria es requerido para crear detalle');
         }
 
@@ -984,17 +984,17 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         const operadorId = detalle.operador?.id;
 
         const request: DetalleCotizacionRequest = {
-            cantidad: detalle.cantidad || 1,
-            unidad: detalle.unidad !== undefined && detalle.unidad !== null ? detalle.unidad : 0,
-            descripcion: detalle.descripcion || '',
-            categoria: categoriaId,
-            categoriaId: categoriaId,
-            productoId: productoId,
-            proveedorId: proveedorId,
-            operadorId: operadorId,
-            comision: detalle.comision || 0,
-            precioHistorico: detalle.precioHistorico || 0,
-            seleccionado: detalle.seleccionado || false, // Campo de selección
+            quantity: detalle.cantidad || 1,
+            unit: detalle.unidad !== undefined && detalle.unidad !== null ? detalle.unidad : 0,
+            description: detalle.descripcion || '',
+            category: categoriaId,
+            categoryId: categoriaId,
+            productId: productoId,
+            supplierId: proveedorId,
+            operatorId: operadorId,
+            comission: detalle.comision || 0,
+            priceHistory: detalle.precioHistorico || 0,
+            selected: detalle.seleccionado || false, // Campo de selección
         };
 
         await this.detalleCotizacionService.updateDetalleCotizacion(detalle.id, request).toPromise();
@@ -1166,7 +1166,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         this.personaService.findPersonaNaturalOrJuridicaById(personaId).subscribe({
             next: (cached: personaDisplay) => {
                 this.personasCache[personaId] = cached;
-                this.personasDisplayMap[personaId] = `${cached.tipo === 'JURIDICA' ? 'RUC' : 'DNI'}: ${cached.identificador} - ${cached.nombre}`;
+                this.personasDisplayMap[personaId] = `${cached.type === 'JURIDICA' ? 'RUC' : 'DNI'}: ${cached.identifier} - ${cached.name}`;
             },
             error: (error: any) => {
                 console.error('Error al cargar información del cliente:', error);
@@ -1190,7 +1190,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
 
         // Si es personaDisplay (nuevo modelo unificado)
         if ('tipo' in persona && 'identificador' in persona) {
-            const tipo = persona.tipo.toUpperCase();
+            const tipo = persona.type.toUpperCase();
             return tipo === 'JURIDICA' ? 'Empresa' : 'Cliente';
         }
 
@@ -1215,7 +1215,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
 
         // Crear nueva categoría
         const nuevaCategoria: CategoriaRequest = {
-            nombre: formValue.nombre,
+            name: formValue.nombre,
         };
 
         // Llamar al servicio para crear la categoría
@@ -1239,7 +1239,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
             this.categoriaEditandose = index;
             // Guardar datos originales para poder cancelar
             this.categoriaDatosOriginales = {
-                nombre: this.categorias[index].nombre,
+                nombre: this.categorias[index].name,
             };
         }
     }
@@ -1249,14 +1249,14 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
             const categoria = this.categorias[index];
 
             // Validar que el nombre no esté vacío
-            if (!categoria.nombre || categoria.nombre.trim().length < 3) {
+            if (!categoria.name || categoria.name.trim().length < 3) {
                 this.showError('El nombre de la categoría debe tener al menos 3 caracteres');
                 return;
             }
 
             // Crear objeto para actualizar
             const categoriaActualizada: CategoriaRequest = {
-                nombre: categoria.nombre,
+                name: categoria.name,
             };
 
             // Llamar al servicio para actualizar
@@ -1279,7 +1279,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
     cancelarEdicionCategoria(index: number): void {
         if (index >= 0 && index < this.categorias.length && this.categoriaDatosOriginales) {
             // Restaurar datos originales
-            this.categorias[index].nombre = this.categoriaDatosOriginales.nombre;
+            this.categorias[index].name = this.categoriaDatosOriginales.nombre;
             this.categoriaEditandose = null;
             this.categoriaDatosOriginales = null;
         }
@@ -1289,7 +1289,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         if (index >= 0 && index < this.categorias.length) {
             const categoria = this.categorias[index];
             const mensaje =
-                `¿Estás seguro de que quieres eliminar la categoría "${categoria.nombre}"?\n\n` +
+                `¿Estás seguro de que quieres eliminar la categoría "${categoria.name}"?\n\n` +
                 `Esta acción no se puede deshacer y podría afectar grupos existentes.`;
 
             if (confirm(mensaje)) {
@@ -1322,9 +1322,9 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
     }
 
     getDetallesByCategoria(categoriaId: number): any[] {
-        if (!this.cotizacion?.detalles) return [];
-        return this.cotizacion.detalles.filter(
-            (detalle) => detalle.categoria?.id === categoriaId,
+        if (!this.cotizacion?.detail) return [];
+        return this.cotizacion.detail.filter(
+            (detalle) => detalle.category?.id === categoriaId,
         );
     }
 
@@ -1337,13 +1337,13 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
     }
 
     getCategoriasConDetalles(): any[] {
-        if (!this.cotizacion?.detalles) return [];
+        if (!this.cotizacion?.detail) return [];
 
         const categoriasMap = new Map();
 
-        this.cotizacion.detalles.forEach((detalle) => {
-            const categoriaId = detalle.categoria?.id || 1;
-            const categoriaNombre = detalle.categoria?.nombre || 'Productos Fijos';
+        this.cotizacion.detail.forEach((detalle) => {
+            const categoriaId = detalle.category?.id || 1;
+            const categoriaNombre = detalle.category?.name || 'Productos Fijos';
 
             if (!categoriasMap.has(categoriaId)) {
                 categoriasMap.set(categoriaId, {
@@ -1379,7 +1379,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
     }
 
     getTotalCotizacionCompleta(): number {
-        if (!this.cotizacion?.detalles) return 0;
+        if (!this.cotizacion?.detail) return 0;
 
         const totalFijos = this.getTotalProductosFijos();
 
@@ -1520,7 +1520,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
             return 'bg-gray-100 text-gray-800';
         }
 
-        const descripcion = estado.descripcion?.toLowerCase();
+        const descripcion = estado.description?.toLowerCase();
         switch (descripcion) {
             case 'aprobada':
                 return 'bg-green-100 text-green-800';
@@ -1559,12 +1559,12 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
     }
 
     getHistorialUsuario(item: HistorialCotizacionSimple): string {
-        if (item.usuarioNombre && item.usuarioNombre.trim()) {
-            return item.usuarioNombre;
+        if (item.userName && item.userName.trim()) {
+            return item.userName;
         }
 
-        if (item.usuarioEmail && item.usuarioEmail.trim()) {
-            return item.usuarioEmail;
+        if (item.userMail && item.userMail.trim()) {
+            return item.userMail;
         }
 
         return 'Usuario no identificado';
@@ -1612,7 +1612,7 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         }
         // Si es personaDisplay
         if ('tipo' in persona && 'nombre' in persona) {
-            return persona.nombre;
+            return persona.name;
         }
         // Compatibilidad con modelos antiguos (soporta apellidosPaterno/apellidosMaterno)
         if ('nombres' in persona) {
@@ -1709,9 +1709,9 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
             // This would create a new proveedor, for now we'll simulate it
             proveedor = {
                 id: 0, // temporary ID
-                nombre: formValue.nuevoProveedor.trim(),
-                creado: this.getCurrentLimaISOString(),
-                actualizado: this.getCurrentLimaISOString(),
+                name: formValue.nuevoProveedor.trim(),
+                created: this.getCurrentLimaISOString(),
+                updated: this.getCurrentLimaISOString(),
             } as ProveedorResponse;
         }
 
@@ -1996,9 +1996,9 @@ export class DetalleCotizacionComponent implements OnInit, OnDestroy {
         } else if (formValue.nuevoProveedor?.trim()) {
             proveedor = {
                 id: 0,
-                nombre: formValue.nuevoProveedor.trim(),
-                creado: this.getCurrentLimaISOString(),
-                actualizado: this.getCurrentLimaISOString(),
+                name: formValue.nuevoProveedor.trim(),
+                created: this.getCurrentLimaISOString(),
+                updated: this.getCurrentLimaISOString(),
             } as ProveedorResponse;
         }
 

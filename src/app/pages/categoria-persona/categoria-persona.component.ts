@@ -192,10 +192,10 @@ export class CategoriaPersonaComponent implements OnInit {
   private convertirATabla(): void {
     this.categoriaPersonaTabla = this.categoriasPersona.map(categoria => ({
       id: categoria.id,
-      nombre: categoria.nombre,
-      descripcion: categoria.descripcion || '',
-      creado: categoria.creado,
-      actualizado: categoria.actualizado
+      nombre: categoria.name,
+      descripcion: categoria.description || '',
+      creado: categoria.created,
+      actualizado: categoria.updated
     }));
     this.totalCategoriaPersona = this.categoriaPersonaTabla.length;
     this.tableConfig = {
@@ -257,8 +257,8 @@ export class CategoriaPersonaComponent implements OnInit {
 
     if (this.categoriaPersonaSeleccionada) {
       this.categoriaPersonaForm.patchValue({
-        nombre: this.categoriaPersonaSeleccionada.nombre || '',
-        descripcion: this.categoriaPersonaSeleccionada.descripcion || ''
+        nombre: this.categoriaPersonaSeleccionada.name || '',
+        descripcion: this.categoriaPersonaSeleccionada.description || ''
       });
 
       this.mostrarModalCrear = true;

@@ -1,12 +1,12 @@
 export interface CorreoPersonaRequest {
-  email: string
-  tipo: string
+  mail: string
+  type: string
 }
 
 export interface CorreoPersonaResponse {
   id: number
-  email: string
-  tipo: string
-  creado: string
-  actualizado: string
+  mail: string
+  type: string
+  created: string
+  updated: string
 }

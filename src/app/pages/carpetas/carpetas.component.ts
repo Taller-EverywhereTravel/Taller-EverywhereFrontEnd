@@ -265,12 +265,12 @@ export class CarpetasComponent implements OnInit {
       const carpetaPadre = this.caminoBreadcrumb[this.caminoBreadcrumb.length - 2];
       this.navegarACarpeta({
         id: carpetaPadre.id,
-        nombre: carpetaPadre.nombre || '',
-        descripcion: carpetaPadre.descripcion || '',
-        nivel: carpetaPadre.nivel,
-        carpetaPadreId: carpetaPadre.carpetaPadreId,
-        creado: carpetaPadre.creado,
-        actualizado: carpetaPadre.actualizado
+        name: carpetaPadre.name || '',
+        description: carpetaPadre.description || '',
+        level: carpetaPadre.level,
+        folderFatherId: carpetaPadre.folderFatherId,
+        created: carpetaPadre.created,
+        updated: carpetaPadre.updated
       });
     }
   }
@@ -281,12 +281,12 @@ export class CarpetasComponent implements OnInit {
     } else {
       this.navegarACarpeta({
         id: carpeta.id,
-        nombre: carpeta.nombre || '',
-        descripcion: carpeta.descripcion || '',
-        nivel: carpeta.nivel,
-        carpetaPadreId: carpeta.carpetaPadreId,
-        creado: carpeta.creado,
-        actualizado: carpeta.actualizado
+        name: carpeta.name || '',
+        description: carpeta.description || '',
+        level: carpeta.level,
+        folderFatherId: carpeta.folderFatherId,
+        created: carpeta.created,
+        updated: carpeta.updated
       });
     }
   }
@@ -301,7 +301,7 @@ export class CarpetasComponent implements OnInit {
       this.carpetasEnNivelActual = await this.carpetaService.findRaicesCarpeta().toPromise() || [];
       this.carpetaActual = null;
       this.breadcrumbPath = [{
-        carpeta: { id: 0, nombre: 'Raíz', nivel: -1 } as CarpetaResponse,
+        carpeta: { id: 0, name: 'Raíz', level: -1 } as CarpetaResponse,
         label: 'Raíz'
       }];
       this.aplicarFiltrosBreadcrumb();
@@ -338,7 +338,7 @@ export class CarpetasComponent implements OnInit {
 
       // Construir breadcrumb path
       this.breadcrumbPath = [
-        { carpeta: { id: 0, nombre: 'Raíz', nivel: -1 } as CarpetaResponse, label: 'Raíz' }
+        { carpeta: { id: 0, name: 'Raíz', level: -1 } as CarpetaResponse, label: 'Raíz' }
       ];
 
       camino.forEach(c => {
@@ -493,12 +493,12 @@ export class CarpetasComponent implements OnInit {
   private convertirCarpetaResponse(carpeta: CarpetaResponse): CarpetaTabla {
     return {
       id: carpeta.id,
-      nombre: carpeta.nombre || 'Sin nombre',
-      descripcion: carpeta.descripcion || 'Sin descripción',
-      nivel: carpeta.nivel,
-      carpetaPadreId: carpeta.carpetaPadreId,
-      creado: carpeta.creado,
-      actualizado: carpeta.actualizado,
+      nombre: carpeta.name || 'Sin nombre',
+      descripcion: carpeta.description || 'Sin descripción',
+      nivel: carpeta.level,
+      carpetaPadreId: carpeta.folderFatherId,
+      creado: carpeta.created,
+      actualizado: carpeta.updated,
       esEspecial: this.esEspecial(carpeta)
     };
   }
@@ -510,8 +510,8 @@ export class CarpetasComponent implements OnInit {
   private esEspecial(carpeta: CarpetaResponse): boolean {
     // Lógica para determinar si una carpeta debe tener borde rojo
     // Por ejemplo: carpetas de nivel 0 (raíces) o con nombres específicos
-    return carpeta.nivel === 0 ||
-      !!(carpeta.nombre && ['Importante', 'Urgente', 'Confidencial'].includes(carpeta.nombre));
+    return carpeta.level === 0 ||
+      !!(carpeta.name && ['Importante', 'Urgente', 'Confidencial'].includes(carpeta.name));
   }
 
   // CRUD Operations
@@ -526,7 +526,7 @@ export class CarpetasComponent implements OnInit {
           this.recargarCarpetaActual();
           this.cerrarModal();
           this.loading = false;
-          this.mostrarExito(`Carpeta "${carpetaRequest.nombre}" creada exitosamente`);
+          this.mostrarExito(`Carpeta "${carpetaRequest.name}" creada exitosamente`);
         },
         error: (error) => {
           console.error('Error al crear carpeta:', error);
@@ -554,8 +554,8 @@ export class CarpetasComponent implements OnInit {
     this.carpetaSeleccionada = carpetaCompleta;
 
     this.carpetaForm.patchValue({
-      nombre: carpetaCompleta.nombre || 'Sin nombre',
-      descripcion: carpetaCompleta.descripcion || 'Sin descripción'
+      nombre: carpetaCompleta.name || 'Sin nombre',
+      descripcion: carpetaCompleta.description || 'Sin descripción'
     });
 
     this.mostrarModalCrear = true;
@@ -623,12 +623,12 @@ export class CarpetasComponent implements OnInit {
       // Para otras vistas, usar navegación normal
       this.navegarACarpeta({
         id: this.carpetaActual.id,
-        nombre: this.carpetaActual.nombre || '',
-        descripcion: this.carpetaActual.descripcion || '',
-        nivel: this.carpetaActual.nivel,
-        carpetaPadreId: this.carpetaActual.carpetaPadreId,
-        creado: this.carpetaActual.creado,
-        actualizado: this.carpetaActual.actualizado
+        name: this.carpetaActual.name || '',
+        description: this.carpetaActual.description || '',
+        level: this.carpetaActual.level,
+        folderFatherId: this.carpetaActual.folderFatherId,
+        created: this.carpetaActual.created,
+        updated: this.carpetaActual.updated
       });
     } else {
       this.cargarRaices();
@@ -829,7 +829,7 @@ export class CarpetasComponent implements OnInit {
   }
 
   getNivelActual(): number {
-    return this.carpetaActual?.nivel || 0;
+    return this.carpetaActual?.level || 0;
   }
 
   // =================================================================
@@ -842,7 +842,7 @@ export class CarpetasComponent implements OnInit {
 
   getCarpetaIcon(carpeta: CarpetaResponse): string {
     // Determinar ícono basado en propiedades de la carpeta
-    if (carpeta.nivel === 0) return 'fas fa-home';
+    if (carpeta.level === 0) return 'fas fa-home';
     return 'fas fa-folder';
   }
 
@@ -1113,8 +1113,8 @@ export class CarpetasComponent implements OnInit {
     return liquidaciones.map(liq => ({
       id: liq.id!,
       tipo: 'liquidacion' as TipoDocumento,
-      numero: liq.numero || `LIQ-${liq.id}`,
-      fecha: liq.fechaCompra || liq.creado || '',
+      numero: liq.number || `LIQ-${liq.id}`,
+      fecha: liq.datePurchase || liq.created || '',
       descripcion: undefined
     }));
   }
@@ -1123,9 +1123,9 @@ export class CarpetasComponent implements OnInit {
     return cotizaciones.map(cot => ({
       id: cot.id!,
       tipo: 'cotizacion' as TipoDocumento,
-      numero: cot.codigoCotizacion || `COT-${cot.id}`,
-      fecha: cot.fechaEmision || '',
-      descripcion: cot.observacion
+      numero: cot.codeQuotation || `COT-${cot.id}`,
+      fecha: cot.dateIssue || '',
+      descripcion: cot.observation
     }));
   }
 
@@ -1133,9 +1133,9 @@ export class CarpetasComponent implements OnInit {
     return recibos.map(rec => ({
       id: rec.id!,
       tipo: 'recibo' as TipoDocumento,
-      numero: `${rec.serie}-${String(rec.correlativo).padStart(9, '0')}`,
-      fecha: rec.fechaEmision || '',
-      descripcion: rec.observaciones
+      numero: `${rec.serie}-${String(rec.correlative).padStart(9, '0')}`,
+      fecha: rec.dateIssue || '',
+      descripcion: rec.observation
     }));
   }
 
@@ -1143,9 +1143,9 @@ export class CarpetasComponent implements OnInit {
     return docs.map(doc => ({
       id: doc.id!,
       tipo: 'documento-cobranza' as TipoDocumento,
-      numero: `${doc.serie}-${String(doc.correlativo).padStart(9, '0')}`,
-      fecha: doc.fechaEmision || '',
-      descripcion: doc.observaciones
+      numero: `${doc.serie}-${String(doc.correlative).padStart(9, '0')}`,
+      fecha: doc.dateIssue || '',
+      descripcion: doc.observation
     }));
   }
 
@@ -1217,7 +1217,7 @@ export class CarpetasComponent implements OnInit {
     docs.forEach((doc) => {
       const personaId = this.getPersonaIdFromDoc(doc, tipo);
       if (personaId && this.clientesCache[personaId]) {
-        doc.clienteNombre = this.clientesCache[personaId].nombre || doc.clienteNombre;
+        doc.clienteNombre = this.clientesCache[personaId].name || doc.clienteNombre;
       }
     });
   }

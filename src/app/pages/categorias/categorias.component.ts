@@ -184,9 +184,9 @@ export class CategoriasComponent implements OnInit {
         // Convertir a CategoriaTabla para filtrado y ordenamiento
         this.categoriasTabla = this.categorias.map(c => ({
           id: c.id,
-          nombre: c.nombre,
-          creado: c.creado ? new Date(c.creado).toISOString() : undefined,
-          actualizado: c.actualizado ? new Date(c.actualizado).toISOString() : undefined
+          nombre: c.name,
+          creado: c.created ? new Date(c.created).toISOString() : undefined,
+          actualizado: c.updated ? new Date(c.updated).toISOString() : undefined
         }));
 
         this.filteredCategorias = [...this.categoriasTabla];
@@ -228,7 +228,7 @@ export class CategoriasComponent implements OnInit {
     this.isEditMode = true;
     this.editingId = categoria.id || null;
     this.categoriaForm.patchValue({
-      nombre: categoria.nombre
+      nombre: categoria.name
     });
     this.showModal = true;
   }
@@ -245,7 +245,7 @@ export class CategoriasComponent implements OnInit {
 
     this.loading = true;
     const payload: CategoriaRequest = {
-      nombre: this.categoriaForm.value.nombre
+      name: this.categoriaForm.value.nombre
     };
 
     const request = this.isEditMode && this.editingId

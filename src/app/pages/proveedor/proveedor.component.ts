@@ -231,11 +231,11 @@ export class ProveedorComponent implements OnInit {
   private convertirATabla(): void {
     this.proveedoresTabla = this.proveedores.map(proveedor => ({
       id: proveedor.id,
-      nombre: proveedor.nombre,
+      nombre: proveedor.name,
       ruc: proveedor.ruc,
-      nombreJuridico: proveedor.nombreJuridico,
-      creado: proveedor.creado,
-      actualizado: proveedor.actualizado
+      nombreJuridico: proveedor.nameJuridic,
+      creado: proveedor.created,
+      actualizado: proveedor.updated
     }));
     this.totalProveedores = this.proveedoresTabla.length;
     this.tableConfig = {
