@@ -66,7 +66,7 @@
                 <i class="fas fa-chevron-right mx-2"></i>
               </li>
               <li class="text-white font-medium">
-                Detalle de Liquidación #{{ liquidacion.numero || liquidacion.id }}
+                Detalle de Liquidación #{{ liquidacion.number || liquidacion.id }}
               </li>
             </ol>
           </nav>
@@ -80,7 +80,7 @@
                 </div>
                 <div>
                   <h1 class="text-3xl font-bold">
-                    Liquidación #{{ liquidacion.numero || liquidacion.id }}
+                    Liquidación #{{ liquidacion.number || liquidacion.id }}
                   </h1>
                   <p class="text-white/80 text-lg">
                     {{ modoEdicion ? 'Editando liquidación' : 'Detalle completo de la liquidación' }}
@@ -195,7 +195,7 @@
                         <div class="w-6 h-6 bg-blue-100 rounded-md flex items-center justify-center">
                           <i class="fas fa-hashtag text-blue-600 text-xs"></i>
                         </div>
-                        <span class="text-sm font-medium text-gray-900">{{ liquidacion.numero || 'Sin número' }}</span>
+                        <span class="text-sm font-medium text-gray-900">{{ liquidacion.number || 'Sin número' }}</span>
                       </div>
                       <div *ngIf="modoEdicion" class="relative">
                         <input type="text" formControlName="numero"
@@ -212,7 +212,7 @@
                           <i class="fas fa-calendar text-green-600 text-xs"></i>
                         </div>
                         <span class="text-sm font-medium text-gray-900">
-                          {{ liquidacion.fechaCompra ? (liquidacion.fechaCompra | date:'dd/MM/yyyy') : 'Sin fecha' }}
+                          {{ liquidacion.datePurchase ? (liquidacion.datePurchase | date:'dd/MM/yyyy') : 'Sin fecha' }}
                         </span>
                       </div>
                       <div *ngIf="modoEdicion" class="relative">
@@ -229,7 +229,7 @@
                         <div class="w-6 h-6 bg-purple-100 rounded-md flex items-center justify-center">
                           <i class="fas fa-map-marker-alt text-purple-600 text-xs"></i>
                         </div>
-                        <span class="text-sm font-medium text-gray-900">{{ liquidacion.destino || 'Sin destino'
+                        <span class="text-sm font-medium text-gray-900">{{ liquidacion.destiny || 'Sin destino'
                           }}</span>
                       </div>
                       <div *ngIf="modoEdicion" class="relative">
@@ -269,7 +269,7 @@
                           <i class="fas fa-box text-white text-sm"></i>
                         </div>
                         <div class="flex-1">
-                          <div class="text-sm font-medium text-orange-900">{{ liquidacion.producto?.type || 'Sin producto' }}</div>
+                          <div class="text-sm font-medium text-orange-900">{{ liquidacion.product?.type || 'Sin producto' }}</div>
                           <div class="text-xs text-orange-600">Servicio contratado</div>
                         </div>
                       </div>
@@ -293,7 +293,7 @@
                           <i class="fas fa-credit-card text-white text-sm"></i>
                         </div>
                         <div class="flex-1">
-                          <div class="text-sm font-medium text-emerald-900">{{ liquidacion.formaPago?.descripcion ||
+                          <div class="text-sm font-medium text-emerald-900">{{ liquidacion.methodPayment?.description ||
                             'Sin forma de pago' }}</div>
                           <div class="text-xs text-emerald-600">Método de pago</div>
                         </div>
@@ -303,7 +303,7 @@
                           class="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
                           <option value="">Seleccionar forma de pago</option>
                           <option *ngFor="let formaPago of formasPago" [value]="formaPago.id">
-                            {{ formaPago.descripcion }}
+                            {{ formaPago.description }}
                           </option>
                         </select>
                       </div>
@@ -318,7 +318,7 @@
                           <i class="fas fa-users text-white text-sm"></i>
                         </div>
                         <div class="flex-1">
-                          <div class="text-sm font-medium text-slate-900">{{ liquidacion.numeroPasajeros || 0 }}</div>
+                          <div class="text-sm font-medium text-slate-900">{{ liquidacion.numberPassenger || 0 }}</div>
                           <div class="text-xs text-slate-600">Total de pasajeros</div>
                         </div>
                       </div>
@@ -405,7 +405,7 @@
                 </div>
 
                 <!-- Detalles Originales -->
-                <div *ngFor="let detalle of liquidacion.detalles; let i = index; trackBy: trackByDetalle" class="mb-3">
+                <div *ngFor="let detalle of liquidacion.detail; let i = index; trackBy: trackByDetalle" class="mb-3">
                   <div class="grid gap-4 items-end min-w-[1600px]"
                     [style.grid-template-columns]="modoEdicion ? '2fr 0.45fr 0.9fr 110px 120px 100px 90px 90px 90px 110px 110px 90px 100px 100px 80px 70px' : '2fr 0.45fr 0.9fr 110px 120px 100px 90px 90px 90px 110px 110px 90px 100px 100px 80px'">
                     <!-- Cliente (Viajero) - Búsqueda Filtrable -->
@@ -430,9 +430,9 @@
                           (mousedown)="onViajeroSelect('detalle-original-' + i, viajero)"
                           class="px-3 py-2 hover:bg-purple-50 cursor-pointer text-sm border-b border-gray-100 last:border-b-0">
                           <div class="font-medium text-gray-900">{{ viajero.personNatural?.name || 'N/A' }} {{
-                            viajero.personNatural?.apellidosPaterno || '' }}</div>
-                          <div *ngIf="viajero.personNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
-                            viajero.personNatural?.apellidosMaterno }}</div>
+                            viajero.personNatural?.surnamePaternal || '' }}</div>
+                          <div *ngIf="viajero.personNatural?.surnameMaternal" class="text-xs text-gray-500">{{
+                            viajero.personNatural?.surnameMaternal }}</div>
                         </div>
                         <div *ngIf="getViajerosFiltrados('detalle-original-' + i).length === 0"
                           class="px-3 py-2 text-sm text-gray-500 text-center">
@@ -444,7 +444,7 @@
                     <!-- Producto -->
                     <div>
                       <!-- En modo edición: select editable -->
-                      <select *ngIf="modoEdicion" [ngModel]="detalle.producto?.id"
+                      <select *ngIf="modoEdicion" [ngModel]="detalle.product?.id"
                         (ngModelChange)="onDetalleOriginalChange(i, 'productoId', $event)"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
@@ -456,26 +456,26 @@
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="px-3 py-2 bg-gray-50 rounded-lg border border-gray-200/50">
                         <span class="text-xs font-medium text-gray-900 block break-words">{{
-                          getProductoDisplayName(detalle.producto?.id) }}</span>
+                          getProductoDisplayName(detalle.product?.id) }}</span>
                       </div>
                     </div>
 
                     <!-- Proveedor -->
                     <div>
                       <!-- En modo edición: select editable -->
-                      <select *ngIf="modoEdicion" [ngModel]="detalle.proveedor?.id"
-                        (ngModelChange)="onDetalleOriginalChange(i, 'proveedorId', $event)"
+                      <select *ngIf="modoEdicion" [ngModel]="detalle.supplier?.id"
+                        (ngModelChange)="onDetalleOriginalChange(i, 'supplierId', $event)"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
                         <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
-                          {{ proveedor.nombre }}
+                          {{ proveedor.name }}
                         </option>
                       </select>
 
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50">
                         <span class="text-xs font-medium text-gray-900 block break-words">{{
-                          getProveedorDisplayName(detalle.proveedor?.id) }}</span>
+                          getProveedorDisplayName(detalle.supplier?.id) }}</span>
                       </div>
                     </div>
 
@@ -495,39 +495,39 @@
 
                     <!-- Documento Cobro -->
                     <div>
-                      <input *ngIf="modoEdicion" type="text" [value]="detalle.documentoCobro ?? ''"
-                        (input)="onDetalleOriginalChange(i, 'documentoCobro', $any($event.target).value)"
+                      <input *ngIf="modoEdicion" type="text" [value]="detalle.documentCollection ?? ''"
+                        (input)="onDetalleOriginalChange(i, 'documentCollection', $any($event.target).value)"
                         placeholder="Doc. Cobro"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
 
                       <div *ngIf="!modoEdicion" class="px-3 py-2 bg-gray-50 rounded-lg border border-gray-200/50">
-                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.documentoCobro || 'Sin doc.' }}</span>
+                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.documentCollection || 'Sin doc.' }}</span>
                       </div>
                     </div>
 
                     <!-- Operador -->
                     <div>
                       <!-- En modo edición: select editable -->
-                      <select *ngIf="modoEdicion" [ngModel]="detalle.operador?.id"
-                        (ngModelChange)="onDetalleOriginalChange(i, 'operadorId', $event)"
+                      <select *ngIf="modoEdicion" [ngModel]="detalle.operator?.id"
+                        (ngModelChange)="onDetalleOriginalChange(i, 'operatorId', $event)"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
                         <option *ngFor="let operador of operadores" [value]="operador.id">
-                          {{ operador.nombre }}
+                          {{ operador.name }}
                         </option>
                       </select>
 
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50">
                         <span class="text-xs font-medium text-gray-900 block break-words">{{
-                          getOperadorDisplayName(detalle.operador?.id) }}</span>
+                          getOperadorDisplayName(detalle.operator?.id) }}</span>
                       </div>
                     </div>
 
                     <!-- Costo de Ticket -->
                     <div>
                       <!-- En modo edición: input editable -->
-                      <input *ngIf="modoEdicion" type="number" [value]="detalle.costoTicket"
+                      <input *ngIf="modoEdicion" type="number" [value]="detalle.costTicket"
                         (input)="onDetalleOriginalChange(i, 'costoTicket', $any($event.target).value)" step="0.01"
                         min="0" placeholder="0.00"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
@@ -535,35 +535,35 @@
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion"
                         class="px-3 py-2 bg-gray-50 rounded-lg border border-gray-200/50 text-right">
-                        <span class="text-xs font-medium text-gray-900">{{ detalle.costoTicket || '0.00' }}</span>
+                        <span class="text-xs font-medium text-gray-900">{{ detalle.costTicket || '0.00' }}</span>
                       </div>
                     </div>
 
                     <!-- Cargo por Servicio -->
                     <div>
                       <!-- En modo edición: input editable -->
-                      <input *ngIf="modoEdicion" type="number" [value]="detalle.cargoServicio"
-                        (input)="onDetalleOriginalChange(i, 'cargoServicio', $any($event.target).value)" step="0.01"
+                      <input *ngIf="modoEdicion" type="number" [value]="detalle.chargeService"
+                        (input)="onDetalleOriginalChange(i, 'chargeService', $any($event.target).value)" step="0.01"
                         min="0" placeholder="0.00"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
 
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50 text-right">
-                        <span class="text-xs font-medium text-gray-900">{{ detalle.cargoServicio || '0.00' }}</span>
+                        <span class="text-xs font-medium text-gray-900">{{ detalle.chargeService || '0.00' }}</span>
                       </div>
                     </div>
 
                     <!-- Valor Venta -->
                     <div>
                       <!-- En modo edición: input editable -->
-                      <input *ngIf="modoEdicion" type="number" [value]="detalle.valorVenta"
-                        (input)="onDetalleOriginalChange(i, 'valorVenta', $any($event.target).value)" step="0.01"
+                      <input *ngIf="modoEdicion" type="number" [value]="detalle.valueSale"
+                        (input)="onDetalleOriginalChange(i, 'valueSale', $any($event.target).value)" step="0.01"
                         min="0" placeholder="0.00"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
 
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50 text-right">
-                        <span class="text-xs font-medium text-gray-900">{{ detalle.valorVenta || '0.00' }}</span>
+                        <span class="text-xs font-medium text-gray-900">{{ detalle.valueSale || '0.00' }}</span>
                       </div>
                     </div>
 
@@ -581,39 +581,39 @@
 
                     <!-- Documento Fee -->
                     <div>
-                      <input *ngIf="modoEdicion" type="text" [value]="detalle.documentoFee ?? ''"
-                        (input)="onDetalleOriginalChange(i, 'documentoFee', $any($event.target).value)"
+                      <input *ngIf="modoEdicion" type="text" [value]="detalle.documentFee ?? ''"
+                        (input)="onDetalleOriginalChange(i, 'documentFee', $any($event.target).value)"
                         placeholder="Doc. Fee"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
 
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50">
-                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.documentoFee || 'Sin doc.' }}</span>
+                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.documentFee || 'Sin doc.' }}</span>
                       </div>
                     </div>
 
                     <!-- Comision -->
                     <div>
-                      <input *ngIf="modoEdicion" type="text" [value]="detalle.comision ?? ''"
+                      <input *ngIf="modoEdicion" type="text" [value]="detalle.comission ?? ''"
                         (input)="onDetalleOriginalChange(i, 'comision', $any($event.target).value)"
                         placeholder="Comisión"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
 
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50">
-                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.comision || 'Sin comisión' }}</span>
+                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.comission || 'Sin comisión' }}</span>
                       </div>
                     </div>
 
                     <!-- Factura Compra -->
                     <div>
                       <!-- En modo edición: input editable -->
-                      <input *ngIf="modoEdicion" type="text" [value]="detalle.facturaCompra"
-                        (input)="onDetalleOriginalChange(i, 'facturaCompra', $any($event.target).value)"
+                      <input *ngIf="modoEdicion" type="text" [value]="detalle.invoicePurchase"
+                        (input)="onDetalleOriginalChange(i, 'invoicePurchase', $any($event.target).value)"
                         placeholder="Factura"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
 
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50">
-                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.facturaCompra || 'Sin
+                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.invoicePurchase || 'Sin
                           factura'
                           }}</span>
                       </div>
@@ -622,14 +622,14 @@
                     <!-- Boleta Pasajero -->
                     <div>
                       <!-- En modo edición: input editable -->
-                      <input *ngIf="modoEdicion" type="text" [value]="detalle.boletaPasajero"
-                        (input)="onDetalleOriginalChange(i, 'boletaPasajero', $any($event.target).value)"
+                      <input *ngIf="modoEdicion" type="text" [value]="detalle.ticketPassenger"
+                        (input)="onDetalleOriginalChange(i, 'ticketPassenger', $any($event.target).value)"
                         placeholder="Boleta"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
 
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50">
-                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.boletaPasajero || 'Sin
+                        <span class="text-xs font-medium text-gray-900 break-words">{{ detalle.ticketPassenger || 'Sin
                           boleta'
                           }}</span>
                       </div>
@@ -638,14 +638,14 @@
                     <!-- Monto Descontado -->
                     <div>
                       <!-- En modo edición: input editable -->
-                      <input *ngIf="modoEdicion" type="number" [value]="detalle.montoDescuento"
-                        (input)="onDetalleOriginalChange(i, 'montoDescuento', $any($event.target).value)" step="0.01"
+                      <input *ngIf="modoEdicion" type="number" [value]="detalle.amountDiscount"
+                        (input)="onDetalleOriginalChange(i, 'amountDiscount', $any($event.target).value)" step="0.01"
                         min="0" placeholder="0.00"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
 
                       <!-- En modo vista: texto readonly -->
                       <div *ngIf="!modoEdicion" class="p-2 bg-gray-50 rounded-lg border border-gray-200/50 text-right">
-                        <span class="text-xs font-medium text-gray-900">{{ detalle.montoDescuento || '0.00' }}</span>
+                        <span class="text-xs font-medium text-gray-900">{{ detalle.amountDiscount || '0.00' }}</span>
                       </div>
                     </div>
 
@@ -680,9 +680,9 @@
                             (mousedown)="onViajeroSelect('detalle-fijo-' + i, viajero)"
                             class="px-3 py-2 hover:bg-purple-50 cursor-pointer text-sm border-b border-gray-100 last:border-b-0">
                             <div class="font-medium text-gray-900">{{ viajero.personNatural?.name || 'N/A' }} {{
-                              viajero.personNatural?.apellidosPaterno || '' }}</div>
-                            <div *ngIf="viajero.personNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
-                              viajero.personNatural?.apellidosMaterno }}</div>
+                              viajero.personNatural?.surnamePaternal || '' }}</div>
+                            <div *ngIf="viajero.personNatural?.surnameMaternal" class="text-xs text-gray-500">{{
+                              viajero.personNatural?.surnameMaternal }}</div>
                           </div>
                           <div *ngIf="getViajerosFiltrados('detalle-fijo-' + i).length === 0"
                             class="px-3 py-2 text-sm text-gray-500 text-center">
@@ -693,8 +693,8 @@
 
                       <!-- Producto -->
                       <div>
-                        <select [ngModel]="detalle.productoId"
-                          (ngModelChange)="onProductoChange(i, 'productoId', $event)"
+                        <select [ngModel]="detalle.productId"
+                          (ngModelChange)="onProductoChange(i, 'productId', $event)"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                           <option value="">Seleccionar</option>
                           <option *ngFor="let producto of productos" [value]="producto.id">
@@ -705,12 +705,12 @@
 
                       <!-- Proveedor -->
                       <div>
-                        <select [ngModel]="detalle.proveedorId"
-                          (ngModelChange)="onProductoChange(i, 'proveedorId', $event)"
+                        <select [ngModel]="detalle.supplierId"
+                          (ngModelChange)="onProductoChange(i, 'supplierId', $event)"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                           <option value="">Seleccionar</option>
                           <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
-                            {{ proveedor.nombre }}
+                            {{ proveedor.name }}
                           </option>
                         </select>
                       </div>
@@ -724,26 +724,26 @@
 
                       <!-- Documento Cobro -->
                       <div>
-                        <input type="text" [value]="detalle.documentoCobro"
-                          (input)="onProductoChange(i, 'documentoCobro', $any($event.target).value)" placeholder="Doc. Cobro"
+                        <input type="text" [value]="detalle.documentCollection"
+                          (input)="onProductoChange(i, 'documentCollection', $any($event.target).value)" placeholder="Doc. Cobro"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
                       </div>
 
                       <!-- Operador -->
                       <div>
-                        <select [ngModel]="detalle.operadorId"
-                          (ngModelChange)="onProductoChange(i, 'operadorId', $event)"
+                        <select [ngModel]="detalle.operatorId"
+                          (ngModelChange)="onProductoChange(i, 'operatorId', $event)"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                           <option value="">Seleccionar</option>
                           <option *ngFor="let operador of operadores" [value]="operador.id">
-                            {{ operador.nombre }}
+                            {{ operador.name }}
                           </option>
                         </select>
                       </div>
 
                       <!-- Costo de Ticket -->
                       <div>
-                        <input type="number" [value]="detalle.costoTicket"
+                        <input type="number" [value]="detalle.costTicket"
                           (input)="onProductoChange(i, 'costoTicket', $any($event.target).value)" step="0.01" min="0"
                           placeholder="0.00"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
@@ -751,7 +751,7 @@
 
                       <!-- Cargo por Servicio -->
                       <div>
-                        <input type="number" [value]="detalle.cargoServicio"
+                        <input type="number" [value]="detalle.chargeService"
                           (input)="onProductoChange(i, 'cargoServicio', $any($event.target).value)" step="0.01" min="0"
                           placeholder="0.00"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
@@ -759,7 +759,7 @@
 
                       <!-- Valor Venta -->
                       <div>
-                        <input type="number" [value]="detalle.valorVenta"
+                        <input type="number" [value]="detalle.valueSale"
                           (input)="onProductoChange(i, 'valorVenta', $any($event.target).value)" step="0.01" min="0"
                           placeholder="0.00"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
@@ -774,21 +774,21 @@
 
                       <!-- Documento Fee -->
                       <div>
-                        <input type="text" [value]="detalle.documentoFee"
+                        <input type="text" [value]="detalle.documentFee"
                           (input)="onProductoChange(i, 'documentoFee', $any($event.target).value)" placeholder="Doc. Fee"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
                       </div>
 
                       <!-- Comision -->
                       <div>
-                        <input type="text" [value]="detalle.comision"
+                        <input type="text" [value]="detalle.comission"
                           (input)="onProductoChange(i, 'comision', $any($event.target).value)" placeholder="Comisión"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
                       </div>
 
                       <!-- Factura Compra -->
                       <div>
-                        <input type="text" [value]="detalle.facturaCompra"
+                        <input type="text" [value]="detalle.invoicePurchase"
                           (input)="onProductoChange(i, 'facturaCompra', $any($event.target).value)"
                           placeholder="Factura"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
@@ -796,7 +796,7 @@
 
                       <!-- Boleta Pasajero -->
                       <div>
-                        <input type="text" [value]="detalle.boletaPasajero"
+                        <input type="text" [value]="detalle.ticketPassenger"
                           (input)="onProductoChange(i, 'boletaPasajero', $any($event.target).value)"
                           placeholder="Boleta"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
@@ -804,8 +804,8 @@
 
                       <!-- Monto Descontado -->
                       <div>
-                        <input type="number" [value]="detalle.montoDescuento"
-                          (input)="onProductoChange(i, 'montoDescuento', $any($event.target).value)" step="0.01" min="0"
+                        <input type="number" [value]="detalle.amountDiscount"
+                          (input)="onProductoChange(i, 'amountDiscount', $any($event.target).value)" step="0.01" min="0"
                           placeholder="0.00"
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" />
                       </div>
@@ -841,9 +841,9 @@
                           (mousedown)="onViajeroSelect('nuevo', viajero)"
                           class="px-3 py-2 hover:bg-purple-50 cursor-pointer text-sm border-b border-gray-100 last:border-b-0">
                           <div class="font-medium text-gray-900">{{ viajero.personNatural?.name || 'N/A' }} {{
-                            viajero.personNatural?.apellidosPaterno || '' }}</div>
-                          <div *ngIf="viajero.personNatural?.apellidosMaterno" class="text-xs text-gray-500">{{
-                            viajero.personNatural?.apellidosMaterno }}</div>
+                            viajero.personNatural?.surnamePaternal || '' }}</div>
+                          <div *ngIf="viajero.personNatural?.surnameMaternal" class="text-xs text-gray-500">{{
+                            viajero.personNatural?.surnameMaternal }}</div>
                         </div>
                         <div *ngIf="getViajerosFiltrados('nuevo').length === 0"
                           class="px-3 py-2 text-sm text-gray-500 text-center">
@@ -869,7 +869,7 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
                         <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
-                          {{ proveedor.nombre }}
+                          {{ proveedor.name }}
                         </option>
                       </select>
                     </div>
@@ -892,7 +892,7 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="">Seleccionar</option>
                         <option *ngFor="let operador of operadores" [value]="operador.id">
-                          {{ operador.nombre }}
+                          {{ operador.name }}
                         </option>
                       </select>
                     </div>
@@ -1104,7 +1104,7 @@
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     <option value="">Seleccione una forma de pago</option>
                     <option *ngFor="let formaPago of formasPago" [value]="formaPago.id">
-                      {{ formaPago.descripcion }}
+                      {{ formaPago.description }}
                     </option>
                   </select>
                 </div>
@@ -1143,14 +1143,14 @@
                   <div class="flex-1">
                     <div class="flex items-center gap-3 mb-2">
                       <span
-                        [class]="pago.currency === 'USD' ?
+                        [class]="pago.moneda === 'USD' ?
                                    'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800' :
                                    'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800'">
                         <i class="fas fa-circle text-xs mr-1"></i>
-                        {{ pago.currency }}
+                        {{ pago.moneda }}
                       </span>
                       <span class="text-lg font-bold text-gray-900">
-                        {{ pago.currency === 'USD' ? (pago.monto | currency:'USD':'symbol':'1.2-2') : ('S/ ' + (pago.monto
+                        {{ pago.moneda === 'USD' ? (pago.monto | currency:'USD':'symbol':'1.2-2') : ('S/ ' + (pago.monto
                         |
                         number:'1.2-2')) }}
                       </span>
@@ -1215,10 +1215,10 @@
                 <div class="flex-1 min-w-0">
                   <!-- Modo vista: solo lectura -->
                   <div *ngIf="!modoEdicion || !observacion.editando">
-                    <p class="text-gray-800 text-sm leading-relaxed break-words">{{ observacion.descripcion }}</p>
-                    <div *ngIf="observacion.creado" class="text-xs text-gray-500 mt-1">
+                    <p class="text-gray-800 text-sm leading-relaxed break-words">{{ observacion.description }}</p>
+                    <div *ngIf="observacion.created" class="text-xs text-gray-500 mt-1">
                       <i class="fas fa-clock mr-1"></i>
-                      {{ observacion.creado | date:'dd/MM/yyyy HH:mm' }}
+                      {{ observacion.created | date:'dd/MM/yyyy HH:mm' }}
                     </div>
                   </div>
 

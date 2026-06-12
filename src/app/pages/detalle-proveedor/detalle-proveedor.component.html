@@ -244,22 +244,22 @@
                                 <div class="space-y-2">
                                     <h4 class="font-bold text-gray-900 text-lg">{{ colaborador.name }}</h4>
                                     <div class="flex items-center gap-2 text-sm text-gray-600"
-                                        *ngIf="colaborador.cargo">
+                                        *ngIf="colaborador.position">
                                         <i class="fas fa-briefcase text-gray-400"></i>
-                                        <span>{{ colaborador.cargo }}</span>
+                                        <span>{{ colaborador.position }}</span>
                                     </div>
                                     <div class="flex items-center gap-2 text-sm text-gray-600"
-                                        *ngIf="colaborador.email">
+                                        *ngIf="colaborador.mail">
                                         <i class="fas fa-envelope text-gray-400"></i>
-                                        <span class="break-all">{{ colaborador.email }}</span>
+                                        <span class="break-all">{{ colaborador.mail }}</span>
                                     </div>
                                     <div class="flex items-center gap-2 text-sm text-gray-600"
-                                        *ngIf="colaborador.telefono">
+                                        *ngIf="colaborador.phone">
                                         <i class="fas fa-phone text-gray-400"></i>
-                                        <span>{{ colaborador.telefono }}</span>
+                                        <span>{{ colaborador.phone }}</span>
                                     </div>
-                                    <div class="text-sm text-gray-600" *ngIf="colaborador.detalle">
-                                        <p class="line-clamp-2">{{ colaborador.detalle }}</p>
+                                    <div class="text-sm text-gray-600" *ngIf="colaborador.detail">
+                                        <p class="line-clamp-2">{{ colaborador.detail }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -327,20 +327,20 @@
                                 <div class="space-y-2">
                                     <h4 class="font-bold text-gray-900 text-base" *ngIf="contacto.description">{{
                                         contacto.description }}</h4>
-                                    <div class="flex items-center gap-2 text-sm text-gray-600" *ngIf="contacto.email">
+                                    <div class="flex items-center gap-2 text-sm text-gray-600" *ngIf="contacto.mail">
                                         <i class="fas fa-envelope text-gray-400"></i>
-                                        <span class="break-all">{{ contacto.email }}</span>
+                                        <span class="break-all">{{ contacto.mail }}</span>
                                     </div>
-                                    <div class="flex items-center gap-2 text-sm text-gray-600" *ngIf="contacto.numero">
+                                    <div class="flex items-center gap-2 text-sm text-gray-600" *ngIf="contacto.number">
                                         <i class="fas fa-phone text-gray-400"></i>
                                         <span>{{ getTelefonoCompleto(contacto) }}</span>
-                                        <span class="text-xs text-gray-500" *ngIf="contacto.codigoPais">({{
-                                            getPaisNombre(contacto.codigoPais) }})</span>
+                                        <span class="text-xs text-gray-500" *ngIf="contacto.codeCountry">({{
+                                            getPaisNombre(contacto.codeCountry) }})</span>
                                     </div>
                                     <div class="flex items-center gap-2 text-sm text-gray-600"
-                                        *ngIf="contacto.grupoContactoNombre">
+                                        *ngIf="contacto.groupContactName">
                                         <i class="fas fa-users text-gray-400"></i>
-                                        <span>{{ contacto.grupoContactoNombre }}</span>
+                                        <span>{{ contacto.groupContactName }}</span>
                                     </div>
                                 </div>
                             </div>

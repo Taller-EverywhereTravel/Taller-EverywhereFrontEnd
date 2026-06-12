@@ -123,7 +123,7 @@
               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                 <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4">
                   <div class="text-sm text-white/80">Cliente</div>
-                  <div class="font-semibold text-white">{{ recibo.clienteNombre || 'Sin cliente' }}</div>
+                  <div class="font-semibold text-white">{{ recibo.clientName || 'Sin cliente' }}</div>
                 </div>
                 <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-4">
                   <div class="text-sm text-white/80">File Venta</div>
@@ -212,8 +212,8 @@
                       <i class="fas fa-id-card text-blue-600 text-xs"></i>
                     </div>
                     <span class="text-sm font-medium text-gray-900">
-                      {{ recibo.personaJuridicaId ? 'RUC: ' + recibo.personaJuridicaRazonSocial + ' - ' +
-                      recibo.personaJuridicaRuc : getDetalleDocumentoDisplay() }}
+                      {{ recibo.personJuridicId ? 'RUC: ' + recibo.personJuridicNameCompany + ' - ' +
+                      recibo.personJuridicRuc : getDetalleDocumentoDisplay() }}
                     </span>
                   </div>
                   <div *ngIf="modoEdicion" class="relative">
@@ -223,13 +223,13 @@
                       <!-- Documentos personales (DNI, Pasaporte, etc.) -->
                       <optgroup label="📄 Documentos Personales del Cliente">
                         <option *ngFor="let doc of documentosCliente" [value]="'doc_' + doc.id">
-                          {{ doc.documento.type }}: {{ doc.numero }}
+                          {{ doc.document.type }}: {{ doc.number }}
                         </option>
                       </optgroup>
                       <!-- Empresas asociadas (RUC) -->
                       <optgroup *ngIf="personasJuridicas.length > 0" label="🏢 Empresas Asociadas al Cliente">
                         <option *ngFor="let pj of personasJuridicas" [value]="'pj_' + pj.id">
-                          RUC: {{ pj.razonSocial }} - {{ pj.ruc }}
+                          RUC: {{ pj.nameCompany }} - {{ pj.ruc }}
                         </option>
                       </optgroup>
                     </select>
@@ -252,7 +252,7 @@
                     <div class="w-6 h-6 bg-purple-100 rounded-md flex items-center justify-center">
                       <i class="fas fa-building text-purple-600 text-xs"></i>
                     </div>
-                    <span class="text-sm font-medium text-gray-900">{{ recibo.sucursalDescripcion || 'Sin sucursal'
+                    <span class="text-sm font-medium text-gray-900">{{ recibo.branchDescription || 'Sin sucursal'
                       }}</span>
                   </div>
                   <div *ngIf="modoEdicion" class="relative">
@@ -260,7 +260,7 @@
                       class="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
                       <option [value]="null">Seleccionar sucursal</option>
                       <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
-                        {{ sucursal.descripcion }}
+                        {{ sucursal.description }}
                       </option>
                     </select>
                     <div *ngIf="reciboForm.get('sucursalId')?.invalid && reciboForm.get('sucursalId')?.touched"
@@ -281,7 +281,7 @@
                     <div class="w-6 h-6 bg-orange-100 rounded-md flex items-center justify-center">
                       <i class="fas fa-credit-card text-orange-600 text-xs"></i>
                     </div>
-                    <span class="text-sm font-medium text-gray-900">{{ recibo.formaPagoDescripcion || 'Sin forma de
+                    <span class="text-sm font-medium text-gray-900">{{ recibo.methodPaymentDescription || 'Sin forma de
                       pago' }}</span>
                   </div>
                   <div *ngIf="modoEdicion" class="relative">
@@ -289,7 +289,7 @@
                       class="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
                       <option [value]="null">Seleccionar forma de pago</option>
                       <option *ngFor="let fp of formasPago" [value]="fp.id">
-                        {{ fp.descripcion }}
+                        {{ fp.description }}
                       </option>
                     </select>
                   </div>
@@ -305,7 +305,7 @@
                     <div class="w-6 h-6 bg-indigo-100 rounded-md flex items-center justify-center">
                       <i class="fas fa-calendar text-indigo-600 text-xs"></i>
                     </div>
-                    <span class="text-sm font-medium text-gray-900">{{ (recibo.fechaEmision | date:'dd/MM/yyyy') || 'Sin
+                    <span class="text-sm font-medium text-gray-900">{{ (recibo.dateIssue | date:'dd/MM/yyyy') || 'Sin
                       fecha' }}</span>
                   </div>
                   <div *ngIf="modoEdicion" class="relative">
@@ -428,7 +428,7 @@
                       </select>
                       <div *ngIf="!modoEdicion" class="px-3 py-2 bg-white rounded-lg border border-gray-200/50">
                         <span class="text-xs font-medium text-gray-900 block truncate">{{
-                          getProductoNombre(detalle.productoId) }}</span>
+                          getProductoNombre(detalle.productId) }}</span>
                       </div>
                     </div>
                     <!-- Descripción -->

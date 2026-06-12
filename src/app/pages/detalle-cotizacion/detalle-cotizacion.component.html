@@ -165,7 +165,7 @@
                                 </label>
                                 <div
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-900">
-                                    {{ cotizacion.nombreCotizacion || 'Sin nombre' }}
+                                    {{ cotizacion.nameQuotation || 'Sin nombre' }}
                                 </div>
                             </div>
 
@@ -176,7 +176,7 @@
                                 </label>
                                 <div
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-900">
-                                    {{ formatDateTime(cotizacion.fechaEmision) }}
+                                    {{ formatDateTime(cotizacion.dateIssue) }}
                                 </div>
                             </div>
 
@@ -187,7 +187,7 @@
                                 </label>
                                 <div
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-900">
-                                    {{ formatDateTime(cotizacion.fechaVencimiento) }}
+                                    {{ formatDateTime(cotizacion.dateExpiration) }}
                                 </div>
                             </div>
 
@@ -199,8 +199,8 @@
                                 <div
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 flex items-center">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
-                                        [ngClass]="getEstadoBadgeClass(cotizacion.estadoCotizacion)">
-                                        {{ cotizacion.estadoCotizacion?.descripcion || 'Sin estado' }}
+                                        [ngClass]="getEstadoBadgeClass(cotizacion.statusQuotation)">
+                                        {{ cotizacion.statusQuotation?.description || 'Sin estado' }}
                                     </span>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@
                                 </label>
                                 <div
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-900">
-                                    {{ cotizacion.sucursal?.descripcion || 'No especificada' }}
+                                    {{ cotizacion.branch?.description || 'No especificada' }}
                                 </div>
                             </div>
                         </div>
@@ -241,7 +241,7 @@
                                     </div>
                                     <div class="flex-1">
                                         <p class="font-semibold text-gray-900 text-base">
-                                            {{ getPersonaDisplayName(cotizacion.personas?.id || 0) }}
+                                            {{ getPersonaDisplayName(cotizacion.person?.id || 0) }}
                                         </p>
                                     </div>
                                 </div>
@@ -287,7 +287,7 @@
                                         </label>
                                         <div
                                             class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 text-sm">
-                                            {{ formatDateTime(cotizacion.fechaSalida) || 'No especifica'}}
+                                            {{ formatDateTime(cotizacion.dateDeparture) || 'No especifica'}}
                                         </div>
                                     </div>
 
@@ -298,7 +298,7 @@
                                         </label>
                                         <div
                                             class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 text-sm">
-                                            {{ formatDateTime(cotizacion.fechaRegreso) || 'No especifica' }}
+                                            {{ formatDateTime(cotizacion.dateReturn) || 'No especifica' }}
                                         </div>
                                     </div>
                                 </div>
@@ -313,7 +313,7 @@
                                         <div class="relative">
                                             <div
                                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 pr-8 text-sm">
-                                                {{ cotizacion.cantAdultos || 1 }}
+                                                {{ cotizacion.numAdult || 1 }}
                                             </div>
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                                 <i class="fas fa-user text-gray-400 text-xs"></i>
@@ -329,7 +329,7 @@
                                         <div class="relative">
                                             <div
                                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 pr-8 text-sm">
-                                                {{ cotizacion.cantNinos || 0 }}
+                                                {{ cotizacion.numChild || 0 }}
                                             </div>
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                                 <i class="fas fa-child text-gray-400 text-xs"></i>
@@ -355,7 +355,7 @@
                                         </label>
                                         <div
                                             class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 text-sm">
-                                            {{ cotizacion.formaPago?.descripcion || 'No especificada' }}
+                                            {{ cotizacion.methodPayment?.description || 'No especificada' }}
                                         </div>
                                     </div>
                                 </div>
@@ -598,7 +598,7 @@
                 </div>
 
                 <!-- Observaciones -->
-                <div class="mb-6" *ngIf="cotizacion.observacion">
+                <div class="mb-6" *ngIf="cotizacion.observation">
                     <div class="bg-gradient-to-r from-slate-50 to-gray-50 rounded-2xl p-6 border border-slate-200">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                             <div
@@ -608,7 +608,7 @@
                             Observaciones
                         </h3>
                         <div class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 min-h-24">
-                            {{ cotizacion.observacion }}
+                            {{ cotizacion.observation }}
                         </div>
                     </div>
                 </div>
@@ -707,7 +707,7 @@
                                         [class.border-red-300]="isFieldInvalid(cotizacionForm, 'estadoCotizacionId')">
                                         <option value="">Seleccionar estado</option>
                                         <option *ngFor="let estado of estadosCotizacion" [value]="estado.id">
-                                            {{ estado.descripcion }}
+                                            {{ estado.description }}
                                         </option>
                                     </select>
                                     <div *ngIf="isFieldInvalid(cotizacionForm, 'estadoCotizacionId')"
@@ -729,7 +729,7 @@
                                         [class.border-red-300]="isFieldInvalid(cotizacionForm, 'sucursalId')">
                                         <option value="">Seleccionar sucursal</option>
                                         <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
-                                            {{ sucursal.descripcion }}
+                                            {{ sucursal.description }}
                                         </option>
                                     </select>
                                     <div *ngIf="isFieldInvalid(cotizacionForm, 'sucursalId')"
@@ -978,7 +978,7 @@
                                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
                                                 <option value="">Seleccionar forma de pago</option>
                                                 <option *ngFor="let formaPago of formasPago" [value]="formaPago.id">
-                                                    {{ formaPago.descripcion }}
+                                                    {{ formaPago.description }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1059,7 +1059,7 @@
                                                 <option value="">Sin proveedor</option>
                                                 <option *ngFor="let proveedor of proveedores" [value]="proveedor.id"
                                                     [selected]="proveedor.id === detalle.proveedor?.id">
-                                                    {{ proveedor.nombre }}
+                                                    {{ proveedor.name }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1072,7 +1072,7 @@
                                                 <option value="">Sin operador</option>
                                                 <option *ngFor="let operador of operadores" [value]="operador.id"
                                                     [selected]="operador.id === detalle.operador?.id">
-                                                    {{ operador.nombre }}
+                                                    {{ operador.name }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1150,7 +1150,7 @@
                                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                                                 <option value="">Opcional</option>
                                                 <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
-                                                    {{ proveedor.nombre }}
+                                                    {{ proveedor.name }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1161,7 +1161,7 @@
                                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                                                 <option value="">Opcional</option>
                                                 <option *ngFor="let operador of operadores" [value]="operador.id">
-                                                    {{ operador.nombre }}
+                                                    {{ operador.name }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1283,7 +1283,7 @@
                                                 <option value="">Seleccionar categoría</option>
                                                 <option *ngFor="let categoria of getCategoriasDisponibles()"
                                                     [value]="categoria.id">
-                                                    {{ categoria.nombre }}
+                                                    {{ categoria.name }}
                                                 </option>
                                             </select>
                                         </div>
@@ -1325,7 +1325,7 @@
                                                         único</label>
                                                 </div>
 
-                                                <h4 class="font-medium text-gray-900">Grupo {{ grupo.categoria.nombre }}
+                                                <h4 class="font-medium text-gray-900">Grupo {{ grupo.categoria.name }}
                                                 </h4>
 
                                                 <!-- Indicador de selección -->
@@ -1405,7 +1405,7 @@
                                                                 <option *ngFor="let proveedor of proveedores"
                                                                     [value]="proveedor.id"
                                                                     [selected]="proveedor.id === detalle.proveedor?.id">
-                                                                    {{ proveedor.nombre }}
+                                                                    {{ proveedor.name }}
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -1419,7 +1419,7 @@
                                                                 <option *ngFor="let operador of operadores"
                                                                     [value]="operador.id"
                                                                     [selected]="operador.id === detalle.operador?.id">
-                                                                    {{ operador.nombre }}
+                                                                    {{ operador.name }}
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -1500,7 +1500,7 @@
                                                                 <option value="">Opcional</option>
                                                                 <option *ngFor="let proveedor of proveedores"
                                                                     [value]="proveedor.id">
-                                                                    {{ proveedor.nombre }}
+                                                                    {{ proveedor.name }}
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -1512,7 +1512,7 @@
                                                                 <option value="">Opcional</option>
                                                                 <option *ngFor="let operador of operadores"
                                                                     [value]="operador.id">
-                                                                    {{ operador.nombre }}
+                                                                    {{ operador.name }}
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -1608,8 +1608,7 @@
                                     <!-- Tarifas por Grupo -->
                                     <div *ngFor="let grupo of gruposHoteles"
                                         class="flex justify-between items-center py-2 border-b border-gray-100">
-                                        <span class="text-gray-700 font-medium">Tarifa Grupo {{ grupo.categoria.nombre
-                                            }}:</span>
+                                        <span class="text-gray-700 font-medium">Tarifa Grupo {{ grupo.categoria.name || 'Sin categoría' }}:</span>
                                         <span class="font-semibold text-gray-900">${{ grupo.total | number : '1.2-2' }} USD</span>
                                     </div>
 
@@ -1713,11 +1712,11 @@
 
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
-                            [ngClass]="getHistorialEstadoBadgeClass(item.estadoCotizacionDescripcion)">
-                            {{ item.estadoCotizacionDescripcion || 'Sin estado' }}
+                            [ngClass]="getHistorialEstadoBadgeClass(item.statusQuotationDescription)">
+                            {{ item.statusQuotationDescription || 'Sin estado' }}
                         </span>
                         <span class="text-xs text-gray-500">
-                            {{ formatDateTime(item.fechaCreacion) }}
+                            {{ formatDateTime(item.dateCreated) }}
                         </span>
                     </div>
 
@@ -1726,9 +1725,9 @@
                         {{ getHistorialUsuario(item) }}
                     </div>
 
-                    <div class="mt-1 text-sm text-gray-700" *ngIf="item.observacion">
+                    <div class="mt-1 text-sm text-gray-700" *ngIf="item.observation">
                         <span class="font-medium">Detalle:</span>
-                        {{ item.observacion }}
+                        {{ item.observation }}
                     </div>
                 </div>
             </div>
@@ -1871,10 +1870,10 @@
                                 <!-- Nombre (editable) -->
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <div *ngIf="categoriaEditandose !== i">
-                                        <div class="text-sm font-medium text-gray-900">{{ categoria.nombre }}</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ categoria.name }}</div>
                                     </div>
                                     <div *ngIf="categoriaEditandose === i">
-                                        <input type="text" [(ngModel)]="categoria.nombre"
+                                        <input type="text" [(ngModel)]="categoria.name"
                                             class="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                                             placeholder="Nombre de la categoría" />
                                     </div>
@@ -1882,12 +1881,12 @@
 
                                 <!-- Fecha de creación -->
                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                    {{ formatearFecha(categoria.creado) }}
+                                    {{ formatearFecha(categoria.created) }}
                                 </td>
 
                                 <!-- Fecha de actualización -->
                                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                    {{ formatearFecha(categoria.actualizado) }}
+                                    {{ formatearFecha(categoria.updated) }}
                                 </td>
 
                                 <!-- Acciones -->

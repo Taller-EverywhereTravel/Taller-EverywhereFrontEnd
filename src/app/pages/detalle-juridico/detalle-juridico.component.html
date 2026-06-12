@@ -222,14 +222,14 @@
                       <span class="font-semibold"> {{ personaJuridica?.ruc || 'N/A' }}</span>
                     </div>
                     <div class="flex justify-between">
-                      <span class="text-gray-600">Razón Soacial:</span>
-                      <span class="font-semibold"> {{ personaJuridica?.razonSocial || 'N/A' }}</span>
+                      <span class="text-gray-600">Razón Social:</span>
+                      <span class="font-semibold"> {{ personaJuridica?.nameCompany || 'N/A' }}</span>
                     </div>
                   </div>
                 </div>
 
                 <!-- Información de Contacto General -->
-                <div class="bg-green-50 rounded-xl p-6" *ngIf="personaJuridica?.persona">
+                <div class="bg-green-50 rounded-xl p-6" *ngIf="personaJuridica?.person">
                   <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <i class="fas fa-info-circle text-green-600"></i>
                     Información General
@@ -237,11 +237,11 @@
                   <div class="space-y-3">
                     <div class="flex justify-between">
                       <span class="text-gray-600">Dirección:</span>
-                      <span class="font-semibold">{{ personaJuridica?.persona?.address || 'N/A' }}</span>
+                      <span class="font-semibold">{{ personaJuridica?.person?.address || 'N/A' }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="text-gray-600">Observaciones:</span>
-                      <span class="font-semibold">{{ personaJuridica?.persona?.observacion || 'N/A' }}</span>
+                      <span class="font-semibold">{{ personaJuridica?.person?.observation || 'N/A' }}</span>
                     </div>
                   </div>
                 </div>
@@ -283,31 +283,31 @@
                   <!-- Información de la empresa -->
                   <div class="space-y-2">
                     <h4 class="font-bold text-gray-900 text-lg line-clamp-2">
-                      {{ empresa.name }} {{ empresa.apellidosPaterno }} {{ empresa.apellidosMaterno }}
+                      {{ empresa.name }} {{ empresa.surnamePaternal }} {{ empresa.surnameMaternal }}
                     </h4>
 
                     <!-- Documento -->
                     <div class="flex items-center gap-2 text-sm text-gray-600">
                       <i class="fas fa-id-card text-gray-400"></i>
-                      <span class="font-mono">{{ empresa.documento || 'N/A' }}</span>
+                      <span class="font-mono">{{ empresa.document || 'N/A' }}</span>
                     </div>
 
                     <!-- Dirección -->
-                    <div *ngIf="empresa.persona.address" class="flex items-start gap-2 text-sm text-gray-600">
+                    <div *ngIf="empresa.person.address" class="flex items-start gap-2 text-sm text-gray-600">
                       <i class="fas fa-map-marker-alt text-gray-400 mt-1"></i>
-                      <span class="line-clamp-2">{{ empresa.persona.address }}</span>
+                      <span class="line-clamp-2">{{ empresa.person.address }}</span>
                     </div>
 
                     <!-- Sexo -->
-                    <div *ngIf="empresa.sexo" class="flex items-center gap-2 text-sm text-gray-600">
+                    <div *ngIf="empresa.sex" class="flex items-center gap-2 text-sm text-gray-600">
                       <i class="fas fa-venus-mars text-gray-400"></i>
-                      <span>{{ empresa.sexo }}</span>
+                      <span>{{ empresa.sex }}</span>
                     </div>
 
                     <!-- Categoría -->
-                    <div *ngIf="empresa.categoriaPersona" class="flex items-center gap-2 text-sm text-gray-600">
+                    <div *ngIf="empresa.categoryPerson" class="flex items-center gap-2 text-sm text-gray-600">
                       <i class="fas fa-tag text-gray-400"></i>
-                      <span>{{ empresa.categoriaPersona.nombre }}</span>
+                      <span>{{ empresa.categoryPerson.name }}</span>
                     </div>
 
                     <!-- Información adicional -->
@@ -315,7 +315,7 @@
                       class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
                       <span>
                         <i class="fas fa-clock mr-1"></i>
-                        {{ empresa.creado | date: 'dd/MM/yyyy' }}
+                        {{ empresa.created | date: 'dd/MM/yyyy' }}
                       </span>
                       <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
                         <i class="fas fa-check-circle mr-1"></i>
@@ -324,10 +324,10 @@
                     </div>
 
                     <!-- Observaciones -->
-                    <div *ngIf="empresa.persona.observacion"
+                    <div *ngIf="empresa.person.observation"
                       class="pt-3 mt-3 border-t border-gray-100 text-xs text-gray-600 bg-gray-50 p-2 rounded">
                       <i class="fas fa-comment mr-1"></i>
-                      {{ empresa.persona.observacion }}
+                      {{ empresa.person.observation }}
                     </div>
                   </div>
                 </div>
@@ -397,7 +397,7 @@
 
                       <div class="flex items-center gap-2 text-sm text-gray-600">
                         <i class="fas fa-globe text-gray-400"></i>
-                        <span>{{ getPaisNombre(telefono.codigoPais) }}</span>
+                        <span>{{ getPaisNombre(telefono.codeCountry) }}</span>
                       </div>
 
                       <div class="flex items-center justify-between text-sm">
@@ -411,9 +411,9 @@
                         </span>
                       </div>
 
-                      <div class="flex items-start gap-2 text-sm text-gray-600" *ngIf="telefono.descripcion">
+                      <div class="flex items-start gap-2 text-sm text-gray-600" *ngIf="telefono.description">
                         <i class="fas fa-comment text-gray-400 mt-1"></i>
-                        <span>{{ telefono.descripcion }}</span>
+                        <span>{{ telefono.description }}</span>
                       </div>
                     </div>
                   </div>
@@ -479,7 +479,7 @@
 
                     <div class="space-y-3">
                       <h4 class="font-bold text-gray-900 text-base break-all leading-tight">
-                        {{ correo.email }}
+                        {{ correo.mail }}
                       </h4>
 
                       <div class="flex items-center justify-between text-sm">
@@ -497,7 +497,7 @@
                         class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
                         <span>
                           <i class="fas fa-clock mr-1"></i>
-                          {{ correo.creado | date: 'dd/MM/yyyy' }}
+                          {{ correo.created | date: 'dd/MM/yyyy' }}
                         </span>
                         <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
                           <i class="fas fa-check-circle mr-1"></i>

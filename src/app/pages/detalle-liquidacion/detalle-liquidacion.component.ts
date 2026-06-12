@@ -28,25 +28,12 @@ import { ObservacionLiquidacionRequest, ObservacionLiquidacionResponse } from '.
 import { personaDisplay } from '../../shared/models/Persona/persona.model';
 import { ProductoResponse } from '../../shared/models/Producto/producto.model';
 import { FormaPagoResponse } from '../../shared/models/FormaPago/formaPago.model';
-import { PagoPaxRequest } from '../../shared/models/PagoPax/pagoPax.model.ts';
+import { PagoPaxRequest, PagoPaxTemp } from '../../shared/models/PagoPax/pagoPax.model';
 
 // Interfaz extendida para observaciones con propiedades de edición
 interface ObservacionConEdicion extends ObservacionLiquidacionResponse {
   editando?: boolean;
   descripcionTemp?: string;
-}
-
-// Interfaz para pagos PAX temporales (antes de guardar en BD)
-interface PagoPaxTemp {
-  id?: number; // Si tiene id, ya existe en BD; si no, es nuevo
-  monto: number;
-  moneda: string;
-  detalle?: string;
-  formaPagoId?: number;
-  formaPago?: FormaPagoResponse;
-  creado?: string;
-  actualizado?: string;
-  isTemporary?: boolean; // true si es nuevo y no está en BD
 }
 
 import { ProveedorResponse } from '../../shared/models/Proveedor/proveedor.model';

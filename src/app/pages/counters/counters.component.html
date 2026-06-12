@@ -654,7 +654,7 @@
     <div class="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-6 rounded-t-3xl">
       <div class="flex items-center justify-between">
         <h2 class="text-xl font-bold">
-          <i class="fas fa-exclamation-triangle mr-3"></i>{{ counterAEliminar?.estado ? 'Desactivar' : 'Activar' }} Counter
+          <i class="fas fa-exclamation-triangle mr-3"></i>{{ counterAEliminar?.status ? 'Desactivar' : 'Activar' }} Counter
         </h2>
         <button (click)="cerrarModalEliminar()"
           class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
@@ -666,24 +666,24 @@
     <!-- Modal Content -->
     <div class="p-8">
       <div class="text-center mb-8">
-        <div [class]="counterAEliminar?.estado ? 'bg-red-100' : 'bg-green-100'" class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i [class]="counterAEliminar?.estado ? 'fas fa-ban text-red-600 text-3xl' : 'fas fa-check text-green-600 text-3xl'"></i>
+        <div [class]="counterAEliminar?.status ? 'bg-red-100' : 'bg-green-100'" class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i [class]="counterAEliminar?.status ? 'fas fa-ban text-red-600 text-3xl' : 'fas fa-check text-green-600 text-3xl'"></i>
         </div>
 
         <h3 class="text-xl font-bold text-gray-900 mb-4">
-          ¿{{ counterAEliminar?.estado ? 'Desactivar' : 'Activar' }} este counter?
+          ¿{{ counterAEliminar?.status ? 'Desactivar' : 'Activar' }} este counter?
         </h3>
 
         <div *ngIf="counterAEliminar" class="bg-gray-50 rounded-xl p-4 mb-6">
-          <p class="text-gray-600 text-sm mb-2">Counter {{ counterAEliminar.estado ? 'a desactivar' : 'a activar' }}:</p>
-          <p class="font-semibold text-gray-900">{{ counterAEliminar.nombre }}</p>
+          <p class="text-gray-600 text-sm mb-2">Counter {{ counterAEliminar.status ? 'a desactivar' : 'a activar' }}:</p>
+          <p class="font-semibold text-gray-900">{{ counterAEliminar.name }}</p>
           <p class="text-gray-500 text-sm mt-1">
-            Código: {{ counterAEliminar.codigo }}
+            Código: {{ counterAEliminar.code }}
           </p>
         </div>
 
         <p class="text-gray-600">
-          {{ counterAEliminar?.estado ? 'Al desactivar el counter, no estará disponible en el sistema.' : 'Al activar el counter, estará disponible nuevamente en el sistema.' }}
+          {{ counterAEliminar?.status ? 'Al desactivar el counter, no estará disponible en el sistema.' : 'Al activar el counter, estará disponible nuevamente en el sistema.' }}
         </p>
       </div>
 
@@ -694,11 +694,11 @@
           <i class="fas fa-times mr-2"></i>Cancelar
         </button>
         <button type="button" (click)="confirmarEliminacionModal()" [disabled]="loading"
-          [class]="counterAEliminar?.estado ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800' : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800'"
+          [class]="counterAEliminar?.status ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800' : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800'"
           class="flex-1 px-6 py-3 text-white rounded-xl transition-all duration-200 font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
           <i class="fas fa-spinner fa-spin mr-2" *ngIf="loading"></i>
-          <i [class]="counterAEliminar?.estado ? 'fas fa-ban mr-2' : 'fas fa-check mr-2'" *ngIf="!loading"></i>
-          {{ loading ? (counterAEliminar?.estado ? 'Desactivando...' : 'Activando...') : (counterAEliminar?.estado ? 'Sí, Desactivar' : 'Sí, Activar') }}
+          <i [class]="counterAEliminar?.status ? 'fas fa-ban mr-2' : 'fas fa-check mr-2'" *ngIf="!loading"></i>
+          {{ loading ? (counterAEliminar?.status ? 'Desactivando...' : 'Activando...') : (counterAEliminar?.status ? 'Sí, Desactivar' : 'Sí, Activar') }}
         </button>
       </div>
     </div>
