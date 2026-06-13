@@ -165,6 +165,12 @@ export const routes: Routes = [
       import('./pages/detalle-recibo/detalle-recibo.component').then(m => m.DetalleReciboComponent),
     canActivate: [authGuard]
   },
+  {
+  path: 'accounting',
+  loadComponent: () =>
+    import('./pages/accounting/accounting').then(m => m.Accounting),
+  canActivate: [authGuard]
+  },
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/auth/login' }
 ];

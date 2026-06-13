@@ -1,0 +1,358 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-slate-100">
+
+  <app-sidebar
+    [isCollapsed]="sidebarCollapsed"
+    [menuItems]="sidebarMenuItems"
+    (itemClick)="onSidebarItemClick($event)"
+    (toggleSidebar)="onToggleSidebar()">
+  </app-sidebar>
+
+  <div class="transition-all duration-300" [class.ml-72]="!sidebarCollapsed" [class.ml-20]="sidebarCollapsed">
+
+    <!-- MENSAJES -->
+    <div class="fixed top-4 right-4 z-[9999] space-y-3 max-w-md">
+      <div *ngIf="showSuccessMessage"
+        class="bg-green-500 text-white px-8 py-5 rounded-xl shadow-2xl flex items-start gap-4 border-l-4 border-green-300">
+        <i class="fas fa-check-circle text-2xl"></i>
+        <div class="flex-1">
+          <p class="font-semibold text-lg">Éxito</p>
+          <p class="text-sm mt-1">{{ successMessage }}</p>
+        </div>
+        <button (click)="hideMessages()">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+
+      <div *ngIf="showErrorMessage"
+        class="bg-red-600 text-white px-8 py-6 rounded-xl shadow-2xl flex items-start gap-4 border-l-4 border-red-300">
+        <i class="fas fa-exclamation-triangle text-3xl"></i>
+        <div class="flex-1">
+          <p class="font-semibold text-lg">Error</p>
+          <p class="text-sm mt-2">{{ errorMessage }}</p>
+        </div>
+        <button (click)="hideMessages()">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-everywhere-primary to-everywhere-secondary text-white relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-white/20 transform skew-x-12"></div>
+
+      <div class="max-w-full mx-auto px-6 py-6 relative z-10">
+        <button (click)="onToggleSidebar()"
+          class="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+
+        <div class="flex flex-col lg:flex-row justify-between items-start gap-8">
+          <div class="flex-1">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                <i class="fas fa-book text-2xl"></i>
+              </div>
+              <div>
+                <h1 class="text-4xl font-bold">Gestión de Asientos Contables</h1>
+                <p class="text-xl opacity-90 mt-2">
+                  Genera y consulta asientos contables a partir de liquidaciones
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8" *ngIf="!isLoading">
+              <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-center gap-4">
+                <div class="w-14 h-14 bg-everywhere-blue rounded-xl flex items-center justify-center">
+                  <i class="fas fa-book text-white text-xl"></i>
+                </div>
+                <div>
+                  <div class="text-2xl font-bold">{{ getTotalAccountingEntries() }}</div>
+                  <div class="text-sm opacity-90 uppercase font-medium tracking-wide">
+                    Asientos registrados
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-center gap-4">
+                <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-check text-white text-xl"></i>
+                </div>
+                <div>
+                  <div class="text-2xl font-bold">{{ getPostedCount() }}</div>
+                  <div class="text-sm opacity-90 uppercase font-medium tracking-wide">
+                    Publicados
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-center gap-4">
+                <div class="w-14 h-14 bg-yellow-500 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-clock text-white text-xl"></i>
+                </div>
+                <div>
+                  <div class="text-2xl font-bold">{{ getDraftCount() }}</div>
+                  <div class="text-sm opacity-90 uppercase font-medium tracking-wide">
+                    Borradores
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="z-10">
+            <button (click)="abrirModalGenerar()" [disabled]="isLoading"
+              class="bg-white text-red-600 hover:bg-gray-50 px-8 py-4 rounded-2xl font-bold flex items-center gap-3 shadow-xl">
+              <i class="fas fa-plus text-lg"></i>
+              <span>Generar Asiento</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENIDO -->
+    <main class="max-w-full mx-auto px-6 py-6">
+
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+        <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Listado de Asientos Contables</h2>
+            <p class="text-sm text-gray-500 mt-1">Asientos generados desde liquidaciones</p>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading" class="p-8 text-center text-gray-500">
+          <i class="fas fa-spinner fa-spin text-3xl mb-3"></i>
+          <p>Cargando asientos contables...</p>
+        </div>
+
+        <div class="overflow-x-auto" *ngIf="!isLoading">
+          <table class="w-full bg-white">
+            <thead class="bg-gradient-to-r from-everywhere-primary to-everywhere-secondary text-white">
+              <tr>
+                <th class="px-4 py-3 text-left text-sm font-semibold">N° Asiento</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Fecha</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Liquidación</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Documento</th>
+                <th class="px-4 py-3 text-right text-sm font-semibold">Debe</th>
+                <th class="px-4 py-3 text-right text-sm font-semibold">Haber</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold">Estado</th>
+                <th class="px-4 py-3 text-center text-sm font-semibold">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let entry of accountingEntries"
+                class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+
+                <td class="px-4 py-3 text-sm font-semibold text-gray-800">
+                  {{ entry.entryNumber || 'N/A' }}
+                </td>
+
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  {{ entry.entryDate ? (entry.entryDate | date:'dd/MM/yyyy') : 'N/A' }}
+                </td>
+
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  {{ entry.liquidationId || 'N/A' }}
+                </td>
+
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  {{ entry.documentType || 'N/A' }} {{ entry.documentNumber || '' }}
+                </td>
+
+                <td class="px-4 py-3 text-sm text-right font-semibold text-blue-600">
+                  {{ entry.totalDebit || 0 | currency:'USD':'symbol':'1.2-2' }}
+                </td>
+
+                <td class="px-4 py-3 text-sm text-right font-semibold text-green-600">
+                  {{ entry.totalCredit || 0 | currency:'USD':'symbol':'1.2-2' }}
+                </td>
+
+                <td class="px-4 py-3 text-sm">
+                  <span class="px-3 py-1 rounded-full text-xs font-semibold"
+                    [class.bg-yellow-100]="entry.status === 'DRAFT'"
+                    [class.text-yellow-700]="entry.status === 'DRAFT'"
+                    [class.bg-green-100]="entry.status === 'POSTED'"
+                    [class.text-green-700]="entry.status === 'POSTED'"
+                    [class.bg-gray-100]="!entry.status"
+                    [class.text-gray-700]="!entry.status">
+                    {{ entry.status || 'DRAFT' }}
+                  </span>
+                </td>
+
+                <td class="px-4 py-3 text-center">
+                  <button (click)="verDetalle(entry)"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
+                    <i class="fas fa-eye mr-1"></i>
+                    Ver
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="accountingEntries.length === 0">
+                <td colspan="8" class="px-4 py-10 text-center text-gray-500">
+                  <i class="fas fa-inbox text-4xl text-gray-300 mb-3"></i>
+                  <p>No hay asientos contables registrados</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL GENERAR ASIENTO -->
+<div *ngIf="mostrarModalGenerar" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  (click)="cerrarModalGenerar()">
+
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden"
+    (click)="$event.stopPropagation()">
+
+    <div class="bg-gradient-to-r from-everywhere-primary to-everywhere-secondary text-white p-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold">Generar Asiento Contable</h2>
+          <p class="text-white/90 mt-1">Ingrese la liquidación origen</p>
+        </div>
+        <button (click)="cerrarModalGenerar()" class="hover:bg-white/20 p-2 rounded-lg">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6">
+      <label class="block text-sm font-semibold text-gray-700 mb-2">
+        ID de Liquidación
+      </label>
+
+      <input
+        type="number"
+        [(ngModel)]="liquidationIdToGenerate"
+        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+        placeholder="Ejemplo: 15">
+
+      <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+        <button (click)="cerrarModalGenerar()"
+          class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 font-medium">
+          Cancelar
+        </button>
+
+        <button (click)="generateFromLiquidation()"
+          class="px-6 py-3 bg-everywhere-primary text-white rounded-xl hover:bg-everywhere-secondary font-medium">
+          <i class="fas fa-book mr-2"></i>
+          Generar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER ASIENTO -->
+<div *ngIf="mostrarModalVer" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  (click)="cerrarModalVer()">
+
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden"
+    (click)="$event.stopPropagation()">
+
+    <div class="bg-gradient-to-r from-everywhere-primary to-everywhere-secondary text-white px-8 py-6">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold flex items-center gap-3">
+          <i class="fas fa-book text-2xl"></i>
+          Detalle de Asiento Contable
+        </h2>
+        <button (click)="cerrarModalVer()" class="hover:bg-white/20 p-2 rounded-lg">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="px-8 py-6 bg-gray-50 border-b" *ngIf="selectedEntry">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="bg-white rounded-lg p-4 shadow-sm">
+          <div class="text-sm text-gray-500 mb-1">N° Asiento</div>
+          <div class="text-lg font-semibold text-gray-800">{{ selectedEntry.entryNumber || 'N/A' }}</div>
+        </div>
+
+        <div class="bg-white rounded-lg p-4 shadow-sm">
+          <div class="text-sm text-gray-500 mb-1">Fecha</div>
+          <div class="text-lg font-semibold text-gray-800">
+            {{ selectedEntry.entryDate ? (selectedEntry.entryDate | date:'dd/MM/yyyy') : 'N/A' }}
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg p-4 shadow-sm">
+          <div class="text-sm text-gray-500 mb-1">Liquidación</div>
+          <div class="text-lg font-semibold text-gray-800">{{ selectedEntry.liquidationId || 'N/A' }}</div>
+        </div>
+
+        <div class="bg-white rounded-lg p-4 shadow-sm">
+          <div class="text-sm text-gray-500 mb-1">Estado</div>
+          <div class="text-lg font-semibold text-gray-800">{{ selectedEntry.status || 'DRAFT' }}</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="px-8 py-6 overflow-auto max-h-[60vh]">
+      <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+        <i class="fas fa-table text-everywhere-primary"></i>
+        Líneas del Asiento
+      </h3>
+
+      <div class="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
+        <table class="w-full bg-white">
+          <thead class="bg-gradient-to-r from-everywhere-primary to-everywhere-secondary text-white">
+            <tr>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Cuenta</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Descripción</th>
+              <th class="px-4 py-3 text-right text-sm font-semibold">Debe</th>
+              <th class="px-4 py-3 text-right text-sm font-semibold">Haber</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let detail of selectedEntry?.details"
+              class="border-b border-gray-200 hover:bg-gray-50">
+
+              <td class="px-4 py-3 text-sm font-medium text-gray-800">
+                {{ detail.accountName || 'N/A' }}
+              </td>
+
+              <td class="px-4 py-3 text-sm text-gray-700">
+                {{ detail.description || 'N/A' }}
+              </td>
+
+              <td class="px-4 py-3 text-sm text-right font-semibold text-blue-600">
+                {{ detail.debitAmount || 0 | currency:'USD':'symbol':'1.2-2' }}
+              </td>
+
+              <td class="px-4 py-3 text-sm text-right font-semibold text-green-600">
+                {{ detail.creditAmount || 0 | currency:'USD':'symbol':'1.2-2' }}
+              </td>
+            </tr>
+
+            <tr *ngIf="!selectedEntry?.details || selectedEntry?.details?.length === 0">
+              <td colspan="4" class="px-4 py-8 text-center text-gray-500">
+                No hay líneas registradas para este asiento.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="px-8 py-4 bg-gray-50 border-t flex justify-end">
+      <button (click)="cerrarModalVer()"
+        class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2">
+        <i class="fas fa-times"></i>
+        Cerrar
+      </button>
+    </div>
+
+  </div>
+</div>

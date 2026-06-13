@@ -29,56 +29,62 @@ export class MenuConfigService {
             title: 'Perfil',
             icon: 'fas fa-user-circle',
             route: '/profile'
-        },/*
-        {
-            id: 'clientes',
-            title: 'Clientes',
-            icon: 'fas fa-address-book',
-            route: '/personas',
-            moduleKey: 'PERSONAS'
         },
         {
-            id: 'carpetas',
-            title: 'Carpetas',
-            icon: 'fas fa-folder',
-            route: '/carpetas',
-            moduleKey: 'CARPETAS'
-        },
-        {
-            id: 'cotizaciones',
-            title: 'Cotizaciones',
-            icon: 'fas fa-file-invoice',
-            route: '/cotizaciones',
-            moduleKey: 'COTIZACIONES'
-        },
-        {
-            id: 'liquidaciones',
-            title: 'Liquidaciones',
-            icon: 'fas fa-credit-card',
-            route: '/liquidaciones',
-            moduleKey: 'LIQUIDACIONES'
-        },
+  id: 'clientes',
+  title: 'Clientes',
+  icon: 'fas fa-address-book',
+  route: '/persons',
+  moduleKey: 'PERSONAS'
+},
+{
+  id: 'carpetas',
+  title: 'Carpetas',
+  icon: 'fas fa-folder',
+  route: '/folders',
+  moduleKey: 'CARPETAS'
+},
+{
+  id: 'cotizaciones',
+  title: 'Cotizaciones',
+  icon: 'fas fa-file-invoice',
+  route: '/quotations',
+  moduleKey: 'COTIZACIONES'
+},
+{
+  id: 'liquidaciones',
+  title: 'Liquidaciones',
+  icon: 'fas fa-credit-card',
+  route: '/liquidations',
+  moduleKey: 'LIQUIDACIONES'
+},
+{
+  id: 'accounting',
+  title: 'Contabilidad',
+  icon: 'fas fa-book',
+  route: '/accounting'
+},
         {
             id: 'generacion-documentos',
             title: 'Generacion de Documentos',
             icon: 'fas fa-file-pdf',
             children: [
                 {
-                    id: 'documentos-cobranza',
-                    title: 'Documentos de Cobranza',
-                    icon: 'fas fa-file-contract',
-                    route: '/documentos-cobranza',
-                    moduleKey: 'DOCUMENTOS_COBRANZA'
-                },
-                {
-                    id: 'recibos',
-                    title: 'Recibos',
-                    icon: 'fas fa-file-alt',
-                    route: '/recibos',
-                    moduleKey: 'RECIBOS'
-                },
+  id: 'documentos-cobranza',
+  title: 'Documentos de Cobranza',
+  icon: 'fas fa-file-contract',
+  route: '/collection-documents',
+  moduleKey: 'DOCUMENTOS_COBRANZA'
+},
+{
+  id: 'recibos',
+  title: 'Recibos',
+  icon: 'fas fa-file-alt',
+  route: '/receipts',
+  moduleKey: 'RECIBOS'
+}
             ]
-        },*/
+        },
         {
             id: 'categorias',
             title: 'Gestion de Categorias',
