@@ -8,11 +8,11 @@
     <!-- Navegación de escritorio -->
     <div class="navbar-nav">
       <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
-      <a routerLink="/personas" routerLinkActive="active" class="nav-link">Clientes</a>
-      <a routerLink="/cotizaciones" routerLinkActive="active" class="nav-link">Cotizaciones</a>
-      <a routerLink="/liquidaciones" routerLinkActive="active" class="nav-link">Liquidaciones</a>
-      <a routerLink="/productos" routerLinkActive="active" class="nav-link">Productos</a>
-      <a routerLink="/reportes" routerLinkActive="active" class="nav-link">Reportes</a>
+      <a routerLink="/persons" routerLinkActive="active" class="nav-link">Clientes</a>
+      <a routerLink="/quotations" routerLinkActive="active" class="nav-link">Cotizaciones</a>
+      <a routerLink="/liquidations" routerLinkActive="active" class="nav-link">Liquidaciones</a>
+      <a routerLink="/products" routerLinkActive="active" class="nav-link">Productos</a>
+      <a routerLink="/statistics" routerLinkActive="active" class="nav-link">Reportes</a>
     </div>
 
     <!-- Menú de usuario -->
@@ -34,11 +34,11 @@
   <!-- Menú móvil -->
   <div class="mobile-menu" [class.open]="isMobileMenuOpen">
     <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()">Dashboard</a>
-    <a routerLink="/personas" routerLinkActive="active" (click)="closeMobileMenu()">Clientes</a>
-    <a routerLink="/cotizaciones" routerLinkActive="active" (click)="closeMobileMenu()">Cotizaciones</a>
-    <a routerLink="/liquidaciones" routerLinkActive="active" (click)="closeMobileMenu()">Liquidaciones</a>
-    <a routerLink="/productos" routerLinkActive="active" (click)="closeMobileMenu()">Productos</a>
-    <a routerLink="/reportes" routerLinkActive="active" (click)="closeMobileMenu()">Reportes</a>
+    <a routerLink="/persons" routerLinkActive="active" (click)="closeMobileMenu()">Clientes</a>
+    <a routerLink="/quotations" routerLinkActive="active" (click)="closeMobileMenu()">Cotizaciones</a>
+    <a routerLink="/liquidations" routerLinkActive="active" (click)="closeMobileMenu()">Liquidaciones</a>
+    <a routerLink="/products" routerLinkActive="active" (click)="closeMobileMenu()">Productos</a>
+    <a routerLink="/statistics" routerLinkActive="active" (click)="closeMobileMenu()">Reportes</a>
     <button class="mobile-logout-btn" (click)="logout()">Cerrar Sesión</button>
   </div>
 </nav>
