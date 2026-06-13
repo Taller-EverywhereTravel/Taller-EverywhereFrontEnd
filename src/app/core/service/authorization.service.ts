@@ -228,7 +228,7 @@ export const MENU_ITEMS: MenuItemConfig[] = [
   {
     id: 'productos',
     label: 'Productos',
-    route: '/productos',
+    route: '/products',
     icon: 'inventory',
     requiredModule: Module.PRODUCTOS
   },

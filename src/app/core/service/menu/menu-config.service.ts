@@ -88,34 +88,34 @@ export class MenuConfigService {
                     id: 'categorias-persona',
                     title: 'Categorias de Clientes',
                     icon: 'fas fa-users',
-                    route: '/categorias-persona',
+                    route: '/category-persons',
                     moduleKey: 'CATEGORIA_PERSONAS'
                 },
                 {
                     id: 'documentos',
                     title: 'Documentos de clientes',
                     icon: 'fas fa-file-alt',
-                    route: '/documentos',
+                    route: '/documents',
                     moduleKey: 'DOCUMENTOS'
                 },
                 {
                     id: 'categorias-producto',
                     title: 'Categorias de Producto',
                     icon: 'fas fa-list',
-                    route: '/categorias'
+                    route: '/categories'
                 },
                 {
                     id: 'estado-cotizacion',
                     title: 'Estado de Cotización',
                     icon: 'fas fa-clipboard-check',
-                    route: '/estado-cotizacion',
+                    route: '/quotation-status',
                     moduleKey: 'COTIZACIONES'
                 },
                 {
                     id: 'forma-pago',
                     title: 'Forma de Pago',
                     icon: 'fas fa-credit-card',
-                    route: '/formas-pago',
+                    route: '/payment-methods',
                     moduleKey: 'FORMA_PAGO'
                 }
             ]
@@ -129,21 +129,21 @@ export class MenuConfigService {
                     id: 'productos',
                     title: 'Productos',
                     icon: 'fas fa-cube',
-                    route: '/productos',
+                    route: '/products',
                     moduleKey: 'PRODUCTOS'
                 },
                 {
                     id: 'proveedores',
                     title: 'Proveedores',
                     icon: 'fas fa-truck',
-                    route: '/proveedores',
+                    route: '/suppliers',
                     moduleKey: 'PROVEEDORES'
                 },
                 {
                     id: 'operadores',
                     title: 'Operadores',
                     icon: 'fas fa-headset',
-                    route: '/operadores',
+                    route: '/operators',
                     moduleKey: 'OPERADOR'
                 }
             ]
@@ -157,7 +157,7 @@ export class MenuConfigService {
                     id: 'sucursales',
                     title: 'Sucursales',
                     icon: 'fas fa-building',
-                    route: '/sucursales',
+                    route: '/branches',
                     moduleKey: 'SUCURSALES'
                 }
             ]

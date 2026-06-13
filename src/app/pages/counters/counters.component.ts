@@ -114,7 +114,7 @@ export class CountersComponent implements OnInit {
           id: 'productos',
           title: 'Productos',
           icon: 'fas fa-cube',
-          route: '/productos',
+          route: '/products',
           moduleKey: 'PRODUCTOS'
         },
         {
